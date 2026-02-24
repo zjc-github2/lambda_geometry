@@ -82,7 +82,9 @@ def check_design_compliance():
     print(f"   注意力头数: {config.reasoning_ai.num_heads}")
     print(f"   层数: {config.reasoning_ai.num_layers}")
     print(f"   FFN维度: {config.reasoning_ai.ffn_dim}")
-    print(f"   输出维度: {config.reasoning_ai.embed_dim} + {config.reasoning_ai.control_dim} = {config.reasoning_ai.embed_dim + config.reasoning_ai.control_dim}")
+    print(
+        f"   输出维度: {config.reasoning_ai.embed_dim} + {config.reasoning_ai.control_dim} = {config.reasoning_ai.embed_dim + config.reasoning_ai.control_dim}"
+    )
     print(f"   - 事件向量: {config.reasoning_ai.embed_dim}维")
     print(f"   - 控制信号: {config.reasoning_ai.control_dim}维 (渲染检查, 解码调用)")
     checks.append(("推理AI输出事件向量+控制信号", True))
@@ -97,6 +99,7 @@ def check_design_compliance():
 
     print("\n5. 分词器检查:")
     from tokenizer import GeometryTokenizer
+
     tokenizer = GeometryTokenizer(vocab_size=config.encoder.vocab_size)
     print(f"   词汇表大小: {len(tokenizer)}")
     print(f"   特殊标记: {tokenizer.SPECIAL_TOKENS}")
@@ -117,12 +120,14 @@ def check_design_compliance():
 
     print("\n8. 事件系统检查:")
     from event_system import Event, EventSequence
+
     print(f"   事件包含: 事件向量 + 是否成功")
     print(f"   事件序列: 支持位置编码")
     checks.append(("事件系统符合设计", True))
 
     print("\n9. 命题列表检查:")
     from proposition_manager import PropositionManager
+
     manager = PropositionManager()
     print(f"   符号命题列表: {manager.symbolic_list.name}")
     print(f"   渲染命题列表: {manager.render_list.name}")
@@ -138,6 +143,7 @@ def check_design_compliance():
 
     print("\n11. 训练策略检查:")
     from training import EncoderDecoderTrainer, SupervisedTrainer, RLTrainer
+
     print(f"   编码器-解码器联合训练: ✓")
     print(f"   监督训练: ✓")
     print(f"   强化学习训练: ✓")
@@ -186,13 +192,13 @@ def print_issues_found():
             "问题": "训练损失为NaN",
             "原因": "解码器因果掩码处理错误，导致除零和无效的掩码操作",
             "修复": "修改_generate_causal_mask方法，移除错误的masked_fill操作；修改MultiHeadAttention的掩码处理逻辑",
-            "状态": "✓ 已修复"
+            "状态": "✓ 已修复",
         },
         {
             "问题": "渲染引擎除零错误",
             "原因": "当两点重合时，Line.distance方法分母为零",
             "修复": "在Line.from_points中检查点是否重合；在distance方法中检查分母是否为零",
-            "状态": "✓ 已修复"
+            "状态": "✓ 已修复",
         },
     ]
 

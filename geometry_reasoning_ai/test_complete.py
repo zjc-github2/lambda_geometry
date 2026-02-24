@@ -147,24 +147,45 @@ def test_render_engine_basic():
     }
 
     tests = [
-        ("coll A B C", lambda: engine.verify_collinear([
-            engine.points["A"], engine.points["B"], engine.points["C"]
-        ])),
-        ("para A B C D", lambda: engine.verify_parallel(
-            engine.points["A"], engine.points["B"],
-            engine.points["C"], engine.points["D"]
-        )),
-        ("perp A B C D", lambda: engine.verify_perpendicular(
-            engine.points["A"], engine.points["B"],
-            engine.points["C"], engine.points["D"]
-        )),
-        ("cong A M M B", lambda: engine.verify_congruent(
-            engine.points["A"], engine.points["M"],
-            engine.points["M"], engine.points["B"]
-        )),
-        ("midp M A B", lambda: engine.verify_midpoint(
-            engine.points["M"], engine.points["A"], engine.points["B"]
-        )),
+        (
+            "coll A B C",
+            lambda: engine.verify_collinear(
+                [engine.points["A"], engine.points["B"], engine.points["C"]]
+            ),
+        ),
+        (
+            "para A B C D",
+            lambda: engine.verify_parallel(
+                engine.points["A"],
+                engine.points["B"],
+                engine.points["C"],
+                engine.points["D"],
+            ),
+        ),
+        (
+            "perp A B C D",
+            lambda: engine.verify_perpendicular(
+                engine.points["A"],
+                engine.points["B"],
+                engine.points["C"],
+                engine.points["D"],
+            ),
+        ),
+        (
+            "cong A M M B",
+            lambda: engine.verify_congruent(
+                engine.points["A"],
+                engine.points["M"],
+                engine.points["M"],
+                engine.points["B"],
+            ),
+        ),
+        (
+            "midp M A B",
+            lambda: engine.verify_midpoint(
+                engine.points["M"], engine.points["A"], engine.points["B"]
+            ),
+        ),
     ]
 
     passed = 0
@@ -199,10 +220,17 @@ def test_render_engine_advanced():
     }
 
     tests = [
-        ("eqangle A B C D E F", lambda: engine.verify_eqangle(
-            engine.points["A"], engine.points["B"], engine.points["C"],
-            engine.points["D"], engine.points["E"], engine.points["F"]
-        )),
+        (
+            "eqangle A B C D E F",
+            lambda: engine.verify_eqangle(
+                engine.points["A"],
+                engine.points["B"],
+                engine.points["C"],
+                engine.points["D"],
+                engine.points["E"],
+                engine.points["F"],
+            ),
+        ),
     ]
 
     passed = 0
@@ -230,10 +258,19 @@ def test_render_engine_advanced():
     }
 
     tests = [
-        ("eqratio A B C D E F G H", lambda: engine.verify_eqratio(
-            engine.points["A"], engine.points["B"], engine.points["C"], engine.points["D"],
-            engine.points["E"], engine.points["F"], engine.points["G"], engine.points["H"]
-        )),
+        (
+            "eqratio A B C D E F G H",
+            lambda: engine.verify_eqratio(
+                engine.points["A"],
+                engine.points["B"],
+                engine.points["C"],
+                engine.points["D"],
+                engine.points["E"],
+                engine.points["F"],
+                engine.points["G"],
+                engine.points["H"],
+            ),
+        ),
     ]
 
     for prop_str, test_func in tests:
@@ -428,11 +465,27 @@ def test_new_rules():
 
     # 测试一些新规则
     test_cases = [
-        ("eqangle6_to_cyclic", ["eqangle6 P A P B Q A Q B", "ncoll P Q A B"], "cyclic A B P Q"),
-        ("eqratio_to_cong", ["eqratio A B P Q C D U V", "cong P Q U V"], "cong A B C D"),
-        ("eqratio_trans", ["eqratio a b c d m n p q", "eqratio c d e f p q r u"], "eqratio a b e f m n r u"),
+        (
+            "eqangle6_to_cyclic",
+            ["eqangle6 P A P B Q A Q B", "ncoll P Q A B"],
+            "cyclic A B P Q",
+        ),
+        (
+            "eqratio_to_cong",
+            ["eqratio A B P Q C D U V", "cong P Q U V"],
+            "cong A B C D",
+        ),
+        (
+            "eqratio_trans",
+            ["eqratio a b c d m n p q", "eqratio c d e f p q r u"],
+            "eqratio a b e f m n r u",
+        ),
         ("cong_to_eqangle", ["cong O A O B", "ncoll O A B"], "eqangle O A A B A B O B"),
-        ("eqangle6_to_cong", ["eqangle6 A O A B B A B O", "ncoll O A B"], "cong O A O B"),
+        (
+            "eqangle6_to_cong",
+            ["eqangle6 A O A B B A B O", "ncoll O A B"],
+            "cong O A O B",
+        ),
     ]
 
     passed = 0
@@ -462,7 +515,7 @@ def test_examples_txt():
     examples_path = os.path.join(
         os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
         "alphageometry-main",
-        "examples.txt"
+        "examples.txt",
     )
 
     if not os.path.exists(examples_path):
@@ -491,11 +544,15 @@ g1 g2 g3 g = centroid g1 g2 g3 g a b c
 o = circle a b c ? coll h g o""",
         ]
     else:
-        with open(examples_path, 'r', encoding='utf-8') as f:
+        with open(examples_path, "r", encoding="utf-8") as f:
             content = f.read()
         problems = parser.parse_problem_file(content)
-        examples = [f"{p.name}\n" + '\n'.join(str(clause) for clause in p.premises) +
-                  (f"\n? {p.goal}" if p.goal else "") for p in problems]
+        examples = [
+            f"{p.name}\n"
+            + "\n".join(str(clause) for clause in p.premises)
+            + (f"\n? {p.goal}" if p.goal else "")
+            for p in problems
+        ]
 
     passed = 0
     for i, example_text in enumerate(examples, 1):
@@ -571,8 +628,13 @@ def run_all_tests():
     except Exception as e:
         print(f"\n✗ 测试过程中发生错误: {e}")
         import traceback
+
         traceback.print_exc()
 
 
 if __name__ == "__main__":
     run_all_tests()
+
+    print(
+        "注意!!!有一些测试没有通过,因为这些命题本来就是错误的.有2个测试在系统正常工作时应该显示不通过.我也不知道为什么ai这样写"
+    )
