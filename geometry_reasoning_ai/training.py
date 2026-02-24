@@ -14,13 +14,13 @@ try:
     from .models import Encoder, Decoder
     from .tokenizer import GeometryTokenizer
     from .event_system import Event
-    from .workflow import ReasoningStep
+    from .integrated_workflow import ReasoningStep
 except ImportError:
     from config import SystemConfig, TrainingConfig, get_default_config
     from models import Encoder, Decoder
     from tokenizer import GeometryTokenizer
     from event_system import Event
-    from workflow import ReasoningStep
+    from integrated_workflow import ReasoningStep
 
 
 @dataclass
@@ -433,7 +433,7 @@ class TrainingPipeline:
 
 
 if __name__ == "__main__":
-    from .workflow import GeometryReasoningSystem
+    from .integrated_workflow import IntegratedGeometrySystem
 
     system = GeometryReasoningSystem()
     pipeline = TrainingPipeline(system)

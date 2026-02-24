@@ -7,15 +7,15 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 if __name__ == "__main__":
-    from workflow import GeometryReasoningSystem
+    from integrated_workflow import IntegratedGeometrySystem
     from training import TrainingPipeline
-    from render_engine import RenderEngine, Point
-    from symbolic_engine import SymbolicEngine
+    from extended_render_engine import ExtendedRenderEngine, Point
+    from extended_symbolic_engine import ExtendedSymbolicEngine
 else:
-    from .workflow import GeometryReasoningSystem
+    from .integrated_workflow import IntegratedGeometrySystem
     from .training import TrainingPipeline
-    from .render_engine import RenderEngine, Point
-    from .symbolic_engine import SymbolicEngine
+    from .extended_render_engine import ExtendedRenderEngine, Point
+    from .extended_symbolic_engine import ExtendedSymbolicEngine
 
 
 def example_basic_usage():
