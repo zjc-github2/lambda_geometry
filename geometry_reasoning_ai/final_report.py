@@ -8,9 +8,9 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from config import get_default_config
 from models import Encoder, Decoder, ReasoningAI, count_parameters
-from integrated_workflow import IntegratedGeometrySystem
-from extended_render_engine import ExtendedRenderEngine
-from extended_symbolic_engine import ExtendedSymbolicEngine
+from workflow import GeometryReasoningSystem
+from render_engine import RenderEngine
+from symbolic_engine import SymbolicEngine
 
 
 def print_section(title):

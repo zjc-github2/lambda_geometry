@@ -7,15 +7,17 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 if __name__ == "__main__":
-    from integrated_workflow import IntegratedGeometrySystem
+    from workflow import GeometryReasoningSystem
     from training import TrainingPipeline
-    from extended_render_engine import ExtendedRenderEngine, Point
-    from extended_symbolic_engine import ExtendedSymbolicEngine
+    from render_engine import RenderEngine
+    from symbolic_engine import SymbolicEngine, ProofState
+    from geometry_parser import GeometryParser
 else:
-    from .integrated_workflow import IntegratedGeometrySystem
+    from .workflow import GeometryReasoningSystem
     from .training import TrainingPipeline
-    from .extended_render_engine import ExtendedRenderEngine, Point
-    from .extended_symbolic_engine import ExtendedSymbolicEngine
+    from .render_engine import RenderEngine
+    from .symbolic_engine import SymbolicEngine, ProofState
+    from .geometry_parser import GeometryParser
 
 
 def example_basic_usage():
@@ -50,13 +52,11 @@ def example_render_engine():
 
     engine = RenderEngine()
 
-    engine.points = {
-        "A": Point(0, 0),
-        "B": Point(2, 0),
-        "C": Point(1, 1.732),
-        "D": Point(1, 0),
-        "M": Point(1, 0),
-    }
+    engine.add_point("A", 0, 0)
+    engine.add_point("B", 2, 0)
+    engine.add_point("C", 1, 1.732)
+    engine.add_point("D", 1, 0)
+    engine.add_point("M", 1, 0)
 
     propositions = [
         ("coll A B D", "点A、B、D共线"),
@@ -65,10 +65,11 @@ def example_render_engine():
     ]
 
     print("\n验证命题:")
-    for prop, desc in propositions:
-        result, msg = engine.render_and_verify(prop)
+    for prop_str, desc in propositions:
+        prop = GeometryParser.parse_proposition(prop_str)
+        result = engine.verify_proposition(prop)
         status = "✓" if result else "✗"
-        print(f"  {status} {desc}: {msg}")
+        print(f"  {status} {desc}: {prop_str}")
 
 
 def example_symbolic_engine():
@@ -79,22 +80,26 @@ def example_symbolic_engine():
     engine = SymbolicEngine()
 
     print("\n添加前提:")
-    engine.add_statement("perp A B C D")
-    print("  - perp A B C D")
-    engine.add_statement("perp E F C D")
-    print("  - perp E F C D")
+    state = ProofState()
+    prop1 = GeometryParser.parse_proposition("perp A B C D")
+    prop2 = GeometryParser.parse_proposition("perp E F C D")
+    state.add(prop1)
+    state.add(prop2)
+    print(f"  - {prop1}")
+    print(f"  - {prop2}")
 
     print("\n运行演绎...")
-    new_statements = engine.deduce()
-    print(f"  推导出 {new_statements} 条新语句")
+    new_props = engine.deduce(state, max_steps=10)
+    print(f"  推导出 {len(new_props)} 条新命题")
 
     print("\n检查结论:")
-    result = engine.verify("para A B E F")
-    print(f"  para A B E F: {'✓ 有效' if result else '✗ 无效'}")
+    target = GeometryParser.parse_proposition("para A B E F")
+    result = state.contains(target)
+    print(f"  {target}: {'✓ 有效' if result else '✗ 无效'}")
 
     print("\n所有推导语句:")
-    for stmt in engine.get_derived_statements():
-        print(f"  - {stmt}")
+    for prop in state.get_all():
+        print(f"  - {prop}")
 
 
 def example_training():
@@ -110,16 +115,31 @@ def example_training():
     print(f"  最终损失: {losses[-1]:.4f}")
 
     supervised_problems = [
-        ("perp A B C D", ["perp A B C D"]),
-        ("midp M A B", ["midp M A B", "cong A M M B"]),
+        (
+            GeometryParser.parse_proposition("perp A B C D"),
+            [GeometryParser.parse_proposition("perp A B C D")],
+        ),
+        (
+            GeometryParser.parse_proposition("midp M A B"),
+            [
+                GeometryParser.parse_proposition("midp M A B"),
+                GeometryParser.parse_proposition("cong A M M B"),
+            ],
+        ),
     ]
 
     print("\n监督训练 (3轮)...")
     pipeline.supervised_training(supervised_problems, num_epochs=3)
 
     rl_problems = [
-        ("perp A B C D", "para A B E F"),
-        ("midp M A B", "cong A M M B"),
+        (
+            GeometryParser.parse_proposition("perp A B C D"),
+            GeometryParser.parse_proposition("para A B E F"),
+        ),
+        (
+            GeometryParser.parse_proposition("midp M A B"),
+            GeometryParser.parse_proposition("cong A M M B"),
+        ),
     ]
 
     print("\n强化学习训练 (3轮)...")
@@ -136,13 +156,11 @@ def example_reasoning():
 
     initial_prop = "perp A B C D"
     target = "para"
-
     print(f"\n初始命题: '{initial_prop}'")
     print(f"目标包含: '{target}'")
     print("\n运行推理...")
 
     success, steps = system.run_reasoning(initial_prop, target=target, max_steps=10)
-
     print(f"\n推理完成: {'成功' if success else '达到最大步数'}")
     print(f"总步数: {len(steps)}")
 
