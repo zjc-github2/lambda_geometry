@@ -6,24 +6,14 @@ from torch import nn
 from typing import Optional, List, Tuple, Dict
 from dataclasses import dataclass
 
-try:
-    from .config import SystemConfig, get_default_config
-    from .event_system import Event, EventSequence
-    from .tokenizer import GeometryTokenizer
-    from .models import Encoder, Decoder, ReasoningAI
-    from .render_engine import RenderEngine
-    from .symbolic_engine import SymbolicEngine
-    from .proposition_manager import PropositionManager
-    from .geometry_parser import GeometryParser, Proposition
-except ImportError:
-    from config import SystemConfig, get_default_config
-    from event_system import Event, EventSequence
-    from tokenizer import GeometryTokenizer
-    from models import Encoder, Decoder, ReasoningAI
-    from render_engine import RenderEngine
-    from symbolic_engine import SymbolicEngine
-    from proposition_manager import PropositionManager
-    from geometry_parser import GeometryParser, Proposition
+from .config import SystemConfig, get_default_config
+from .event_system import Event, EventSequence
+from .tokenizer import GeometryTokenizer
+from .models import Encoder, Decoder, ReasoningAI
+from .render_engine import RenderEngine
+from .symbolic_engine import SymbolicEngine
+from .proposition_manager import PropositionManager
+from .geometry_parser import GeometryParser, Proposition
 
 
 @dataclass

@@ -9,18 +9,11 @@ from dataclasses import dataclass
 from collections import deque
 import random
 
-try:
-    from .config import SystemConfig, TrainingConfig, get_default_config
-    from .models import Encoder, Decoder
-    from .tokenizer import GeometryTokenizer
-    from .event_system import Event
-    from .workflow import ReasoningStep
-except ImportError:
-    from config import SystemConfig, TrainingConfig, get_default_config
-    from models import Encoder, Decoder
-    from tokenizer import GeometryTokenizer
-    from event_system import Event
-    from workflow import ReasoningStep
+from .config import SystemConfig, TrainingConfig, get_default_config
+from .models import Encoder, Decoder
+from .tokenizer import GeometryTokenizer
+from .event_system import Event
+from .workflow import ReasoningStep
 
 
 @dataclass

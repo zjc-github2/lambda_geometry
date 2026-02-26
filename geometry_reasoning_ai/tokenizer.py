@@ -2,7 +2,7 @@
 """几何题推理AI的分词器。"""
 
 import re
-from typing import List
+from typing import List, Any
 from dataclasses import dataclass
 
 
@@ -175,7 +175,11 @@ class GeometryTokenizer:
             self.id_to_token[idx] = token
             idx += 1
 
-    def tokenize(self, text: str) -> List[str]:
+    def tokenize(self, text: Any) -> List[str]:
+        if hasattr(text, "__str__"):
+            text = str(text)
+        if not isinstance(text, str):
+            text = str(text)
         pattern = r"(\s+|" + "|".join(re.escape(s) for s in self.SYMBOLS) + r")"
         tokens = []
         for part in re.split(pattern, text):

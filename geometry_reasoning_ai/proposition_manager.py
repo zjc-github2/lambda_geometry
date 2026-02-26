@@ -5,10 +5,7 @@ from typing import List, Optional, Dict, Any, Set
 from dataclasses import dataclass, field
 from datetime import datetime
 
-try:
-    from .geometry_parser import Proposition
-except ImportError:
-    from geometry_parser import Proposition
+from .geometry_parser import Proposition
 
 
 @dataclass
@@ -162,12 +159,9 @@ class PropositionManager:
 
     def get_proof_state(self):
         """获取证明状态"""
-        try:
-            from .symbolic_engine import ProofState
-        except ImportError:
-            from symbolic_engine import ProofState
+        from symbolic_engine import ProofState as SEProofState  # type: ignore
 
-        state = ProofState()
+        state = SEProofState()
         for prop in self._proof_state:
             state.add(prop)
         return state

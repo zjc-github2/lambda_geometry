@@ -62,7 +62,7 @@ class FeedForward(nn.Module):
         self.fc2 = nn.Linear(ffn_dim, embed_dim)
         self.dropout = nn.Dropout(dropout)
 
-    def forward(self, x):  # pylint: disable=no-member
+    def forward(self, x):  # pylint: disable=no-member,not-callable
         x = torch.nn.functional.gelu(self.fc1(x))
         x = self.dropout(x)
         x = self.fc2(x)

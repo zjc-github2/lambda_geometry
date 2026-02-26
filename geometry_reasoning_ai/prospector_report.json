@@ -1,0 +1,1143 @@
+{
+  "summary": {
+    "started": "2026-02-26 09:20:21.629166",
+    "libraries": [],
+    "strictness": null,
+    "profiles": "default, no_doc_warnings, no_test_warnings, strictness_medium, strictness_high, strictness_veryhigh, no_member_warnings",
+    "tools": [
+      "dodgy",
+      "mccabe",
+      "profile-validator",
+      "pycodestyle",
+      "pyflakes",
+      "pylint"
+    ],
+    "message_count": 71,
+    "completed": "2026-02-26 09:20:34.819485",
+    "time_taken": "13.19",
+    "formatter": "json"
+  },
+  "messages": [
+    {
+      "source": "mccabe",
+      "code": "MC0001",
+      "location": {
+        "path": "symbolic_engine.py",
+        "module": null,
+        "function": "SymbolicEngine.check",
+        "line": 1119,
+        "character": 0
+      },
+      "message": "SymbolicEngine.check is too complex (16)",
+      "isFixable": false
+    },
+    {
+      "source": "pylint",
+      "code": "too-many-branches",
+      "location": {
+        "path": "symbolic_engine.py",
+        "module": "geometry_reasoning_ai.symbolic_engine",
+        "function": "SymbolicEngine._match_theorem",
+        "line": 1703,
+        "character": 4,
+        "lineEnd": 1703,
+        "characterEnd": 22
+      },
+      "message": "Too many branches (39/15)",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/refactor/too-many-branches.html"
+    },
+    {
+      "source": "mccabe",
+      "code": "MC0001",
+      "location": {
+        "path": "symbolic_engine.py",
+        "module": null,
+        "function": "SymbolicEngine._apply_theorem",
+        "line": 1807,
+        "character": 0
+      },
+      "message": "SymbolicEngine._apply_theorem is too complex (16)",
+      "isFixable": false
+    },
+    {
+      "source": "pycodestyle",
+      "code": "E741",
+      "location": {
+        "path": "symbolic_engine.py",
+        "module": null,
+        "function": null,
+        "line": 607,
+        "character": 13
+      },
+      "message": "ambiguous variable name 'l'",
+      "isFixable": false
+    },
+    {
+      "source": "pycodestyle",
+      "code": "E741",
+      "location": {
+        "path": "symbolic_engine.py",
+        "module": null,
+        "function": null,
+        "line": 1158,
+        "character": 17
+      },
+      "message": "ambiguous variable name 'l'",
+      "isFixable": false
+    },
+    {
+      "source": "pycodestyle",
+      "code": "E741",
+      "location": {
+        "path": "symbolic_engine.py",
+        "module": null,
+        "function": null,
+        "line": 1173,
+        "character": 9
+      },
+      "message": "ambiguous variable name 'l'",
+      "isFixable": false
+    },
+    {
+      "source": "pylint",
+      "code": "bare-except",
+      "location": {
+        "path": "symbolic_engine.py",
+        "module": "geometry_reasoning_ai.symbolic_engine",
+        "function": "SymbolicEngine._numerical_check_eqangle.bring_together",
+        "line": 1321,
+        "character": 12,
+        "lineEnd": 1322,
+        "characterEnd": 33
+      },
+      "message": "No exception type(s) specified",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/bare-except.html"
+    },
+    {
+      "source": "pylint",
+      "code": "too-many-boolean-expressions",
+      "location": {
+        "path": "symbolic_engine.py",
+        "module": "geometry_reasoning_ai.symbolic_engine",
+        "function": "Line.same",
+        "line": 163,
+        "character": 11,
+        "lineEnd": 163,
+        "characterEnd": 85
+      },
+      "message": "Too many boolean expressions in if statement (6/5)",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/refactor/too-many-boolean-expressions.html"
+    },
+    {
+      "source": "pylint",
+      "code": "too-many-arguments",
+      "location": {
+        "path": "symbolic_engine.py",
+        "module": "geometry_reasoning_ai.symbolic_engine",
+        "function": "Circle.__init__",
+        "line": 171,
+        "character": 4,
+        "lineEnd": 171,
+        "characterEnd": 16
+      },
+      "message": "Too many arguments (6/5)",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/refactor/too-many-arguments.html"
+    },
+    {
+      "source": "pylint",
+      "code": "too-many-positional-arguments",
+      "location": {
+        "path": "symbolic_engine.py",
+        "module": "geometry_reasoning_ai.symbolic_engine",
+        "function": "Circle.__init__",
+        "line": 171,
+        "character": 4,
+        "lineEnd": 171,
+        "characterEnd": 16
+      },
+      "message": "Too many positional arguments (6/5)",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/refactor/too-many-positional-arguments.html"
+    },
+    {
+      "source": "pylint",
+      "code": "too-many-boolean-expressions",
+      "location": {
+        "path": "symbolic_engine.py",
+        "module": "geometry_reasoning_ai.symbolic_engine",
+        "function": "line_line_intersection",
+        "line": 215,
+        "character": 7,
+        "lineEnd": 215,
+        "characterEnd": 87
+      },
+      "message": "Too many boolean expressions in if statement (6/5)",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/refactor/too-many-boolean-expressions.html"
+    },
+    {
+      "source": "pylint",
+      "code": "too-many-locals",
+      "location": {
+        "path": "symbolic_engine.py",
+        "module": "geometry_reasoning_ai.symbolic_engine",
+        "function": "line_circle_intersection",
+        "line": 223,
+        "character": 0,
+        "lineEnd": 223,
+        "characterEnd": 28
+      },
+      "message": "Too many local variables (25/15)",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/refactor/too-many-locals.html"
+    },
+    {
+      "source": "pylint",
+      "code": "too-many-locals",
+      "location": {
+        "path": "symbolic_engine.py",
+        "module": "geometry_reasoning_ai.symbolic_engine",
+        "function": "circle_circle_intersection",
+        "line": 268,
+        "character": 0,
+        "lineEnd": 268,
+        "characterEnd": 30
+      },
+      "message": "Too many local variables (17/15)",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/refactor/too-many-locals.html"
+    },
+    {
+      "source": "pylint",
+      "code": "protected-access",
+      "location": {
+        "path": "symbolic_engine.py",
+        "module": "geometry_reasoning_ai.symbolic_engine",
+        "function": "GeomGraph.is_equal",
+        "line": 693,
+        "character": 11,
+        "lineEnd": 693,
+        "characterEnd": 17
+      },
+      "message": "Access to a protected member _val of a client class",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/protected-access.html"
+    },
+    {
+      "source": "pylint",
+      "code": "protected-access",
+      "location": {
+        "path": "symbolic_engine.py",
+        "module": "geometry_reasoning_ai.symbolic_engine",
+        "function": "GeomGraph.is_equal",
+        "line": 697,
+        "character": 24,
+        "lineEnd": 697,
+        "characterEnd": 30
+      },
+      "message": "Access to a protected member _val of a client class",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/protected-access.html"
+    },
+    {
+      "source": "pylint",
+      "code": "unused-argument",
+      "location": {
+        "path": "symbolic_engine.py",
+        "module": "geometry_reasoning_ai.symbolic_engine",
+        "function": "GeomGraph.is_perp",
+        "line": 700,
+        "character": 48,
+        "lineEnd": 700,
+        "characterEnd": 68
+      },
+      "message": "Unused argument 'level'",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/unused-argument.html"
+    },
+    {
+      "source": "pylint",
+      "code": "arguments-out-of-order",
+      "location": {
+        "path": "symbolic_engine.py",
+        "module": "geometry_reasoning_ai.symbolic_engine",
+        "function": "GeomGraph.get_or_create_const_rat",
+        "line": 749,
+        "character": 12,
+        "lineEnd": 749,
+        "characterEnd": 40
+      },
+      "message": "Positional arguments appear to be out of order",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/arguments-out-of-order.html"
+    },
+    {
+      "source": "pylint",
+      "code": "too-many-arguments",
+      "location": {
+        "path": "symbolic_engine.py",
+        "module": "geometry_reasoning_ai.symbolic_engine",
+        "function": "Definition.__init__",
+        "line": 827,
+        "character": 4,
+        "lineEnd": 827,
+        "characterEnd": 16
+      },
+      "message": "Too many arguments (6/5)",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/refactor/too-many-arguments.html"
+    },
+    {
+      "source": "pylint",
+      "code": "too-many-positional-arguments",
+      "location": {
+        "path": "symbolic_engine.py",
+        "module": "geometry_reasoning_ai.symbolic_engine",
+        "function": "Definition.__init__",
+        "line": 827,
+        "character": 4,
+        "lineEnd": 827,
+        "characterEnd": 16
+      },
+      "message": "Too many positional arguments (6/5)",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/refactor/too-many-positional-arguments.html"
+    },
+    {
+      "source": "pylint",
+      "code": "unused-argument",
+      "location": {
+        "path": "symbolic_engine.py",
+        "module": "geometry_reasoning_ai.symbolic_engine",
+        "function": "Definition._build_definition",
+        "line": 881,
+        "character": 31,
+        "lineEnd": 881,
+        "characterEnd": 40
+      },
+      "message": "Unused argument 'name'",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/unused-argument.html"
+    },
+    {
+      "source": "pylint",
+      "code": "protected-access",
+      "location": {
+        "path": "symbolic_engine.py",
+        "module": "geometry_reasoning_ai.symbolic_engine",
+        "function": "SymbolicEngine.check_para",
+        "line": 1185,
+        "character": 13,
+        "lineEnd": 1185,
+        "characterEnd": 33
+      },
+      "message": "Access to a protected member _get_line of a client class",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/protected-access.html"
+    },
+    {
+      "source": "pylint",
+      "code": "protected-access",
+      "location": {
+        "path": "symbolic_engine.py",
+        "module": "geometry_reasoning_ai.symbolic_engine",
+        "function": "SymbolicEngine.check_para",
+        "line": 1186,
+        "character": 13,
+        "lineEnd": 1186,
+        "characterEnd": 33
+      },
+      "message": "Access to a protected member _get_line of a client class",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/protected-access.html"
+    },
+    {
+      "source": "pylint",
+      "code": "protected-access",
+      "location": {
+        "path": "symbolic_engine.py",
+        "module": "geometry_reasoning_ai.symbolic_engine",
+        "function": "SymbolicEngine.check_perp",
+        "line": 1229,
+        "character": 13,
+        "lineEnd": 1229,
+        "characterEnd": 33
+      },
+      "message": "Access to a protected member _get_line of a client class",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/protected-access.html"
+    },
+    {
+      "source": "pylint",
+      "code": "protected-access",
+      "location": {
+        "path": "symbolic_engine.py",
+        "module": "geometry_reasoning_ai.symbolic_engine",
+        "function": "SymbolicEngine.check_perp",
+        "line": 1230,
+        "character": 13,
+        "lineEnd": 1230,
+        "characterEnd": 33
+      },
+      "message": "Access to a protected member _get_line of a client class",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/protected-access.html"
+    },
+    {
+      "source": "pylint",
+      "code": "too-many-locals",
+      "location": {
+        "path": "symbolic_engine.py",
+        "module": "geometry_reasoning_ai.symbolic_engine",
+        "function": "SymbolicEngine._numerical_check_eqangle",
+        "line": 1299,
+        "character": 4,
+        "lineEnd": 1299,
+        "characterEnd": 32
+      },
+      "message": "Too many local variables (27/15)",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/refactor/too-many-locals.html"
+    },
+    {
+      "source": "pylint",
+      "code": "unused-variable",
+      "location": {
+        "path": "symbolic_engine.py",
+        "module": "geometry_reasoning_ai.symbolic_engine",
+        "function": "SymbolicEngine.check_simtri",
+        "line": 1374,
+        "character": 8,
+        "lineEnd": 1374,
+        "characterEnd": 9
+      },
+      "message": "Unused variable 'a'",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/unused-variable.html"
+    },
+    {
+      "source": "pylint",
+      "code": "unused-variable",
+      "location": {
+        "path": "symbolic_engine.py",
+        "module": "geometry_reasoning_ai.symbolic_engine",
+        "function": "SymbolicEngine.check_contri",
+        "line": 1395,
+        "character": 8,
+        "lineEnd": 1395,
+        "characterEnd": 9
+      },
+      "message": "Unused variable 'a'",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/unused-variable.html"
+    },
+    {
+      "source": "pylint",
+      "code": "no-else-return",
+      "location": {
+        "path": "symbolic_engine.py",
+        "module": "geometry_reasoning_ai.symbolic_engine",
+        "function": "SymbolicEngine._apply_construction",
+        "line": 1445,
+        "character": 8,
+        "lineEnd": 1472,
+        "characterEnd": 21
+      },
+      "message": "Unnecessary \"elif\" after \"return\", remove the leading \"el\" from \"elif\"",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/refactor/no-else-return.html"
+    },
+    {
+      "source": "pylint",
+      "code": "too-many-nested-blocks",
+      "location": {
+        "path": "symbolic_engine.py",
+        "module": "geometry_reasoning_ai.symbolic_engine",
+        "function": "SymbolicEngine._match_theorem",
+        "line": 1713,
+        "character": 8,
+        "lineEnd": 1787,
+        "characterEnd": 59
+      },
+      "message": "Too many nested blocks (6/5)",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/refactor/too-many-nested-blocks.html"
+    },
+    {
+      "source": "pylint",
+      "code": "too-many-nested-blocks",
+      "location": {
+        "path": "symbolic_engine.py",
+        "module": "geometry_reasoning_ai.symbolic_engine",
+        "function": "SymbolicEngine._match_theorem",
+        "line": 1726,
+        "character": 8,
+        "lineEnd": 1787,
+        "characterEnd": 59
+      },
+      "message": "Too many nested blocks (7/5)",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/refactor/too-many-nested-blocks.html"
+    },
+    {
+      "source": "pylint",
+      "code": "too-many-nested-blocks",
+      "location": {
+        "path": "symbolic_engine.py",
+        "module": "geometry_reasoning_ai.symbolic_engine",
+        "function": "SymbolicEngine._match_theorem",
+        "line": 1747,
+        "character": 8,
+        "lineEnd": 1787,
+        "characterEnd": 59
+      },
+      "message": "Too many nested blocks (7/5)",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/refactor/too-many-nested-blocks.html"
+    },
+    {
+      "source": "pylint",
+      "code": "too-many-nested-blocks",
+      "location": {
+        "path": "symbolic_engine.py",
+        "module": "geometry_reasoning_ai.symbolic_engine",
+        "function": "SymbolicEngine._match_theorem",
+        "line": 1768,
+        "character": 8,
+        "lineEnd": 1787,
+        "characterEnd": 59
+      },
+      "message": "Too many nested blocks (7/5)",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/refactor/too-many-nested-blocks.html"
+    },
+    {
+      "source": "pylint",
+      "code": "no-else-return",
+      "location": {
+        "path": "symbolic_engine.py",
+        "module": "geometry_reasoning_ai.symbolic_engine",
+        "function": "SymbolicEngine._apply_theorem",
+        "line": 1832,
+        "character": 12,
+        "lineEnd": 1851,
+        "characterEnd": 28
+      },
+      "message": "Unnecessary \"elif\" after \"return\", remove the leading \"el\" from \"elif\"",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/refactor/no-else-return.html"
+    },
+    {
+      "source": "pylint",
+      "code": "unused-variable",
+      "location": {
+        "path": "symbolic_engine.py",
+        "module": "geometry_reasoning_ai.symbolic_engine",
+        "function": "run_symbolic_engine_test",
+        "line": 1890,
+        "character": 4,
+        "lineEnd": 1890,
+        "characterEnd": 11
+      },
+      "message": "Unused variable 'success'",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/unused-variable.html"
+    },
+    {
+      "source": "pylint",
+      "code": "too-many-branches",
+      "location": {
+        "path": "render_engine.py",
+        "module": "geometry_reasoning_ai.render_engine",
+        "function": "RenderEngine.verify_proposition",
+        "line": 129,
+        "character": 4,
+        "lineEnd": 129,
+        "characterEnd": 26
+      },
+      "message": "Too many branches (26/15)",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/refactor/too-many-branches.html"
+    },
+    {
+      "source": "pylint",
+      "code": "no-else-return",
+      "location": {
+        "path": "render_engine.py",
+        "module": "geometry_reasoning_ai.render_engine",
+        "function": "RenderEngine.verify_proposition",
+        "line": 142,
+        "character": 12,
+        "lineEnd": 192,
+        "characterEnd": 28
+      },
+      "message": "Unnecessary \"elif\" after \"return\", remove the leading \"el\" from \"elif\"",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/refactor/no-else-return.html"
+    },
+    {
+      "source": "pylint",
+      "code": "too-many-locals",
+      "location": {
+        "path": "render_engine.py",
+        "module": "geometry_reasoning_ai.render_engine",
+        "function": "RenderEngine._verify_eqratio6",
+        "line": 376,
+        "character": 4,
+        "lineEnd": 376,
+        "characterEnd": 24
+      },
+      "message": "Too many local variables (16/15)",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/refactor/too-many-locals.html"
+    },
+    {
+      "source": "pylint",
+      "code": "too-many-locals",
+      "location": {
+        "path": "render_engine.py",
+        "module": "geometry_reasoning_ai.render_engine",
+        "function": "RenderEngine._verify_sameside",
+        "line": 425,
+        "character": 4,
+        "lineEnd": 425,
+        "characterEnd": 24
+      },
+      "message": "Too many local variables (18/15)",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/refactor/too-many-locals.html"
+    },
+    {
+      "source": "pylint",
+      "code": "no-else-return",
+      "location": {
+        "path": "render_engine.py",
+        "module": "geometry_reasoning_ai.render_engine",
+        "function": "RenderEngine._verify_sameside",
+        "line": 429,
+        "character": 8,
+        "lineEnd": 469,
+        "characterEnd": 24
+      },
+      "message": "Unnecessary \"elif\" after \"return\", remove the leading \"el\" from \"elif\"",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/refactor/no-else-return.html"
+    },
+    {
+      "source": "pylint",
+      "code": "too-many-locals",
+      "location": {
+        "path": "render_engine.py",
+        "module": "geometry_reasoning_ai.render_engine",
+        "function": "RenderEngine._verify_simtri_star",
+        "line": 522,
+        "character": 4,
+        "lineEnd": 522,
+        "characterEnd": 27
+      },
+      "message": "Too many local variables (17/15)",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/refactor/too-many-locals.html"
+    },
+    {
+      "source": "pylint",
+      "code": "f-string-without-interpolation",
+      "location": {
+        "path": "final_report.py",
+        "module": "geometry_reasoning_ai.final_report",
+        "function": "check_design_compliance",
+        "line": 63,
+        "character": 10,
+        "lineEnd": 63,
+        "characterEnd": 32
+      },
+      "message": "Using an f-string that does not have any interpolated variables",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/f-string-without-interpolation.html"
+    },
+    {
+      "source": "pylint",
+      "code": "unused-variable",
+      "location": {
+        "path": "final_report.py",
+        "module": "geometry_reasoning_ai.final_report",
+        "function": "check_design_compliance",
+        "line": 105,
+        "character": 4,
+        "lineEnd": 105,
+        "characterEnd": 10
+      },
+      "message": "Unused variable 'engine'",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/unused-variable.html"
+    },
+    {
+      "source": "pylint",
+      "code": "f-string-without-interpolation",
+      "location": {
+        "path": "final_report.py",
+        "module": "geometry_reasoning_ai.final_report",
+        "function": "check_design_compliance",
+        "line": 106,
+        "character": 10,
+        "lineEnd": 106,
+        "characterEnd": 75
+      },
+      "message": "Using an f-string that does not have any interpolated variables",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/f-string-without-interpolation.html"
+    },
+    {
+      "source": "pylint",
+      "code": "f-string-without-interpolation",
+      "location": {
+        "path": "final_report.py",
+        "module": "geometry_reasoning_ai.final_report",
+        "function": "check_design_compliance",
+        "line": 107,
+        "character": 10,
+        "lineEnd": 107,
+        "characterEnd": 58
+      },
+      "message": "Using an f-string that does not have any interpolated variables",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/f-string-without-interpolation.html"
+    },
+    {
+      "source": "pylint",
+      "code": "f-string-without-interpolation",
+      "location": {
+        "path": "final_report.py",
+        "module": "geometry_reasoning_ai.final_report",
+        "function": "check_design_compliance",
+        "line": 113,
+        "character": 10,
+        "lineEnd": 113,
+        "characterEnd": 54
+      },
+      "message": "Using an f-string that does not have any interpolated variables",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/f-string-without-interpolation.html"
+    },
+    {
+      "source": "pylint",
+      "code": "unused-import",
+      "location": {
+        "path": "final_report.py",
+        "module": "geometry_reasoning_ai.final_report",
+        "function": "check_design_compliance",
+        "line": 117,
+        "character": 4,
+        "lineEnd": 117,
+        "characterEnd": 49
+      },
+      "message": "Unused Event imported from event_system",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/unused-import.html"
+    },
+    {
+      "source": "pylint",
+      "code": "import-outside-toplevel",
+      "location": {
+        "path": "final_report.py",
+        "module": "geometry_reasoning_ai.final_report",
+        "function": "check_design_compliance",
+        "line": 117,
+        "character": 4,
+        "lineEnd": 117,
+        "characterEnd": 49
+      },
+      "message": "Import outside toplevel (event_system.Event, event_system.EventSequence)",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/convention/import-outside-toplevel.html"
+    },
+    {
+      "source": "pylint",
+      "code": "f-string-without-interpolation",
+      "location": {
+        "path": "final_report.py",
+        "module": "geometry_reasoning_ai.final_report",
+        "function": "check_design_compliance",
+        "line": 119,
+        "character": 10,
+        "lineEnd": 119,
+        "characterEnd": 57
+      },
+      "message": "Using an f-string that does not have any interpolated variables",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/f-string-without-interpolation.html"
+    },
+    {
+      "source": "pylint",
+      "code": "f-string-without-interpolation",
+      "location": {
+        "path": "final_report.py",
+        "module": "geometry_reasoning_ai.final_report",
+        "function": "check_design_compliance",
+        "line": 120,
+        "character": 10,
+        "lineEnd": 120,
+        "characterEnd": 48
+      },
+      "message": "Using an f-string that does not have any interpolated variables",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/f-string-without-interpolation.html"
+    },
+    {
+      "source": "pylint",
+      "code": "unused-variable",
+      "location": {
+        "path": "final_report.py",
+        "module": "geometry_reasoning_ai.final_report",
+        "function": "check_design_compliance",
+        "line": 132,
+        "character": 4,
+        "lineEnd": 132,
+        "characterEnd": 10
+      },
+      "message": "Unused variable 'system'",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/unused-variable.html"
+    },
+    {
+      "source": "pylint",
+      "code": "f-string-without-interpolation",
+      "location": {
+        "path": "final_report.py",
+        "module": "geometry_reasoning_ai.final_report",
+        "function": "check_design_compliance",
+        "line": 133,
+        "character": 10,
+        "lineEnd": 133,
+        "characterEnd": 50
+      },
+      "message": "Using an f-string that does not have any interpolated variables",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/f-string-without-interpolation.html"
+    },
+    {
+      "source": "pylint",
+      "code": "f-string-without-interpolation",
+      "location": {
+        "path": "final_report.py",
+        "module": "geometry_reasoning_ai.final_report",
+        "function": "check_design_compliance",
+        "line": 134,
+        "character": 10,
+        "lineEnd": 134,
+        "characterEnd": 60
+      },
+      "message": "Using an f-string that does not have any interpolated variables",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/f-string-without-interpolation.html"
+    },
+    {
+      "source": "pylint",
+      "code": "f-string-without-interpolation",
+      "location": {
+        "path": "final_report.py",
+        "module": "geometry_reasoning_ai.final_report",
+        "function": "check_design_compliance",
+        "line": 135,
+        "character": 10,
+        "lineEnd": 135,
+        "characterEnd": 57
+      },
+      "message": "Using an f-string that does not have any interpolated variables",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/f-string-without-interpolation.html"
+    },
+    {
+      "source": "pylint",
+      "code": "f-string-without-interpolation",
+      "location": {
+        "path": "final_report.py",
+        "module": "geometry_reasoning_ai.final_report",
+        "function": "check_design_compliance",
+        "line": 136,
+        "character": 10,
+        "lineEnd": 136,
+        "characterEnd": 51
+      },
+      "message": "Using an f-string that does not have any interpolated variables",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/f-string-without-interpolation.html"
+    },
+    {
+      "source": "pylint",
+      "code": "unused-import",
+      "location": {
+        "path": "final_report.py",
+        "module": "geometry_reasoning_ai.final_report",
+        "function": "check_design_compliance",
+        "line": 140,
+        "character": 4,
+        "lineEnd": 140,
+        "characterEnd": 76
+      },
+      "message": "Unused EncoderDecoderTrainer imported from training",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/unused-import.html"
+    },
+    {
+      "source": "pylint",
+      "code": "import-outside-toplevel",
+      "location": {
+        "path": "final_report.py",
+        "module": "geometry_reasoning_ai.final_report",
+        "function": "check_design_compliance",
+        "line": 140,
+        "character": 4,
+        "lineEnd": 140,
+        "characterEnd": 76
+      },
+      "message": "Import outside toplevel (training.EncoderDecoderTrainer, training.SupervisedTrainer, training.RLTrainer)",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/convention/import-outside-toplevel.html"
+    },
+    {
+      "source": "pylint",
+      "code": "f-string-without-interpolation",
+      "location": {
+        "path": "final_report.py",
+        "module": "geometry_reasoning_ai.final_report",
+        "function": "check_design_compliance",
+        "line": 142,
+        "character": 10,
+        "lineEnd": 142,
+        "characterEnd": 52
+      },
+      "message": "Using an f-string that does not have any interpolated variables",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/f-string-without-interpolation.html"
+    },
+    {
+      "source": "pylint",
+      "code": "f-string-without-interpolation",
+      "location": {
+        "path": "final_report.py",
+        "module": "geometry_reasoning_ai.final_report",
+        "function": "check_design_compliance",
+        "line": 143,
+        "character": 10,
+        "lineEnd": 143,
+        "characterEnd": 33
+      },
+      "message": "Using an f-string that does not have any interpolated variables",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/f-string-without-interpolation.html"
+    },
+    {
+      "source": "pylint",
+      "code": "f-string-without-interpolation",
+      "location": {
+        "path": "final_report.py",
+        "module": "geometry_reasoning_ai.final_report",
+        "function": "check_design_compliance",
+        "line": 144,
+        "character": 10,
+        "lineEnd": 144,
+        "characterEnd": 39
+      },
+      "message": "Using an f-string that does not have any interpolated variables",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/f-string-without-interpolation.html"
+    },
+    {
+      "source": "pylint",
+      "code": "unused-variable",
+      "location": {
+        "path": "final_report.py",
+        "module": "geometry_reasoning_ai.final_report",
+        "function": "main",
+        "line": 237,
+        "character": 4,
+        "lineEnd": 237,
+        "characterEnd": 20
+      },
+      "message": "Unused variable 'design_compliant'",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/unused-variable.html"
+    },
+    {
+      "source": "pylint",
+      "code": "too-many-statements",
+      "location": {
+        "path": "final_report.py",
+        "module": "geometry_reasoning_ai.final_report",
+        "function": "check_design_compliance",
+        "line": 18,
+        "character": 0,
+        "lineEnd": 18,
+        "characterEnd": 27
+      },
+      "message": "Too many statements (90/60)",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/refactor/too-many-statements.html"
+    },
+    {
+      "source": "pylint",
+      "code": "too-many-locals",
+      "location": {
+        "path": "final_report.py",
+        "module": "geometry_reasoning_ai.final_report",
+        "function": "check_design_compliance",
+        "line": 18,
+        "character": 0,
+        "lineEnd": 18,
+        "characterEnd": 27
+      },
+      "message": "Too many local variables (25/15)",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/refactor/too-many-locals.html"
+    },
+    {
+      "source": "pylint",
+      "code": "import-outside-toplevel",
+      "location": {
+        "path": "final_report.py",
+        "module": "geometry_reasoning_ai.final_report",
+        "function": "check_design_compliance",
+        "line": 96,
+        "character": 4,
+        "lineEnd": 96,
+        "characterEnd": 43
+      },
+      "message": "Import outside toplevel (tokenizer.GeometryTokenizer)",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/convention/import-outside-toplevel.html"
+    },
+    {
+      "source": "pylint",
+      "code": "import-outside-toplevel",
+      "location": {
+        "path": "final_report.py",
+        "module": "geometry_reasoning_ai.final_report",
+        "function": "check_design_compliance",
+        "line": 124,
+        "character": 4,
+        "lineEnd": 124,
+        "characterEnd": 54
+      },
+      "message": "Import outside toplevel (proposition_manager.PropositionManager)",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/convention/import-outside-toplevel.html"
+    },
+    {
+      "source": "pylint",
+      "code": "f-string-without-interpolation",
+      "location": {
+        "path": "check_syntax_support.py",
+        "module": "geometry_reasoning_ai.check_syntax_support",
+        "function": null,
+        "line": 109,
+        "character": 6,
+        "lineEnd": 109,
+        "characterEnd": 31
+      },
+      "message": "Using an f-string that does not have any interpolated variables",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/f-string-without-interpolation.html"
+    },
+    {
+      "source": "pylint",
+      "code": "f-string-without-interpolation",
+      "location": {
+        "path": "check_syntax_support.py",
+        "module": "geometry_reasoning_ai.check_syntax_support",
+        "function": null,
+        "line": 116,
+        "character": 6,
+        "lineEnd": 116,
+        "characterEnd": 31
+      },
+      "message": "Using an f-string that does not have any interpolated variables",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/f-string-without-interpolation.html"
+    },
+    {
+      "source": "pylint",
+      "code": "f-string-without-interpolation",
+      "location": {
+        "path": "check_syntax_support.py",
+        "module": "geometry_reasoning_ai.check_syntax_support",
+        "function": null,
+        "line": 121,
+        "character": 6,
+        "lineEnd": 121,
+        "characterEnd": 25
+      },
+      "message": "Using an f-string that does not have any interpolated variables",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/warning/f-string-without-interpolation.html"
+    },
+    {
+      "source": "pylint",
+      "code": "no-else-continue",
+      "location": {
+        "path": "geometry_parser.py",
+        "module": "geometry_reasoning_ai.geometry_parser",
+        "function": "GeometryParser.load_constructions_from_file",
+        "line": 416,
+        "character": 20,
+        "lineEnd": 426,
+        "characterEnd": 32
+      },
+      "message": "Unnecessary \"else\" after \"continue\", remove the \"else\" and de-indent the code inside it",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/refactor/no-else-continue.html"
+    },
+    {
+      "source": "pylint",
+      "code": "not-callable",
+      "location": {
+        "path": "models.py",
+        "module": "geometry_reasoning_ai.models",
+        "function": "FeedForward.forward",
+        "line": 66,
+        "character": 12,
+        "lineEnd": 66,
+        "characterEnd": 49
+      },
+      "message": "torch.nn.functional.gelu is not callable",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/error/not-callable.html"
+    },
+    {
+      "source": "pylint",
+      "code": "import-outside-toplevel",
+      "location": {
+        "path": "proposition_manager.py",
+        "module": "geometry_reasoning_ai.proposition_manager",
+        "function": "PropositionManager.get_proof_state",
+        "line": 163,
+        "character": 12,
+        "lineEnd": 163,
+        "characterEnd": 67
+      },
+      "message": "Import outside toplevel (symbolic_engine.ProofState)",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/convention/import-outside-toplevel.html"
+    },
+    {
+      "source": "pylint",
+      "code": "import-outside-toplevel",
+      "location": {
+        "path": "proposition_manager.py",
+        "module": "geometry_reasoning_ai.proposition_manager",
+        "function": "PropositionManager.get_proof_state",
+        "line": 165,
+        "character": 12,
+        "lineEnd": 165,
+        "characterEnd": 66
+      },
+      "message": "Import outside toplevel (symbolic_engine.ProofState)",
+      "isFixable": false,
+      "docUrl": "https://pylint.readthedocs.io/en/latest/user_guide/messages/convention/import-outside-toplevel.html"
+    }
+  ]
+}

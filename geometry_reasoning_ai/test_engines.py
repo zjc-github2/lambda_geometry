@@ -2,14 +2,10 @@
 """渲染引擎和符号引擎的综合测试。"""
 
 import math
-import sys
-import os
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-
-from render_engine import RenderEngine, Point
-from symbolic_engine import SymbolicEngine, ProofState
-from geometry_parser import GeometryParser, Proposition
+from .render_engine import RenderEngine
+from .symbolic_engine import SymbolicEngine, ProofState
+from .geometry_parser import GeometryParser
 
 
 def test_render_engine_basic():

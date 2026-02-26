@@ -3,7 +3,7 @@
 几何语法解析器 - 统一解析 AlphaGeometry 格式的几何命题和构造
 """
 
-from typing import List, Dict, Tuple, Optional, Set
+from typing import List, Dict, Tuple, Optional
 from dataclasses import dataclass
 import re
 
@@ -159,7 +159,9 @@ class GeometryParser:
         "circumcenter",
         "orthocenter",
         "incenter",
+        "incenter2",
         "excenter",
+        "excenter2",
         "centroid",
         "ninepoints",
         "triangle",
@@ -388,7 +390,7 @@ class GeometryParser:
         """
         construction_defs = {}
         current_construction = None
-        current_conditions = []
+        current_conditions: List[Proposition] = []
 
         with open(filepath, "r", encoding="utf-8") as f:
             for line in f:
@@ -414,14 +416,13 @@ class GeometryParser:
                     if ":" in line:
                         # 跳过变量定义行
                         continue
-                    else:
-                        # 尝试解析为命题
-                        try:
-                            prop = GeometryParser.parse_proposition(line)
-                            current_conditions.append(prop)
-                        except ValueError:
-                            # 跳过无法解析的行
-                            pass
+                    # 尝试解析为命题
+                    try:
+                        prop = GeometryParser.parse_proposition(line)
+                        current_conditions.append(prop)
+                    except ValueError:
+                        # 跳过无法解析的行
+                        pass
 
         # 保存最后一个构造
         if current_construction:

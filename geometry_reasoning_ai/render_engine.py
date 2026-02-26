@@ -4,18 +4,15 @@
 """
 
 import math
-from typing import Dict, List, Tuple, Optional, Set
+from typing import Dict, Tuple, Optional
 from dataclasses import dataclass
 
-try:
-    from .geometry_parser import Proposition, GeometryParser
-except ImportError:
-    from geometry_parser import Proposition, GeometryParser
+from .geometry_parser import Proposition
 
 
 @dataclass
-class Point:
-    """点"""
+class RenderPoint:
+    """渲染点"""
 
     name: str
     x: float
@@ -25,14 +22,14 @@ class Point:
         return hash(self.name)
 
     def __eq__(self, other):
-        if not isinstance(other, Point):
+        if not isinstance(other, RenderPoint):
             return False
         return self.name == other.name
 
 
 @dataclass
-class Line:
-    """线"""
+class RenderLine:
+    """渲染线"""
 
     name: str
     p1: str
@@ -42,14 +39,14 @@ class Line:
         return hash(self.name)
 
     def __eq__(self, other):
-        if not isinstance(other, Line):
+        if not isinstance(other, RenderLine):
             return False
         return self.name == other.name
 
 
 @dataclass
-class Circle:
-    """圆"""
+class RenderCircle:
+    """渲染圆"""
 
     name: str
     center: str
@@ -59,7 +56,7 @@ class Circle:
         return hash(self.name)
 
     def __eq__(self, other):
-        if not isinstance(other, Circle):
+        if not isinstance(other, RenderCircle):
             return False
         return self.name == other.name
 
@@ -68,38 +65,38 @@ class RenderEngine:
     """几何渲染引擎 - 用于数值验证"""
 
     def __init__(self):
-        self.points: Dict[str, Point] = {}
-        self.lines: Dict[str, Line] = {}
-        self.circles: Dict[str, Circle] = {}
+        self.points: Dict[str, RenderPoint] = {}
+        self.lines: Dict[str, RenderLine] = {}
+        self.circles: Dict[str, RenderCircle] = {}
         self.tolerance = 1e-6  # 浮点数比较容差
 
-    def add_point(self, name: str, x: float, y: float) -> Point:
+    def add_point(self, name: str, x: float, y: float) -> RenderPoint:
         """添加点"""
-        point = Point(name=name, x=x, y=y)
+        point = RenderPoint(name=name, x=x, y=y)
         self.points[name] = point
         return point
 
-    def add_line(self, name: str, p1: str, p2: str) -> Line:
+    def add_line(self, name: str, p1: str, p2: str) -> RenderLine:
         """添加线"""
-        line = Line(name=name, p1=p1, p2=p2)
+        line = RenderLine(name=name, p1=p1, p2=p2)
         self.lines[name] = line
         return line
 
-    def add_circle(self, name: str, center: str, point: str) -> Circle:
+    def add_circle(self, name: str, center: str, point: str) -> RenderCircle:
         """添加圆"""
-        circle = Circle(name=name, center=center, point=point)
+        circle = RenderCircle(name=name, center=center, point=point)
         self.circles[name] = circle
         return circle
 
-    def get_point(self, name: str) -> Optional[Point]:
+    def get_point(self, name: str) -> Optional[RenderPoint]:
         """获取点"""
         return self.points.get(name)
 
-    def get_line(self, name: str) -> Optional[Line]:
+    def get_line(self, name: str) -> Optional[RenderLine]:
         """获取线"""
         return self.lines.get(name)
 
-    def get_circle(self, name: str) -> Optional[Circle]:
+    def get_circle(self, name: str) -> Optional[RenderCircle]:
         """获取圆"""
         return self.circles.get(name)
 
@@ -302,7 +299,6 @@ class RenderEngine:
         """验证圆: circle O A (O 是圆心,A 在圆上)"""
         if len(args) != 2:
             return False
-        O, A = args
         # 圆的定义: O 是圆心, A 在圆上
         # 这只是一个标记,总是返回 True
         return True
@@ -324,7 +320,7 @@ class RenderEngine:
         """验证六点等角: eqangle6 A B C D E F G H"""
         if len(args) != 8:
             return False
-        A, B, C, D, E, F, G, H = args
+        A, B, C, _, E, F, G, _ = args
 
         # 计算角 A B C
         angle1 = self.angle(B, A, C)
@@ -456,16 +452,16 @@ class RenderEngine:
             pB = self.get_point(B)
             pO2 = self.get_point(O2)
             pD = self.get_point(D)
-            if any(p is None for p in [pA, pO, pC, pB, pO2, pD]):
+            if pA is None or pO is None or pC is None or pB is None or pO2 is None or pD is None:
                 return False
 
             # 检查 A 和 D 在 OC 的同侧
-            cross1 = (pO.x - pC.x) * (pA.y - pC.y) - (pO.y - pC.y) * (pA.x - pC.x)
-            cross2 = (pO.x - pC.x) * (pD.y - pC.y) - (pO.y - pC.y) * (pD.x - pC.x)
+            cross1 = (pO.x - pC.x) * (pA.y - pC.y) - (pO.y - pC.y) * (pA.x - pC.x)  #
+            cross2 = (pO.x - pC.x) * (pD.y - pC.y) - (pO.y - pC.y) * (pD.x - pC.x)  #
 
             # 检查 B 和 D 在 OC 的同侧
-            cross3 = (pO.x - pC.x) * (pB.y - pC.y) - (pO.y - pC.y) * (pB.x - pC.x)
-            cross4 = (pO.x - pC.x) * (pD.y - pC.y) - (pO.y - pC.y) * (pD.x - pC.x)
+            cross3 = (pO.x - pC.x) * (pB.y - pC.y) - (pO.y - pC.y) * (pB.x - pC.x)  #
+            cross4 = (pO.x - pC.x) * (pD.y - pC.y) - (pO.y - pC.y) * (pD.x - pC.x)  #
 
             # 同号表示同侧
             return (cross1 * cross2 > 0) and (cross3 * cross4 > 0)
@@ -554,6 +550,10 @@ class RenderEngine:
         self.points.clear()
         self.lines.clear()
         self.circles.clear()
+
+    def reset(self):
+        """重置引擎（清空所有几何对象）"""
+        self.clear()
 
     def __str__(self):
         return f"RenderEngine(points={len(self.points)}, lines={len(self.lines)}, circles={len(self.circles)})"
