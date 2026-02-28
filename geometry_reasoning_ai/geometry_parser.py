@@ -7,6 +7,17 @@ from typing import List, Dict, Tuple, Optional
 from dataclasses import dataclass
 import re
 
+try:
+    from .geometry_definitions import (
+        GeometryPredicates,
+        GeometryConstructions,
+    )
+except ImportError:
+    from geometry_definitions import (
+        GeometryPredicates,
+        GeometryConstructions,
+    )
+
 
 @dataclass
 class Proposition:
@@ -66,146 +77,16 @@ class Problem:
 class GeometryParser:
     """几何语法解析器"""
 
-    # 支持的谓词列表
-    SUPPORTED_PREDICATES = {
-        # 基本关系
-        "coll",
-        "para",
-        "perp",
-        "cong",
-        "midp",
-        "cyclic",
-        "circle",
-        # 角度关系
-        "eqangle",
-        "eqangle6",
-        "eqangle3",
-        "eqangle2",
-        # 比例关系
-        "eqratio",
-        "eqratio6",
-        "eqratio3",
-        # 否定关系
-        "ncoll",
-        "npara",
-        "nperp",
-        "diff",
-        # 特殊关系
-        "sameside",
-        "rconst",
-        # 三角形关系
-        "contri",
-        "contri2",
-        "simtri",
-        "simtri2",
-        # 特殊标记
-        "contri*",
-        "simtri*",
-    }
+    # 支持的谓词列表 - 从统一数据源获取
+    SUPPORTED_PREDICATES = GeometryPredicates.get_predicate_names()
 
-    # 谓词参数数量映射 (None 表示可变参数, list 表示支持多种参数数量)
+    # 谓词参数数量映射 - 从统一数据源获取
     PREDICATE_ARITIES = {
-        "coll": 3,
-        "para": 4,
-        "perp": 4,
-        "cong": 4,
-        "midp": 3,
-        "cyclic": None,
-        "circle": None,
-        "eqangle": 8,
-        "eqangle6": 8,
-        "eqangle3": 6,
-        "eqangle2": 4,
-        "eqratio": 8,
-        "eqratio6": 8,
-        "eqratio3": 6,
-        "ncoll": None,  # 支持 3 或 4 个参数
-        "npara": 4,
-        "nperp": 4,
-        "diff": 2,
-        "sameside": None,
-        "rconst": 6,
-        "contri": 6,
-        "contri2": 6,
-        "simtri": 6,
-        "simtri2": 6,
-        "contri*": 6,
-        "simtri*": 6,
+        name: pred.arity for name, pred in GeometryPredicates.PREDICATES.items()
     }
 
-    # 支持的构造列表
-    SUPPORTED_CONSTRUCTIONS = {
-        "free",
-        "midpoint",
-        "foot",
-        "intersection_ll",
-        "intersection_lc",
-        "intersection_cc",
-        "intersection_lp",
-        "intersection_lt",
-        "intersection_pp",
-        "intersection_tt",
-        "on_line",
-        "on_pline",
-        "on_tline",
-        "on_bline",
-        "on_aline",
-        "on_aline2",
-        "on_circle",
-        "on_circum",
-        "on_dia",
-        "on_opline",
-        "circle",
-        "circumcenter",
-        "orthocenter",
-        "incenter",
-        "incenter2",
-        "excenter",
-        "excenter2",
-        "centroid",
-        "ninepoints",
-        "triangle",
-        "iso_triangle",
-        "r_triangle",
-        "rectangle",
-        "parallelogram",
-        "trapezoid",
-        "r_trapezoid",
-        "eq_trapezoid",
-        "square",
-        "isquare",
-        "pentagon",
-        "quadrangle",
-        "eq_quadrangle",
-        "eqdia_quadrangle",
-        "angle_bisector",
-        "angle_mirror",
-        "bisect",
-        "amirror",
-        "mirror",
-        "reflect",
-        "nsquare",
-        "psquare",
-        "shift",
-        "eq_triangle",
-        "eqdistance",
-        "eqangle2",
-        "eqangle3",
-        "trisect",
-        "trisegment",
-        "triangle12",
-        "ieq_triangle",
-        "risos",
-        "lc_tangent",
-        "cc_tangent",
-        "cc_tangent0",
-        "tangent",
-        "2l1c",
-        "e5128",
-        "3peq",
-        "segment",
-        "s_angle",
-    }
+    # 支持的构造列表 - 从统一数据源获取
+    SUPPORTED_CONSTRUCTIONS = GeometryConstructions.get_construction_names()
 
     @staticmethod
     def parse_proposition(text: str) -> Proposition:

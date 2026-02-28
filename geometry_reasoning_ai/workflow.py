@@ -10,14 +10,24 @@ from typing import Dict, List, Optional, Tuple, Union
 import torch
 from torch import nn
 
-from .config import SystemConfig, get_default_config
-from .event_system import Event, EventSequence
-from .geometry_parser import GeometryParser, Proposition
-from .models import Decoder, Encoder, ReasoningAI
-from .proposition_manager import PropositionManager
-from .render_engine import RenderEngine
-from .symbolic_engine import SymbolicEngine
-from .tokenizer import GeometryTokenizer
+try:
+    from .config import SystemConfig, get_default_config
+    from .event_system import Event, EventSequence
+    from .geometry_parser import GeometryParser, Proposition
+    from .models import Decoder, Encoder, ReasoningAI
+    from .proposition_manager import PropositionManager
+    from .render_engine import RenderEngine
+    from .symbolic_engine import SymbolicEngine
+    from .tokenizer import GeometryTokenizer
+except ImportError:
+    from config import SystemConfig, get_default_config
+    from event_system import Event, EventSequence
+    from geometry_parser import GeometryParser, Proposition
+    from models import Decoder, Encoder, ReasoningAI
+    from proposition_manager import PropositionManager
+    from render_engine import RenderEngine
+    from symbolic_engine import SymbolicEngine
+    from tokenizer import GeometryTokenizer
 
 
 @dataclass
@@ -305,15 +315,3 @@ class GeometryReasoningSystem:
             + count(self.decoder)
             + count(self.reasoning_ai),
         }
-
-
-if __name__ == "__main__":
-    system = GeometryReasoningSystem()
-
-    params = system.count_parameters()
-    print("模型参数:")
-    for name, count in params.items():
-        print(f"  {name}: {count:,}")
-
-    print(f"\n总参数量: {params['total']:,}")
-    print(f"小于0.05M (50,000): {params['total'] < 50000}")

@@ -6,13 +6,24 @@
 不包含辅助线功能，专注于从条件到结论的推理步骤。
 """
 
-import sys
+import json
 import os
 import random
-from typing import List, Tuple, Dict, Optional
 from dataclasses import dataclass, field
+from typing import List, Tuple, Dict, Optional
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+try:
+    from .geometry_definitions import (
+        GeometryConstructions,
+        GeometryPredicates,
+        GeometryRules,
+    )
+except ImportError:
+    from geometry_definitions import (
+        GeometryConstructions,
+        GeometryPredicates,
+        GeometryRules,
+    )
 
 
 @dataclass
@@ -68,518 +79,47 @@ class ProofData:
         return sequence
 
 
+def _get_definitions_dict() -> Dict:
+    """获取构造定义字典（兼容旧代码格式）"""
+    result = {}
+    for name, defn in GeometryConstructions.CONSTRUCTIONS.items():
+        result[name] = {
+            "args": defn.args,
+            "predicates": defn.predicates,
+            "description": defn.description,
+        }
+    return result
+
+
+def _get_predicate_templates() -> Dict:
+    """获取谓词模板（兼容旧代码格式）"""
+    templates = {}
+    for name, pred in GeometryPredicates.PREDICATES.items():
+        if pred.arity > 0:
+            args_str = " ".join([f"{{{i}}}" for i in range(pred.arity)])
+            templates[name] = {
+                "args": pred.arity,
+                "template": f"{name} {args_str}",
+            }
+    return templates
+
+
+def _get_rules_list() -> List[Dict]:
+    """获取规则列表（兼容旧代码格式）"""
+    return GeometryRules.get_rules_dict_list()
+
+
 class GeometryDefinitions:
-    """几何定义 - 从AlphaGeometry defs.txt完整解析"""
+    """几何定义 - 兼容旧代码的包装类"""
 
-    DEFINITIONS = {
-        "triangle": {
-            "args": ["a", "b", "c"],
-            "predicates": [],
-            "description": "三角形ABC",
-        },
-        "midpoint": {
-            "args": ["m", "a", "b"],
-            "predicates": ["midp m a b", "coll m a b", "cong m a m b"],
-            "description": "M是AB的中点",
-        },
-        "foot": {
-            "args": ["x", "a", "b", "c"],
-            "predicates": ["perp x a b c", "coll x b c"],
-            "description": "X是A到BC的垂足",
-        },
-        "orthocenter": {
-            "args": ["h", "a", "b", "c"],
-            "predicates": ["perp h a b c", "perp h b c a", "perp h c a b"],
-            "description": "H是三角形ABC的垂心",
-        },
-        "circumcenter": {
-            "args": ["o", "a", "b", "c"],
-            "predicates": ["cong o a o b", "cong o b o c"],
-            "description": "O是三角形ABC的外心",
-        },
-        "incenter": {
-            "args": ["i", "a", "b", "c"],
-            "predicates": [
-                "eqangle a b a i a i a c",
-                "eqangle c a c i c i c b",
-                "eqangle b c b i b i b a",
-            ],
-            "description": "I是三角形ABC的内心",
-        },
-        "centroid": {
-            "args": ["g", "a", "b", "c"],
-            "predicates": [],
-            "description": "G是三角形ABC的重心（需要中点构造）",
-        },
-        "on_line": {
-            "args": ["x", "a", "b"],
-            "predicates": ["coll x a b"],
-            "description": "X在直线AB上",
-        },
-        "on_tline": {
-            "args": ["x", "a", "b", "c"],
-            "predicates": ["perp x a b c"],
-            "description": "X在过A垂直于BC的直线上",
-        },
-        "on_pline": {
-            "args": ["x", "a", "b", "c"],
-            "predicates": ["para x a b c"],
-            "description": "X在过A平行于BC的直线上",
-        },
-        "on_circle": {
-            "args": ["x", "o", "a"],
-            "predicates": ["cong o x o a"],
-            "description": "X在以O为圆心过A的圆上",
-        },
-        "on_circum": {
-            "args": ["x", "a", "b", "c"],
-            "predicates": ["cyclic a b c x"],
-            "description": "X在三角形ABC的外接圆上",
-        },
-        "intersection_ll": {
-            "args": ["x", "a", "b", "c", "d"],
-            "predicates": ["coll x a b", "coll x c d"],
-            "description": "X是直线AB和CD的交点",
-        },
-        "angle_bisector": {
-            "args": ["x", "a", "b", "c"],
-            "predicates": ["eqangle b a b x b x b c"],
-            "description": "AX是角BAC的角平分线",
-        },
-        "free": {"args": ["a"], "predicates": [], "description": "自由点A"},
-        "segment": {"args": ["a", "b"], "predicates": [], "description": "线段AB"},
-        "r_triangle": {
-            "args": ["a", "b", "c"],
-            "predicates": ["perp a b a c"],
-            "description": "直角三角形ABC（A为直角）",
-        },
-        "iso_triangle": {
-            "args": ["a", "b", "c"],
-            "predicates": ["cong a b a c", "eqangle b a b c c b c a"],
-            "description": "等腰三角形ABC",
-        },
-        "parallelogram": {
-            "args": ["a", "b", "c", "d"],
-            "predicates": [
-                "para a b c d",
-                "para a d b c",
-                "cong a b c d",
-                "cong a d b c",
-            ],
-            "description": "平行四边形ABCD（对边平行且相等）",
-        },
-        "rectangle": {
-            "args": ["a", "b", "c", "d"],
-            "predicates": [
-                "perp a b b c",
-                "para a b c d",
-                "para a d b c",
-                "cong a b c d",
-                "cong a d b c",
-                "cong a c b d",
-            ],
-            "description": "矩形ABCD",
-        },
-        "square": {
-            "args": ["a", "b", "c", "d"],
-            "predicates": [
-                "perp a b b c",
-                "cong a b b c",
-                "para a b c d",
-                "para a d b c",
-                "cong b c c d",
-                "cong c d d a",
-                "cong a c b d",
-            ],
-            "description": "正方形ABCD",
-        },
-        "trapezoid": {
-            "args": ["a", "b", "c", "d"],
-            "predicates": ["para a b c d"],
-            "description": "梯形ABCD",
-        },
-    }
-
-    PREDICATE_TEMPLATES = {
-        "coll": {"args": 3, "template": "coll {0} {1} {2}"},
-        "para": {"args": 4, "template": "para {0} {1} {2} {3}"},
-        "perp": {"args": 4, "template": "perp {0} {1} {2} {3}"},
-        "cong": {"args": 4, "template": "cong {0} {1} {2} {3}"},
-        "midp": {"args": 3, "template": "midp {0} {1} {2}"},
-        "cyclic": {"args": 4, "template": "cyclic {0} {1} {2} {3}"},
-        "circle": {"args": 4, "template": "circle {0} {1} {2} {3}"},
-        "eqangle": {"args": 8, "template": "eqangle {0} {1} {2} {3} {4} {5} {6} {7}"},
-        "eqratio": {"args": 8, "template": "eqratio {0} {1} {2} {3} {4} {5} {6} {7}"},
-        "simtri": {"args": 6, "template": "simtri {0} {1} {2} {3} {4} {5}"},
-        "contri": {"args": 6, "template": "contri {0} {1} {2} {3} {4} {5}"},
-    }
+    DEFINITIONS = _get_definitions_dict()
+    PREDICATE_TEMPLATES = _get_predicate_templates()
 
 
 class DeductionRules:
-    """演绎规则 - 从AlphaGeometry rules.txt完整解析"""
+    """演绎规则 - 兼容旧代码的包装类"""
 
-    RULES = [
-        {
-            "name": "r01",
-            "premises": ["perp A B C D", "perp C D E F", "ncoll A B E"],
-            "conclusion": "para A B E F",
-        },
-        {
-            "name": "r02",
-            "premises": ["cong O A O B", "cong O B O C", "cong O C O D"],
-            "conclusion": "cyclic A B C D",
-        },
-        {
-            "name": "r03",
-            "premises": ["eqangle A B P Q C D P Q"],
-            "conclusion": "para A B C D",
-        },
-        {
-            "name": "r04",
-            "premises": ["cyclic A B P Q"],
-            "conclusion": "eqangle P A P B Q A Q B",
-        },
-        {
-            "name": "r05",
-            "premises": ["eqangle6 P A P B Q A Q B", "ncoll P Q A B"],
-            "conclusion": "cyclic A B P Q",
-        },
-        {
-            "name": "r06",
-            "premises": ["cyclic A B C P Q R", "eqangle C A C B R P R Q"],
-            "conclusion": "cong A B P Q",
-        },
-        {
-            "name": "r07",
-            "premises": ["midp E A B", "midp F A C"],
-            "conclusion": "para E F B C",
-        },
-        {
-            "name": "r08",
-            "premises": ["para A B C D", "coll O A C", "coll O B D"],
-            "conclusion": "eqratio3 A B C D O O",
-        },
-        {
-            "name": "r09",
-            "premises": ["perp A B C D", "perp E F G H", "npara A B E F"],
-            "conclusion": "eqangle A B E F C D G H",
-        },
-        {
-            "name": "r10",
-            "premises": ["eqangle A B C D M N P Q", "eqangle C D E F P Q R U"],
-            "conclusion": "eqangle A B E F M N R U",
-        },
-        {
-            "name": "r11",
-            "premises": ["eqratio A B C D M N P Q", "eqratio C D E F P Q R U"],
-            "conclusion": "eqratio A B E F M N R U",
-        },
-        {
-            "name": "r12",
-            "premises": ["eqratio6 D B D C A B A C", "coll D B C", "ncoll A B C"],
-            "conclusion": "eqangle6 A B A D A D A C",
-        },
-        {
-            "name": "r13",
-            "premises": ["eqangle6 A B A D A D A C", "coll D B C", "ncoll A B C"],
-            "conclusion": "eqratio6 D B D C A B A C",
-        },
-        {
-            "name": "r14",
-            "premises": ["cong O A O B", "ncoll O A B"],
-            "conclusion": "eqangle O A A B A B O B",
-        },
-        {
-            "name": "r15",
-            "premises": ["eqangle6 A O A B B A B O", "ncoll O A B"],
-            "conclusion": "cong O A O B",
-        },
-        {
-            "name": "r16",
-            "premises": ["circle O A B C", "perp O A A X"],
-            "conclusion": "eqangle A X A B C A C B",
-        },
-        {
-            "name": "r17",
-            "premises": ["circle O A B C", "eqangle A X A B C A C B"],
-            "conclusion": "perp O A A X",
-        },
-        {
-            "name": "r18",
-            "premises": ["circle O A B C", "midp M B C"],
-            "conclusion": "eqangle A B A C O B O M",
-        },
-        {
-            "name": "r19",
-            "premises": ["circle O A B C", "coll M B C", "eqangle A B A C O B O M"],
-            "conclusion": "midp M B C",
-        },
-        {
-            "name": "r20",
-            "premises": ["perp A B B C", "midp M A C"],
-            "conclusion": "cong A M B M",
-        },
-        {
-            "name": "r21",
-            "premises": ["circle O A B C", "coll O A C"],
-            "conclusion": "perp A B B C",
-        },
-        {
-            "name": "r22",
-            "premises": ["cyclic A B C D", "para A B C D"],
-            "conclusion": "eqangle A D C D C D C B",
-        },
-        {
-            "name": "r23",
-            "premises": ["midp M A B", "perp O M A B"],
-            "conclusion": "cong O A O B",
-        },
-        {
-            "name": "r24",
-            "premises": ["cong A P B P", "cong A Q B Q"],
-            "conclusion": "perp A B P Q",
-        },
-        {
-            "name": "r25",
-            "premises": ["cong A P B P", "cong A Q B Q", "cyclic A B P Q"],
-            "conclusion": "perp P A A Q",
-        },
-        {
-            "name": "r26",
-            "premises": ["midp M A B", "midp M C D"],
-            "conclusion": "para A C B D",
-        },
-        {
-            "name": "r27",
-            "premises": ["midp M A B", "para A C B D", "para A D B C"],
-            "conclusion": "midp M C D",
-        },
-        {
-            "name": "r28",
-            "premises": [
-                "eqratio O A A C O B B D",
-                "coll O A C",
-                "coll O B D",
-                "ncoll A B C",
-                "sameside A O C B O D",
-            ],
-            "conclusion": "para A B C D",
-        },
-        {"name": "r29", "premises": ["para A B A C"], "conclusion": "coll A B C"},
-        {
-            "name": "r30",
-            "premises": ["midp M A B", "midp N C D"],
-            "conclusion": "eqratio M A A B N C C D",
-        },
-        {
-            "name": "r31",
-            "premises": ["eqangle A B P Q C D U V", "perp P Q U V"],
-            "conclusion": "perp A B C D",
-        },
-        {
-            "name": "r32",
-            "premises": ["eqratio A B P Q C D U V", "cong P Q U V"],
-            "conclusion": "cong A B C D",
-        },
-        {
-            "name": "r33",
-            "premises": ["cong A B P Q", "cong B C Q R", "cong C A R P", "ncoll A B C"],
-            "conclusion": "contri A B C P Q R",
-        },
-        {
-            "name": "r34",
-            "premises": [
-                "cong A B P Q",
-                "cong B C Q R",
-                "eqangle6 B A B C Q P Q R",
-                "ncoll A B C",
-            ],
-            "conclusion": "contri A B C P Q R",
-        },
-        {
-            "name": "r35",
-            "premises": [
-                "eqangle6 B A B C Q P Q R",
-                "eqangle6 C A C B R P R Q",
-                "ncoll A B C",
-            ],
-            "conclusion": "simtri A B C P Q R",
-        },
-        {
-            "name": "r36",
-            "premises": [
-                "eqangle6 B A B C Q R Q P",
-                "eqangle6 C A C B R Q R P",
-                "ncoll A B C",
-            ],
-            "conclusion": "simtri2 A B C P Q R",
-        },
-        {
-            "name": "r37",
-            "premises": [
-                "eqangle6 B A B C Q P Q R",
-                "eqangle6 C A C B R P R Q",
-                "ncoll A B C",
-                "cong A B P Q",
-            ],
-            "conclusion": "contri A B C P Q R",
-        },
-        {
-            "name": "r38",
-            "premises": [
-                "eqangle6 B A B C Q R Q P",
-                "eqangle6 C A C B R Q R P",
-                "ncoll A B C",
-                "cong A B P Q",
-            ],
-            "conclusion": "contri2 A B C P Q R",
-        },
-        {
-            "name": "r39",
-            "premises": [
-                "eqratio6 B A B C Q P Q R",
-                "eqratio6 C A C B R P R Q",
-                "ncoll A B C",
-            ],
-            "conclusion": "simtri A B C P Q R",
-        },
-        {
-            "name": "r40",
-            "premises": [
-                "eqratio6 B A B C Q P Q R",
-                "eqangle6 B A B C Q P Q R",
-                "ncoll A B C",
-            ],
-            "conclusion": "simtri A B C P Q R",
-        },
-        {
-            "name": "r41",
-            "premises": [
-                "eqratio6 B A B C Q P Q R",
-                "eqratio6 C A C B R P R Q",
-                "ncoll A B C",
-                "cong A B P Q",
-            ],
-            "conclusion": "contri A B C P Q R",
-        },
-        {
-            "name": "r42",
-            "premises": [
-                "para A B C D",
-                "coll M A D",
-                "coll N B C",
-                "eqratio6 M A M D N B N C",
-                "sameside M A D N B C",
-            ],
-            "conclusion": "para M N A B",
-        },
-        {
-            "name": "r43",
-            "premises": ["para A B C D", "coll M A D", "coll N B C", "para M N A B"],
-            "conclusion": "eqratio6 M A M D N B N C",
-        },
-        {
-            "name": "r44",
-            "premises": ["coll A B C", "coll A B D"],
-            "conclusion": "coll A C D",
-        },
-        {
-            "name": "r45",
-            "premises": ["coll A B C", "coll A B D"],
-            "conclusion": "coll B C D",
-        },
-        {
-            "name": "r46",
-            "premises": ["para A B C D", "para C D E F"],
-            "conclusion": "para A B E F",
-        },
-        {
-            "name": "r47",
-            "premises": ["perp A B C D", "perp C D E F"],
-            "conclusion": "para A B E F",
-        },
-        {
-            "name": "r48",
-            "premises": ["perp A B C D", "para C D E F"],
-            "conclusion": "perp A B E F",
-        },
-        {
-            "name": "r49",
-            "premises": ["cong A B C D", "cong C D E F"],
-            "conclusion": "cong A B E F",
-        },
-        {
-            "name": "r50",
-            "premises": ["midp M A B", "midp M C D"],
-            "conclusion": "cong A C B D",
-        },
-        {
-            "name": "r51",
-            "premises": ["cyclic A B C D", "cyclic A B C E"],
-            "conclusion": "cyclic A B D E",
-        },
-        {
-            "name": "r52",
-            "premises": ["eqangle A B C D E F G H", "eqangle E F G H I J K L"],
-            "conclusion": "eqangle A B C D I J K L",
-        },
-        {
-            "name": "r53",
-            "premises": ["eqratio A B C D E F G H", "eqratio E F G H I J K L"],
-            "conclusion": "eqratio A B C D I J K L",
-        },
-        {
-            "name": "r54",
-            "premises": ["para A B C D", "para A B E F"],
-            "conclusion": "para C D E F",
-        },
-        {
-            "name": "r55",
-            "premises": ["cong A B C D", "cong A B E F"],
-            "conclusion": "cong C D E F",
-        },
-        {"name": "r56", "premises": ["midp M A B"], "conclusion": "coll M A B"},
-        {"name": "r57", "premises": ["midp M A B"], "conclusion": "cong M A M B"},
-        {
-            "name": "r58",
-            "premises": ["perp A B C D", "perp A B E F"],
-            "conclusion": "para C D E F",
-        },
-        {"name": "r59", "premises": ["cyclic A B C D"], "conclusion": "cyclic B C D A"},
-        {"name": "r60", "premises": ["cyclic A B C D"], "conclusion": "cyclic A C D B"},
-        {
-            "name": "r61",
-            "premises": ["coll A B C", "coll A B D"],
-            "conclusion": "coll C D A",
-        },
-        {
-            "name": "r62",
-            "premises": ["coll A B C", "coll D E F"],
-            "conclusion": "ncoll A B D",
-        },
-        {"name": "r63", "premises": ["para A B C D"], "conclusion": "para B A D C"},
-        {"name": "r64", "premises": ["perp A B C D"], "conclusion": "perp B A D C"},
-        {"name": "r65", "premises": ["cong A B C D"], "conclusion": "cong B A D C"},
-        {"name": "r66", "premises": ["cong A B C D"], "conclusion": "cong C D A B"},
-        {"name": "r67", "premises": ["para A B C D"], "conclusion": "para C D A B"},
-        {"name": "r68", "premises": ["perp A B C D"], "conclusion": "perp C D A B"},
-        {
-            "name": "r69",
-            "premises": ["cong O A O B", "cong O A O C"],
-            "conclusion": "cong O B O C",
-        },
-        {"name": "r70", "premises": ["cong O A O B"], "conclusion": "cong O B O A"},
-        {"name": "r71", "premises": ["coll A B C"], "conclusion": "coll B A C"},
-        {"name": "r72", "premises": ["coll A B C"], "conclusion": "coll A C B"},
-        {"name": "r73", "premises": ["coll A B C"], "conclusion": "coll C B A"},
-        {"name": "r74", "premises": ["para A B C D"], "conclusion": "para A B D C"},
-        {"name": "r75", "premises": ["para A B C D"], "conclusion": "para B A C D"},
-        {"name": "r76", "premises": ["cyclic A B C D"], "conclusion": "cyclic A B D C"},
-        {"name": "r77", "premises": ["cyclic A B C D"], "conclusion": "cyclic D A B C"},
-        {"name": "r78", "premises": ["midp M A B"], "conclusion": "midp M B A"},
-        {"name": "r79", "premises": ["perp A B C D"], "conclusion": "perp A B D C"},
-        {"name": "r80", "premises": ["perp A B C D"], "conclusion": "perp B A C D"},
-    ]
+    RULES = _get_rules_list()
 
 
 class SimpleProofState:
@@ -907,10 +447,7 @@ class TrainingDataGenerator:
 
     def _load_cache(self):
         """加载缓存文件"""
-        import json
-        import os
-
-        if os.path.exists(self._cache_file):
+        if self._cache_file and os.path.exists(self._cache_file):
             try:
                 with open(self._cache_file, "r", encoding="utf-8") as f:
                     data = json.load(f)
@@ -931,9 +468,6 @@ class TrainingDataGenerator:
 
     def _save_cache(self):
         """保存缓存文件"""
-        import json
-        import os
-
         if self._cache_file:
             try:
                 data = {}
@@ -960,8 +494,6 @@ class TrainingDataGenerator:
         """清空缓存"""
         self._cache.clear()
         if self._cache_file:
-            import os
-
             if os.path.exists(self._cache_file):
                 os.remove(self._cache_file)
 
@@ -1206,8 +738,6 @@ class TrainingDataGenerator:
             filepath: 输出文件路径
             output_format: 输出格式 (json, txt)
         """
-        import json
-
         if output_format == "json":
             with open(filepath, "w", encoding="utf-8") as f:
                 json.dump(
@@ -1223,7 +753,7 @@ class TrainingDataGenerator:
                     f.write(f"问题: {d.problem_statement}\n")
                     f.write(f"目标: {d.goal}\n")
                     f.write(f"初始条件: {d.setup_predicates}\n")
-                    f.write(f"证明步骤:\n")
+                    f.write("证明步骤:\n")
                     for i, step in enumerate(d.proof_steps):
                         f.write(
                             f"  {i+1}. {step.premises} => {step.conclusion} ({step.rule_name})\n"
@@ -1251,76 +781,3 @@ class TrainingDataGenerator:
 
                 sequences.append((" ".join(d.setup_predicates), step_sequence, d.goal))
         return sequences
-
-
-def run_demo():
-    """运行演示"""
-    print("=" * 60)
-    print("几何证明数据生成器演示")
-    print("=" * 60)
-
-    generator = TrainingDataGenerator()
-
-    print("\n1. 生成单个问题的证明数据:")
-    print("-" * 40)
-
-    problem = "a b c = triangle; m = midpoint m a b ? coll m a b"
-    print(f"问题: {problem}")
-
-    proof_data = generator.generate_proof_data(problem, "midpoint_example")
-
-    print(f"初始条件: {proof_data.setup_predicates}")
-    print(f"目标: {proof_data.goal}")
-    print(f"是否解决: {proof_data.is_solved}")
-    print(f"证明步骤数: {len(proof_data.proof_steps)}")
-
-    if proof_data.proof_steps:
-        print("\n证明步骤:")
-        for i, step in enumerate(proof_data.proof_steps):
-            print(f"  {i+1}. {step.premises} => {step.conclusion} [{step.rule_name}]")
-
-    print("\n" + "=" * 60)
-    print("2. 批量生成训练数据:")
-    print("-" * 40)
-
-    batch_data = generator.generate_batch(num_problems=10, include_random=True)
-
-    solved_count = sum(1 for d in batch_data if d.is_solved)
-    total_steps = sum(len(d.proof_steps) for d in batch_data)
-
-    print(f"生成问题数: {len(batch_data)}")
-    print(f"解决问题数: {solved_count}")
-    print(f"总证明步骤: {total_steps}")
-
-    print("\n问题列表:")
-    for d in batch_data[:5]:
-        status = "✓" if d.is_solved else "✗"
-        print(f"  [{status}] {d.problem_name}: {len(d.proof_steps)} 步")
-
-    print("\n" + "=" * 60)
-    print("3. 导出训练数据:")
-    print("-" * 40)
-
-    output_path = os.path.join(
-        os.path.dirname(__file__), "generated_training_data.json"
-    )
-    generator.export_to_file(batch_data, output_path, output_format="json")
-    print(f"已导出到: {output_path}")
-
-    sequences = generator.get_training_sequences(batch_data)
-    print(f"\n训练序列数: {len(sequences)}")
-
-    if sequences:
-        print("\n示例训练序列:")
-        init, steps, goal = sequences[0]
-        print(f"  初始: {init[:50]}...")
-        print(f"  步骤: {steps[:3]}...")
-        print(f"  目标: {goal}")
-
-    print("\n" + "=" * 60)
-    print("演示完成!")
-    print("=" * 60)
-
-
-if __name__ == "__main__":
-    run_demo()

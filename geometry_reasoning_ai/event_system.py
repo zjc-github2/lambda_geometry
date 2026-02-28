@@ -8,7 +8,6 @@ from dataclasses import dataclass
 from typing import List, Optional
 
 import torch
-from torch import nn
 
 
 @dataclass

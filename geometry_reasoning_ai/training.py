@@ -13,11 +13,18 @@ import torch
 from torch import nn
 from torch.optim import Adam
 
-from .config import SystemConfig, TrainingConfig, get_default_config
-from .event_system import Event
-from .models import Decoder, Encoder
-from .tokenizer import GeometryTokenizer
-from .workflow import ReasoningStep
+try:
+    from .config import SystemConfig, TrainingConfig, get_default_config
+    from .event_system import Event
+    from .models import Decoder, Encoder
+    from .tokenizer import GeometryTokenizer
+    from .workflow import ReasoningStep
+except ImportError:
+    from config import SystemConfig, TrainingConfig, get_default_config
+    from event_system import Event
+    from models import Decoder, Encoder
+    from tokenizer import GeometryTokenizer
+    from workflow import ReasoningStep
 
 if TYPE_CHECKING:
     from .workflow import GeometryReasoningSystem
@@ -452,9 +459,9 @@ class TrainingPipeline:
 
 
 if __name__ == "__main__":
-    from .workflow import GeometryReasoningSystem
+    import geometry_reasoning_ai.workflow as _workflow_module
 
-    system = GeometryReasoningSystem()
+    system = _workflow_module.GeometryReasoningSystem()
     pipeline = TrainingPipeline(system)
 
     print("预训练编码器-解码器...")

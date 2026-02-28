@@ -2,28 +2,318 @@
 """
 训练数据生成脚本
 通过受控的逐步推理生成训练数据
+自动从 DEFINITIONS 读取构造定义，无需手动维护
 """
 
-import os
-import sys
-import random
 import json
+import os
+import random
+from typing import List, Dict, Tuple, Optional
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-
-from data_generator import (
-    GeometryDefinitions,
-    DeductionRules,
-    ProofStep,
-    ProofData,
-)  # pylint: disable=wrong-import-position
+try:
+    from .data_generator import (
+        GeometryDefinitions,
+        DeductionRules,
+        ProofStep,
+        ProofData,
+    )
+except ImportError:
+    from data_generator import (
+        GeometryDefinitions,
+        DeductionRules,
+        ProofStep,
+        ProofData,
+    )
 
 # ==================== 配置参数 ====================
 MAX_STEPS = 20
 MIN_STEPS = 10
-NUM_PROBLEMS = 10
+NUM_PROBLEMS = 100
 OUTPUT_FILE = os.path.join(os.path.dirname(__file__), "generated_training_data.json")
 # =================================================
+
+# 构造依赖配置：定义哪些构造需要先创建其他构造
+CONSTRUCTION_DEPENDENCIES: Dict[str, Dict] = {
+    "triangle": {
+        "requires": [],
+        "description": "基础三角形",
+    },
+    "midpoint": {
+        "requires": ["triangle"],
+        "triangle_args": [0, 1],
+        "description": "三角形边的中点",
+    },
+    "circumcenter": {
+        "requires": ["triangle"],
+        "triangle_args": [0, 1, 2],
+        "description": "三角形的外心",
+    },
+    "orthocenter": {
+        "requires": ["triangle"],
+        "triangle_args": [0, 1, 2],
+        "description": "三角形的垂心",
+    },
+    "incenter": {
+        "requires": ["triangle"],
+        "triangle_args": [0, 1, 2],
+        "description": "三角形的内心",
+    },
+    "foot": {
+        "requires": ["triangle"],
+        "triangle_args": [0, 1, 2],
+        "description": "三角形高的垂足",
+    },
+    "on_line": {
+        "requires": ["triangle"],
+        "triangle_args": [0, 1],
+        "description": "三角形边上的点",
+    },
+    "on_tline": {
+        "requires": ["triangle"],
+        "triangle_args": [0, 1, 2],
+        "description": "垂线上的点",
+    },
+    "on_pline": {
+        "requires": ["triangle"],
+        "triangle_args": [0, 1, 2],
+        "description": "平行线上的点",
+    },
+    "on_circle": {
+        "requires": ["circumcenter"],
+        "description": "外接圆上的点",
+    },
+    "on_circum": {
+        "requires": ["triangle"],
+        "triangle_args": [0, 1, 2],
+        "description": "外接圆上的点",
+    },
+    "intersection_ll": {
+        "requires": ["triangle"],
+        "triangle_args": [0, 1, 1, 2],
+        "description": "两直线交点",
+    },
+    "angle_bisector": {
+        "requires": ["triangle"],
+        "triangle_args": [0, 1, 2],
+        "description": "角平分线上的点",
+    },
+    "r_triangle": {
+        "requires": [],
+        "description": "直角三角形",
+    },
+    "iso_triangle": {
+        "requires": [],
+        "description": "等腰三角形",
+    },
+    "parallelogram": {
+        "requires": [],
+        "description": "平行四边形",
+    },
+    "rectangle": {
+        "requires": [],
+        "description": "矩形",
+    },
+    "square": {
+        "requires": [],
+        "description": "正方形",
+    },
+    "trapezoid": {
+        "requires": [],
+        "description": "梯形",
+    },
+    "free": {
+        "requires": [],
+        "description": "自由点",
+    },
+    "segment": {
+        "requires": [],
+        "description": "线段",
+    },
+}
+
+
+class ConstructionGenerator:
+    """构造生成器 - 自动从 DEFINITIONS 生成构造语句"""
+
+    def __init__(self):
+        self.definitions = GeometryDefinitions.DEFINITIONS
+        self.point_names = list("abcdefghijklmnopqrstuvwxyz")
+        self.used_points: set = set()
+
+    def reset(self):
+        self.used_points = set()
+
+    def _get_unused_points(self, count: int) -> List[str]:
+        available = [p for p in self.point_names if p not in self.used_points]
+        if len(available) < count:
+            return []
+        points = random.sample(available, count)
+        self.used_points.update(points)
+        return points
+
+    def _get_unused_point(self) -> Optional[str]:
+        points = self._get_unused_points(1)
+        return points[0] if points else None
+
+    def generate_construction(
+        self, const_name: str, existing_points: Optional[List[str]] = None
+    ) -> Tuple[List[str], List[str]]:
+        """生成构造语句
+
+        Args:
+            const_name: 构造名称
+            existing_points: 已存在的点列表（用于依赖构造）
+
+        Returns:
+            (构造语句列表, 新增的点列表)
+        """
+        if const_name not in self.definitions:
+            return [], []
+
+        definition = self.definitions[const_name]
+        args_template = definition.get("args", [])
+        constructions = []
+        new_points = []
+
+        if const_name not in CONSTRUCTION_DEPENDENCIES:
+            return self._generate_simple_construction(const_name, args_template)
+
+        dep_config = CONSTRUCTION_DEPENDENCIES[const_name]
+        requires = dep_config.get("requires", [])
+
+        if not requires:
+            return self._generate_simple_construction(const_name, args_template)
+
+        for req_const in requires:
+            if req_const == "triangle":
+                tri_points = self._get_unused_points(3)
+                if not tri_points:
+                    return [], []
+                tri_stmt = f"{' '.join(tri_points)} = triangle"
+                constructions.append(tri_stmt)
+                new_points.extend(tri_points)
+                existing_points = tri_points
+            elif req_const == "circumcenter":
+                if not existing_points or len(existing_points) < 3:
+                    return [], []
+                o = self._get_unused_point()
+                if not o:
+                    return [], []
+                circum_stmt = f"{o} = circumcenter {o} {' '.join(existing_points[:3])}"
+                constructions.append(circum_stmt)
+                new_points.append(o)
+                existing_points = existing_points + [o]
+
+        if const_name in [
+            "midpoint",
+            "circumcenter",
+            "orthocenter",
+            "incenter",
+            "foot",
+            "angle_bisector",
+        ]:
+            if not existing_points:
+                return [], []
+            new_point = self._get_unused_point()
+            if not new_point:
+                return [], []
+            triangle_args = dep_config.get("triangle_args", [0, 1, 2])
+            args = [
+                existing_points[i] for i in triangle_args if i < len(existing_points)
+            ]
+            stmt = f"{new_point} = {const_name} {new_point} {' '.join(args)}"
+            constructions.append(stmt)
+            new_points.append(new_point)
+
+        elif const_name in ["on_line", "on_tline", "on_pline"]:
+            if not existing_points:
+                return [], []
+            new_point = self._get_unused_point()
+            if not new_point:
+                return [], []
+            triangle_args = dep_config.get("triangle_args", [0, 1, 2])
+            args = [
+                existing_points[i] for i in triangle_args if i < len(existing_points)
+            ]
+            stmt = f"{new_point} = {const_name} {new_point} {' '.join(args)}"
+            constructions.append(stmt)
+            new_points.append(new_point)
+
+        elif const_name == "on_circle":
+            if not existing_points or len(existing_points) < 4:
+                return [], []
+            new_point = self._get_unused_point()
+            if not new_point:
+                return [], []
+            o = existing_points[3] if len(existing_points) > 3 else existing_points[0]
+            a = existing_points[0]
+            stmt = f"{new_point} = on_circle {new_point} {o} {a}"
+            constructions.append(stmt)
+            new_points.append(new_point)
+
+        elif const_name == "on_circum":
+            if not existing_points or len(existing_points) < 3:
+                return [], []
+            new_point = self._get_unused_point()
+            if not new_point:
+                return [], []
+            stmt = (
+                f"{new_point} = on_circum {new_point} {' '.join(existing_points[:3])}"
+            )
+            constructions.append(stmt)
+            new_points.append(new_point)
+
+        elif const_name == "intersection_ll":
+            if not existing_points or len(existing_points) < 4:
+                return [], []
+            new_point = self._get_unused_point()
+            if not new_point:
+                return [], []
+            args = [
+                existing_points[i] for i in [0, 1, 1, 2] if i < len(existing_points)
+            ]
+            stmt = f"{new_point} = intersection_ll {new_point} {' '.join(args)}"
+            constructions.append(stmt)
+            new_points.append(new_point)
+
+        else:
+            return self._generate_simple_construction(const_name, args_template)
+
+        return constructions, new_points
+
+    def _generate_simple_construction(
+        self, const_name: str, args_template: List[str]
+    ) -> Tuple[List[str], List[str]]:
+        """生成简单构造（无依赖）"""
+        num_args = len(args_template)
+        points = self._get_unused_points(num_args)
+        if not points:
+            return [], []
+
+        if const_name in ["triangle", "r_triangle", "iso_triangle"]:
+            stmt = f"{' '.join(points)} = {const_name}"
+        elif const_name in ["parallelogram", "rectangle", "square", "trapezoid"]:
+            stmt = f"{' '.join(points)} = {const_name} {' '.join(points)}"
+        elif const_name == "free":
+            stmt = f"{points[0]} = free"
+        elif const_name == "segment":
+            stmt = f"{points[0]} {points[1]} = segment"
+        else:
+            stmt = f"{' '.join(points)} = {const_name} {' '.join(points)}"
+
+        return [stmt], points
+
+    def get_available_constructions(self) -> List[str]:
+        """获取所有可用的构造名称"""
+        return list(self.definitions.keys())
+
+    def get_constructions_with_predicates(self) -> List[str]:
+        """获取所有会产生谓词的构造名称"""
+        result = []
+        for name, defn in self.definitions.items():
+            if defn.get("predicates"):
+                result.append(name)
+        return result
 
 
 class ControlledReasoningEngine:
@@ -171,66 +461,37 @@ class ControlledReasoningEngine:
 
 
 def generate_random_construction():
-    point_names = list("abcdefghijklmnopqrstuvwxyz")
-    construction_types = [
-        ("triangle", lambda: [f"{' '.join(random.sample(point_names, 3))} = triangle"]),
-        (
-            "midpoint",
-            lambda: _gen_midpoint_construction(point_names),
-        ),
-        (
-            "circumcenter",
-            lambda: _gen_circumcenter_construction(point_names),
-        ),
-        (
-            "orthocenter",
-            lambda: _gen_orthocenter_construction(point_names),
-        ),
-        (
-            "parallelogram",
-            lambda: [
-                f"{' '.join(random.sample(point_names, 4))} = parallelogram {' '.join(random.sample(point_names, 4))}"
-            ],
-        ),
-    ]
-    _, constructor = random.choice(construction_types)
-    return constructor()
-
-
-def _gen_midpoint_construction(point_names):
-    a, b, c, m = random.sample(point_names, 4)
-    return [
-        f"{a} {b} {c} = triangle",
-        f"{m} = midpoint {m} {a} {b}",
-    ]
-
-
-def _gen_circumcenter_construction(point_names):
-    a, b, c, o = random.sample(point_names, 4)
-    return [
-        f"{a} {b} {c} = triangle",
-        f"{o} = circumcenter {o} {a} {b} {c}",
-    ]
-
-
-def _gen_orthocenter_construction(point_names):
-    a, b, c, h = random.sample(point_names, 4)
-    return [
-        f"{a} {b} {c} = triangle",
-        f"{h} = orthocenter {h} {a} {b} {c}",
-    ]
+    """随机生成构造语句 - 自动从 DEFINITIONS 选择"""
+    generator = ConstructionGenerator()
+    generator.reset()
+    available = generator.get_constructions_with_predicates()
+    if not available:
+        return []
+    chosen = random.choice(available)
+    constructions, _ = generator.generate_construction(chosen)
+    return constructions
 
 
 def generate_training_data():
     """生成训练数据主函数"""
     print("=" * 60)
-    print("几何证明训练数据生成器 (受控推理)")
+    print("几何证明训练数据生成器 (受控推理 + 自动构造)")
     print("=" * 60)
     print("\n配置参数:")
     print(f"  最小步数: {MIN_STEPS}")
     print(f"  最大步数: {MAX_STEPS}")
     print(f"  目标数量: {NUM_PROBLEMS}")
     print(f"  输出文件: {OUTPUT_FILE}")
+
+    generator = ConstructionGenerator()
+    available = generator.get_constructions_with_predicates()
+    print(f"\n可用构造类型 ({len(available)} 种):")
+    for const in available:
+        defn = GeometryDefinitions.DEFINITIONS.get(const, {})
+        desc = defn.get("description", "")
+        preds = defn.get("predicates", [])
+        print(f"  - {const}: {desc} ({len(preds)} 个谓词)")
+
     print()
 
     engine = ControlledReasoningEngine()
@@ -244,6 +505,8 @@ def generate_training_data():
         attempts += 1
         engine.reset()
         constructions = generate_random_construction()
+        if not constructions:
+            continue
         setup_predicates = []
         for const in constructions:
             for pred in engine.expand_construction(const):

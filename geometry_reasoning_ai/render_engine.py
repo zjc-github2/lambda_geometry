@@ -8,7 +8,10 @@ import math
 from dataclasses import dataclass
 from typing import Callable, Dict, Optional, Tuple
 
-from .geometry_parser import Proposition
+try:
+    from .geometry_parser import Proposition
+except ImportError:
+    from geometry_parser import Proposition
 
 
 @dataclass

@@ -6,17 +6,17 @@
 它使用演绎数据库(DD)和代数推理(AR)相结合的方式进行几何证明。
 """
 
-import sys
-import os
-
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from typing import List, Dict, Tuple, Optional, Set, Any, Union, cast
-from dataclasses import dataclass
-from collections import defaultdict
 import math
+from collections import defaultdict
+from dataclasses import dataclass
+from typing import List, Dict, Tuple, Optional, Set, Any, Union, cast
 
-from geometry_reasoning_ai.geometry_parser import Proposition, Construction, Problem, GeometryParser
+try:
+    from .geometry_parser import Proposition, Construction, Problem, GeometryParser
+    from .geometry_definitions import GeometryRules
+except ImportError:
+    from geometry_parser import Proposition, Construction, Problem, GeometryParser
+    from geometry_definitions import GeometryRules
 
 
 ATOM = 1e-12
@@ -547,7 +547,7 @@ class ProofState:
 
     def __init__(self):
         self.propositions: Set[Proposition] = set()
-        self.dependencies: Dict[Tuple[str, ...], Dependency] = {}
+        self.dependencies: Dict[Tuple[str, ...], Optional[Dependency]] = {}
 
     def add(self, prop: Proposition, dep: Optional[Dependency] = None) -> bool:
         key = hashed(prop.predicate, list(prop.args))
@@ -936,20 +936,12 @@ class SymbolicEngine:
         self._load_default_theorems()
 
     def _load_default_theorems(self):
-        default_rules = [
-            "coll A B C, coll A B D => coll A C D",
-            "para A B C D, para C D E F => para A B E F",
-            "perp A B C D, perp C D E F => para A B E F",
-            "cong A B C D, cong C D E F => cong A B E F",
-            "midp M A B, midp M C D => cong A C B D",
-            "cyclic A B C D, cyclic A B C E => cyclic A B D E",
-            "eqangle A B C D E F G H, eqangle E F G H I J K L => eqangle A B C D I J K L",
-            "eqratio A B C D E F G H, eqratio E F G H I J K L => eqratio A B C D I J K L",
-        ]
-        for i, rule in enumerate(default_rules):
+        for rule in GeometryRules.RULES:
             try:
-                th = Theorem.from_txt(rule)
-                th.rule_name = f"r{i:02d}"
+                premises_str = ", ".join(rule.premises)
+                rule_str = f"{premises_str} => {rule.conclusion}"
+                th = Theorem.from_txt(rule_str)
+                th.rule_name = rule.name
                 self.theorems[th.rule_name] = th
             except Exception:
                 pass
@@ -1732,19 +1724,19 @@ class SymbolicEngine:
 
         if predicate == "coll" and len(points) >= 3:
             return self.add_coll(args)
-        elif predicate == "para" and len(points) == 4:
+        if predicate == "para" and len(points) == 4:
             return self.add_para(args)
-        elif predicate == "perp" and len(points) == 4:
+        if predicate == "perp" and len(points) == 4:
             return self.add_perp(args)
-        elif predicate == "cong" and len(points) == 4:
+        if predicate == "cong" and len(points) == 4:
             return self.add_cong(args)
-        elif predicate == "midp" and len(points) == 3:
+        if predicate == "midp" and len(points) == 3:
             return self.add_midp(args)
-        elif predicate == "cyclic" and len(points) >= 4:
+        if predicate == "cyclic" and len(points) >= 4:
             return self.add_cyclic(args)
-        elif predicate == "eqangle" and len(points) == 8:
+        if predicate == "eqangle" and len(points) == 8:
             return self.add_eqangle(args)
-        elif predicate == "eqratio" and len(points) == 8:
+        if predicate == "eqratio" and len(points) == 8:
             return self.add_eqratio(args)
 
         return []
@@ -1802,7 +1794,7 @@ class SymbolicEngine:
         if not unknown_vars:
             points = [mapping.get(a) for a in args]
             if None not in points:
-                key = hashed(name, [p.name for p in points])
+                key = hashed(name, [p.name for p in points if p is not None])
                 if key in self.graph.cache:
                     return self._match_remaining_premises(
                         theorem, mapping, premise_idx + 1
@@ -1839,7 +1831,7 @@ class SymbolicEngine:
     def _get_cached_relations(self, name: str) -> List[Tuple[GeomPoint, ...]]:
         """从缓存中获取指定类型的所有关系"""
         relations = []
-        for key, dep in self.graph.cache.items():
+        for key, _dep in self.graph.cache.items():
             if isinstance(key, tuple) and len(key) > 0 and key[0] == name:
                 point_names = key[1:]
                 points = []
