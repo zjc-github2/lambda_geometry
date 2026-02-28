@@ -257,7 +257,7 @@ def test_combined_engines():
     print("=" * 60)
 
     render_engine = RenderEngine()
-    symbolic_engine = SymbolicEngine()
+    _symbolic_engine = SymbolicEngine()  # 用于初始化，实际使用state
 
     render_engine.add_point("A", 0, 0)
     render_engine.add_point("B", 2, 0)
@@ -313,7 +313,7 @@ def test_geometry_parser():
     problem_str = "a b c = triangle; h = on_tline b a c ? perp a h b c"
     try:
         problem = parser.parse_problem(problem_str)
-        print(f"  ✓ 解析成功:")
+        print("  ✓ 解析成功:")
         print(f"    构造数: {len(problem.constructions)}")
         print(f"    目标: {problem.goal}")
     except Exception as e:

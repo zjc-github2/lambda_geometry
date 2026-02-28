@@ -159,7 +159,7 @@ class PropositionManager:
 
     def get_proof_state(self):
         """获取证明状态"""
-        from symbolic_engine import ProofState as SEProofState  # type: ignore
+        from .symbolic_engine import ProofState as SEProofState  # pylint: disable=import-outside-toplevel
 
         state = SEProofState()
         for prop in self._proof_state:

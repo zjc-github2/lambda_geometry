@@ -139,57 +139,42 @@ class RenderEngine:
         args = prop.args
 
         try:
-            if prop_type == "coll":
-                return self._verify_coll(args)
-            elif prop_type == "para":
-                return self._verify_para(args)
-            elif prop_type == "perp":
-                return self._verify_perp(args)
-            elif prop_type == "cong":
-                return self._verify_cong(args)
-            elif prop_type == "midp":
-                return self._verify_midp(args)
-            elif prop_type == "cyclic":
-                return self._verify_cyclic(args)
-            elif prop_type == "circle":
-                return self._verify_circle(args)
-            elif prop_type == "eqangle":
-                return self._verify_eqangle(args)
-            elif prop_type == "eqangle6":
-                return self._verify_eqangle6(args)
-            elif prop_type == "eqangle3":
-                return self._verify_eqangle3(args)
-            elif prop_type == "eqangle2":
-                return self._verify_eqangle2(args)
-            elif prop_type == "eqratio":
-                return self._verify_eqratio(args)
-            elif prop_type == "eqratio6":
-                return self._verify_eqratio6(args)
-            elif prop_type == "eqratio3":
-                return self._verify_eqratio3(args)
-            elif prop_type == "ncoll":
-                return not self._verify_coll(args)
-            elif prop_type == "npara":
-                return not self._verify_para(args)
-            elif prop_type == "nperp":
-                return not self._verify_perp(args)
-            elif prop_type == "diff":
-                return self._verify_diff(args)
-            elif prop_type == "sameside":
-                return self._verify_sameside(args)
-            elif prop_type == "rconst":
-                return self._verify_rconst(args)
-            elif prop_type in ["contri", "contri2"]:
-                return self._verify_contri(args)
-            elif prop_type in ["simtri", "simtri2"]:
-                return self._verify_simtri(args)
-            elif prop_type == "contri*":
-                return self._verify_contri_star(args)
-            elif prop_type == "simtri*":
-                return self._verify_simtri_star(args)
-            else:
-                print(f"警告: 未知的命题类型: {prop_type}")
-                return False
+            verify_map = {
+                "coll": self._verify_coll,
+                "para": self._verify_para,
+                "perp": self._verify_perp,
+                "cong": self._verify_cong,
+                "midp": self._verify_midp,
+                "cyclic": self._verify_cyclic,
+                "circle": self._verify_circle,
+                "eqangle": self._verify_eqangle,
+                "eqangle6": self._verify_eqangle6,
+                "eqangle3": self._verify_eqangle3,
+                "eqangle2": self._verify_eqangle2,
+                "eqratio": self._verify_eqratio,
+                "eqratio6": self._verify_eqratio6,
+                "eqratio3": self._verify_eqratio3,
+                "diff": self._verify_diff,
+                "sameside": self._verify_sameside,
+                "rconst": self._verify_rconst,
+                "contri": self._verify_contri,
+                "contri2": self._verify_contri,
+                "simtri": self._verify_simtri,
+                "simtri2": self._verify_simtri,
+                "contri*": self._verify_contri_star,
+                "simtri*": self._verify_simtri_star,
+            }
+            negate_map = {
+                "ncoll": self._verify_coll,
+                "npara": self._verify_para,
+                "nperp": self._verify_perp,
+            }
+            if prop_type in verify_map:
+                return verify_map[prop_type](args)
+            if prop_type in negate_map:
+                return not negate_map[prop_type](args)
+            print(f"警告: 未知的命题类型: {prop_type}")
+            return False
         except Exception as e:
             print(f"验证命题 {prop} 时出错: {e}")
             return False
@@ -443,7 +428,7 @@ class RenderEngine:
 
             # 同号表示同侧
             return cross1 * cross2 > 0
-        elif len(args) == 6:
+        if len(args) == 6:
             # sameside A O C B O D: A 和 D 在 OC 的同侧，B 和 D 在 OC 的同侧
             A, O, C, B, O2, D = args
             pA = self.get_point(A)
@@ -452,7 +437,14 @@ class RenderEngine:
             pB = self.get_point(B)
             pO2 = self.get_point(O2)
             pD = self.get_point(D)
-            if pA is None or pO is None or pC is None or pB is None or pO2 is None or pD is None:
+            if (
+                pA is None
+                or pO is None
+                or pC is None
+                or pB is None
+                or pO2 is None
+                or pD is None
+            ):
                 return False
 
             # 检查 A 和 D 在 OC 的同侧
@@ -465,8 +457,7 @@ class RenderEngine:
 
             # 同号表示同侧
             return (cross1 * cross2 > 0) and (cross3 * cross4 > 0)
-        else:
-            return False
+        return False
 
     def _verify_rconst(self, args: Tuple[str, ...]) -> bool:
         """验证比例常数: rconst A B C D m n (AB/CD = m/n)"""

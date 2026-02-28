@@ -98,7 +98,11 @@ class Line:
         p2: Optional["Point"] = None,
         coefficients: Optional[Tuple[float, float, float]] = None,
     ):
-        self.coefficients: Tuple[Optional[float], Optional[float], Optional[float]] = (None, None, None)
+        self.coefficients: Tuple[Optional[float], Optional[float], Optional[float]] = (
+            None,
+            None,
+            None,
+        )
         if p1 is None and p2 is None and coefficients is None:
             return
 
@@ -320,10 +324,12 @@ class GeomNode:
         for node in nodes:
             self.merge_one(node, deps)
 
-    def why_equal(self, nodes: List["GeomNode"], level: Union[int, float]) -> Optional[Any]:
+    def why_equal(
+        self, nodes: List["GeomNode"], level: Union[int, float]
+    ) -> Optional[Any]:
         # Simple implementation or stub
         if self in nodes:
-            return [] # Found equality
+            return []  # Found equality
         return None
 
     def rep(self) -> "GeomNode":
@@ -408,7 +414,9 @@ class GeomSegment(GeomNode):
 class GeomAngle(GeomNode):
     """几何角节点"""
 
-    def set_directions(self, d1: Optional["GeomDirection"], d2: Optional["GeomDirection"]) -> None:
+    def set_directions(
+        self, d1: Optional["GeomDirection"], d2: Optional["GeomDirection"]
+    ) -> None:
         self._directions = (d1, d2)
 
     def get_directions(
@@ -749,7 +757,9 @@ class GeomGraph:
 
     def _create_const_ang(self, n: int, d: int) -> None:
         n, d = simplify(n, d)
-        ang = self.aconst[(n, d)] = cast(GeomAngle, self.new_node(GeomAngle, f"{n}pi/{d}"))  #
+        ang = self.aconst[(n, d)] = cast(
+            GeomAngle, self.new_node(GeomAngle, f"{n}pi/{d}")
+        )  #
         ang.set_directions(None, None)  #
 
     def get_or_create_const_rat(self, n: int, d: int) -> Tuple[GeomRatio, GeomRatio]:
@@ -765,7 +775,9 @@ class GeomGraph:
 
     def _create_const_rat(self, n: int, d: int) -> None:
         n, d = simplify(n, d)
-        rat = self.rconst[(n, d)] = cast(GeomRatio, self.new_node(GeomRatio, f"{n}/{d}"))  #
+        rat = self.rconst[(n, d)] = cast(
+            GeomRatio, self.new_node(GeomRatio, f"{n}/{d}")
+        )  #
         rat.set_lengths(None, None)  #
 
 
@@ -1457,32 +1469,31 @@ class SymbolicEngine:
 
         if name == "triangle":
             return self._construct_triangle(args)
-        elif name == "midpoint":
+        if name == "midpoint":
             return self._construct_midpoint(args)
-        elif name == "foot":
+        if name == "foot":
             return self._construct_foot(args)
-        elif name == "intersection_ll":
+        if name == "intersection_ll":
             return self._construct_intersection_ll(args)
-        elif name == "on_line":
+        if name == "on_line":
             return self._construct_on_line(args)
-        elif name == "on_tline":
+        if name == "on_tline":
             return self._construct_on_tline(args)
-        elif name == "on_circle":
+        if name == "on_circle":
             return self._construct_on_circle(args)
-        elif name == "on_circum":
+        if name == "on_circum":
             return self._construct_on_circum(args)
-        elif name == "circle":
+        if name == "circle":
             return self._construct_circle(args)
-        elif name == "circumcenter":
+        if name == "circumcenter":
             return self._construct_circumcenter(args)
-        elif name == "orthocenter":
+        if name == "orthocenter":
             return self._construct_orthocenter(args)
-        elif name == "incenter":
+        if name == "incenter":
             return self._construct_incenter(args)
-        elif name == "centroid":
+        if name == "centroid":
             return self._construct_centroid(args)
-        else:
-            return []
+        return []
 
     def _construct_triangle(self, args: List[str]) -> List[Dependency]:
         if len(args) < 3:
@@ -1844,24 +1855,23 @@ class SymbolicEngine:
 
             if name == "coll":
                 return self.add_coll([p.name for p in points if p is not None], deps)
-            elif name == "para":
+            if name == "para":
                 return self.add_para([p.name for p in points if p is not None], deps)
-            elif name == "perp":
+            if name == "perp":
                 return self.add_perp([p.name for p in points if p is not None], deps)
-            elif name == "cong":
+            if name == "cong":
                 return self.add_cong([p.name for p in points if p is not None], deps)
-            elif name == "midp":
+            if name == "midp":
                 return self.add_midp([p.name for p in points if p is not None], deps)
-            elif name == "cyclic":
+            if name == "cyclic":
                 return self.add_cyclic([p.name for p in points if p is not None], deps)
-            elif name == "eqangle":
+            if name == "eqangle":
                 return self.add_eqangle([p.name for p in points if p is not None], deps)
-            elif name == "eqratio":
+            if name == "eqratio":
                 return self.add_eqratio([p.name for p in points if p is not None], deps)
-            else:
-                dep = deps.populate(name, points)
-                self.graph.cache_dep(name, points, dep)
-                return [dep]
+            dep = deps.populate(name, points)
+            self.graph.cache_dep(name, points, dep)
+            return [dep]
 
         except Exception:
             return []
