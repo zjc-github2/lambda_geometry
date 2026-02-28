@@ -6,12 +6,17 @@
 它使用演绎数据库(DD)和代数推理(AR)相结合的方式进行几何证明。
 """
 
+import sys
+import os
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from typing import List, Dict, Tuple, Optional, Set, Any, Union, cast
 from dataclasses import dataclass
 from collections import defaultdict
 import math
 
-from .geometry_parser import Proposition, Construction, Problem, GeometryParser
+from geometry_reasoning_ai.geometry_parser import Proposition, Construction, Problem, GeometryParser
 
 
 ATOM = 1e-12
@@ -548,8 +553,7 @@ class ProofState:
         key = hashed(prop.predicate, list(prop.args))
         if key not in self.dependencies:
             self.propositions.add(prop)
-            if dep:
-                self.dependencies[key] = dep
+            self.dependencies[key] = dep
             return True
         return False
 
@@ -1207,6 +1211,15 @@ class SymbolicEngine:
         a, b, c, d = points
         if a == b or c == d:
             return False
+
+        key = hashed("para", [p.name for p in points])
+        if key in self.graph.cache:
+            return True
+
+        key_rev = hashed("para", [p.name for p in [c, d, a, b]])
+        if key_rev in self.graph.cache:
+            return True
+
         ab = self.graph._get_line(a, b)
         cd = self.graph._get_line(c, d)
         if not ab or not cd:
@@ -1620,7 +1633,17 @@ class SymbolicEngine:
         new_props = []
 
         for prop in state.get_all():
-            self._add_proposition_to_graph(prop)
+            deps = self._add_proposition_to_graph(prop)
+            if deps:
+                for dep in deps:
+                    if hasattr(dep, "args") and dep.name:
+                        points = dep.args
+                        if all(isinstance(p, GeomPoint) for p in points):
+                            point_names = tuple(p.name for p in points)
+                            new_prop = Proposition(predicate=dep.name, args=point_names)
+                            if not state.contains(new_prop):
+                                state.add(new_prop, dep)
+                                new_props.append(new_prop)
 
         for step in range(max_steps):
             added = self._bfs_one_level(step)
@@ -1655,11 +1678,22 @@ class SymbolicEngine:
         Returns:
             (是否可证明, 推导出的命题列表)
         """
+        derived = []
+
         if premises:
             for prop in premises:
-                self._add_proposition_to_graph(prop)
+                deps = self._add_proposition_to_graph(prop)
+                if deps:
+                    for dep in deps:
+                        if hasattr(dep, "args") and dep.name:
+                            points = dep.args
+                            if all(isinstance(p, GeomPoint) for p in points):
+                                point_names = tuple(p.name for p in points)
+                                new_prop = Proposition(
+                                    predicate=dep.name, args=point_names
+                                )
+                                derived.append(new_prop)
 
-        derived = []
         for step in range(max_steps):
             added = self._bfs_one_level(step)
             if not added:
@@ -1682,8 +1716,12 @@ class SymbolicEngine:
         """获取所有已加载的定理规则"""
         return list(self.theorems.values())
 
-    def _add_proposition_to_graph(self, prop: Proposition) -> None:
-        """将命题添加到图中"""
+    def _add_proposition_to_graph(self, prop: Proposition) -> List[Dependency]:
+        """将命题添加到图中
+
+        Returns:
+            添加的依赖项列表
+        """
         predicate = prop.predicate
         args = list(prop.args)
 
@@ -1693,21 +1731,23 @@ class SymbolicEngine:
             points.append(p)
 
         if predicate == "coll" and len(points) >= 3:
-            self.add_coll(args)
+            return self.add_coll(args)
         elif predicate == "para" and len(points) == 4:
-            self.add_para(args)
+            return self.add_para(args)
         elif predicate == "perp" and len(points) == 4:
-            self.add_perp(args)
+            return self.add_perp(args)
         elif predicate == "cong" and len(points) == 4:
-            self.add_cong(args)
+            return self.add_cong(args)
         elif predicate == "midp" and len(points) == 3:
-            self.add_midp(args)
+            return self.add_midp(args)
         elif predicate == "cyclic" and len(points) >= 4:
-            self.add_cyclic(args)
+            return self.add_cyclic(args)
         elif predicate == "eqangle" and len(points) == 8:
-            self.add_eqangle(args)
+            return self.add_eqangle(args)
         elif predicate == "eqratio" and len(points) == 8:
-            self.add_eqratio(args)
+            return self.add_eqratio(args)
+
+        return []
 
     def _bfs_one_level(self, level: int) -> List[Dependency]:
         added = []
@@ -1734,83 +1774,85 @@ class SymbolicEngine:
         name = first_premise.name
         args = first_premise.args
 
-        if name == "coll":
-            for p1 in self.graph.all_points():
-                for p2 in self.graph.all_points():
-                    if p1 == p2:
-                        continue
-                    for p3 in self.graph.all_points():
-                        if p3 in [p1, p2]:
-                            continue
-                        if self.check_coll([p1, p2, p3]):
-                            mapping = {args[0]: p1, args[1]: p2, args[2]: p3}
-                            if self._check_remaining_premises(theorem, mapping):
-                                matches.append(mapping)
-
-        elif name == "para":
-            for p1 in self.graph.all_points():
-                for p2 in self.graph.all_points():
-                    if p1 == p2:
-                        continue
-                    for p3 in self.graph.all_points():
-                        if p3 in [p1, p2]:
-                            continue
-                        for p4 in self.graph.all_points():
-                            if p4 in [p1, p2, p3]:
-                                continue
-                            if self.check_para([p1, p2, p3, p4]):
-                                mapping = {
-                                    args[0]: p1,
-                                    args[1]: p2,
-                                    args[2]: p3,
-                                    args[3]: p4,
-                                }
-                                if self._check_remaining_premises(theorem, mapping):
-                                    matches.append(mapping)
-
-        elif name == "perp":
-            for p1 in self.graph.all_points():
-                for p2 in self.graph.all_points():
-                    if p1 == p2:
-                        continue
-                    for p3 in self.graph.all_points():
-                        if p3 in [p1, p2]:
-                            continue
-                        for p4 in self.graph.all_points():
-                            if p4 in [p1, p2, p3]:
-                                continue
-                            if self.check_perp([p1, p2, p3, p4]):
-                                mapping = {
-                                    args[0]: p1,
-                                    args[1]: p2,
-                                    args[2]: p3,
-                                    args[3]: p4,
-                                }
-                                if self._check_remaining_premises(theorem, mapping):
-                                    matches.append(mapping)
-
-        elif name == "cong":
-            for p1 in self.graph.all_points():
-                for p2 in self.graph.all_points():
-                    if p1 == p2:
-                        continue
-                    for p3 in self.graph.all_points():
-                        if p3 in [p1, p2]:
-                            continue
-                        for p4 in self.graph.all_points():
-                            if p4 in [p1, p2, p3]:
-                                continue
-                            if self.check_cong([p1, p2, p3, p4]):
-                                mapping = {
-                                    args[0]: p1,
-                                    args[1]: p2,
-                                    args[2]: p3,
-                                    args[3]: p4,
-                                }
-                                if self._check_remaining_premises(theorem, mapping):
-                                    matches.append(mapping)
+        if name in ["coll", "para", "perp", "cong", "midp", "cyclic"]:
+            cached_relations = self._get_cached_relations(name)
+            for rel_args in cached_relations:
+                if len(rel_args) == len(args):
+                    initial_mapping = dict(zip(args, rel_args))
+                    result_mappings = self._match_remaining_premises(
+                        theorem, initial_mapping, 1
+                    )
+                    matches.extend(result_mappings)
 
         return matches[:100]
+
+    def _match_remaining_premises(
+        self, theorem: Theorem, mapping: Dict[str, GeomPoint], premise_idx: int
+    ) -> List[Dict[str, GeomPoint]]:
+        if premise_idx >= len(theorem.premise):
+            return [mapping]
+
+        premise = theorem.premise[premise_idx]
+        name = premise.name
+        args = premise.args
+
+        known_vars = [a for a in args if a in mapping]
+        unknown_vars = [a for a in args if a not in mapping]
+
+        if not unknown_vars:
+            points = [mapping.get(a) for a in args]
+            if None not in points:
+                key = hashed(name, [p.name for p in points])
+                if key in self.graph.cache:
+                    return self._match_remaining_premises(
+                        theorem, mapping, premise_idx + 1
+                    )
+            return []
+
+        cached_relations = self._get_cached_relations(name)
+        results = []
+
+        for rel_args in cached_relations:
+            if len(rel_args) != len(args):
+                continue
+
+            compatible = True
+            for var in known_vars:
+                var_idx = args.index(var)
+                if mapping[var] != rel_args[var_idx]:
+                    compatible = False
+                    break
+
+            if compatible:
+                new_mapping = dict(mapping)
+                for i, var in enumerate(args):
+                    if var not in new_mapping:
+                        new_mapping[var] = rel_args[i]
+
+                sub_results = self._match_remaining_premises(
+                    theorem, new_mapping, premise_idx + 1
+                )
+                results.extend(sub_results)
+
+        return results
+
+    def _get_cached_relations(self, name: str) -> List[Tuple[GeomPoint, ...]]:
+        """从缓存中获取指定类型的所有关系"""
+        relations = []
+        for key, dep in self.graph.cache.items():
+            if isinstance(key, tuple) and len(key) > 0 and key[0] == name:
+                point_names = key[1:]
+                points = []
+                valid = True
+                for pname in point_names:
+                    p = self.graph.get_point(pname)
+                    if p is None:
+                        valid = False
+                        break
+                    points.append(p)
+                if valid:
+                    relations.append(tuple(points))
+        return relations
 
     def _check_remaining_premises(
         self, theorem: Theorem, mapping: Dict[str, GeomPoint]

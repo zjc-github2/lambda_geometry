@@ -1,1763 +1,1925 @@
 [
   {
     "problem_name": "controlled_0",
-    "problem_statement": "n l p = triangle; f = circumcenter f n l p ? perp f f n l",
+    "problem_statement": "n a m h = parallelogram l f q r ? para q r q r",
     "constructions": [
-      "n l p = triangle",
-      "f = circumcenter f n l p"
+      "n a m h = parallelogram l f q r"
     ],
-    "goal": "perp f f n l",
+    "goal": "para q r q r",
     "setup_predicates": [
-      "cong f n f l",
-      "cong f l f p"
+      "para l f q r",
+      "para l r f q",
+      "cong l f q r",
+      "cong l r f q"
     ],
     "proof_steps": [
       {
         "premises": [
-          "cong f n f l"
+          "para l f q r"
         ],
-        "conclusion": "cong f l f n",
-        "rule_name": "r70",
+        "conclusion": "para l f r q",
+        "rule_name": "r74",
         "level": 1
       },
       {
         "premises": [
-          "cong f l f p"
+          "para l f q r"
         ],
-        "conclusion": "cong l f p f",
-        "rule_name": "r65",
+        "conclusion": "para q r l f",
+        "rule_name": "r67",
         "level": 2
       },
       {
         "premises": [
-          "cong f l f p",
-          "cong f l f n"
+          "cong l f q r"
         ],
-        "conclusion": "cong f p f n",
-        "rule_name": "r55",
+        "conclusion": "cong f l r q",
+        "rule_name": "r65",
         "level": 3
       },
       {
         "premises": [
-          "cong f p f n"
+          "cong l f q r"
         ],
-        "conclusion": "cong p f n f",
-        "rule_name": "r65",
+        "conclusion": "cong q r l f",
+        "rule_name": "r66",
         "level": 4
       },
       {
         "premises": [
-          "cong l f p f",
-          "cong p f n f"
+          "para l f q r"
         ],
-        "conclusion": "cong l f n f",
-        "rule_name": "r49",
+        "conclusion": "para f l q r",
+        "rule_name": "r75",
         "level": 5
       },
       {
         "premises": [
-          "cong f n f l",
-          "cong f l f n"
+          "para l f r q"
         ],
-        "conclusion": "cong f n f n",
-        "rule_name": "r49",
+        "conclusion": "para f l r q",
+        "rule_name": "r75",
         "level": 6
       },
       {
         "premises": [
-          "cong f p f n"
+          "para q r l f",
+          "para l f r q"
         ],
-        "conclusion": "cong f n f p",
-        "rule_name": "r70",
+        "conclusion": "para q r r q",
+        "rule_name": "r46",
         "level": 7
       },
       {
         "premises": [
-          "cong f n f p",
-          "cong f n f l"
+          "para l r f q"
         ],
-        "conclusion": "cong f p f l",
-        "rule_name": "r69",
+        "conclusion": "para l r q f",
+        "rule_name": "r74",
         "level": 8
       },
       {
         "premises": [
-          "cong f l f n",
-          "cong f n f l"
+          "para l f q r",
+          "para q r l f"
         ],
-        "conclusion": "cong f l f l",
-        "rule_name": "r49",
+        "conclusion": "para l f l f",
+        "rule_name": "r46",
         "level": 9
       },
       {
         "premises": [
-          "cong f l f l",
-          "cong f n f n"
+          "para l r f q",
+          "para l r q f"
         ],
-        "conclusion": "perp f f l n",
-        "rule_name": "r24",
+        "conclusion": "para f q q f",
+        "rule_name": "r54",
         "level": 10
       },
       {
         "premises": [
-          "cong f p f n",
-          "cong f n f p"
+          "cong f l r q"
         ],
-        "conclusion": "cong f p f p",
-        "rule_name": "r49",
+        "conclusion": "cong r q f l",
+        "rule_name": "r66",
         "level": 11
       },
       {
         "premises": [
-          "cong f p f p",
-          "cong f n f n"
+          "para l f l f"
         ],
-        "conclusion": "perp f f p n",
-        "rule_name": "r24",
+        "conclusion": "coll l f f",
+        "rule_name": "r29",
         "level": 12
       },
       {
         "premises": [
-          "cong f l f l",
-          "cong f p f p"
+          "para l f r q",
+          "para l f q r"
         ],
-        "conclusion": "perp f f l p",
-        "rule_name": "r24",
+        "conclusion": "para r q q r",
+        "rule_name": "r54",
         "level": 13
       },
       {
         "premises": [
-          "perp f f l n"
+          "para l f l f"
         ],
-        "conclusion": "perp f f n l",
-        "rule_name": "r64",
+        "conclusion": "para l f f l",
+        "rule_name": "r74",
         "level": 14
+      },
+      {
+        "premises": [
+          "para q r r q"
+        ],
+        "conclusion": "para r q r q",
+        "rule_name": "r75",
+        "level": 15
+      },
+      {
+        "premises": [
+          "para f q q f"
+        ],
+        "conclusion": "para q f q f",
+        "rule_name": "r75",
+        "level": 16
+      },
+      {
+        "premises": [
+          "para q f q f"
+        ],
+        "conclusion": "para q f f q",
+        "rule_name": "r74",
+        "level": 17
+      },
+      {
+        "premises": [
+          "para q r r q"
+        ],
+        "conclusion": "para q r q r",
+        "rule_name": "r74",
+        "level": 18
       }
     ],
     "is_solved": true,
     "step_sequence": [
-      "cong f n f l",
-      "=> cong f l f n",
-      "cong f l f p",
-      "=> cong l f p f",
-      "cong f l f p",
-      "cong f l f n",
-      "=> cong f p f n",
-      "cong f p f n",
-      "=> cong p f n f",
-      "cong l f p f",
-      "cong p f n f",
-      "=> cong l f n f",
-      "cong f n f l",
-      "cong f l f n",
-      "=> cong f n f n",
-      "cong f p f n",
-      "=> cong f n f p",
-      "cong f n f p",
-      "cong f n f l",
-      "=> cong f p f l",
-      "cong f l f n",
-      "cong f n f l",
-      "=> cong f l f l",
-      "cong f l f l",
-      "cong f n f n",
-      "=> perp f f l n",
-      "cong f p f n",
-      "cong f n f p",
-      "=> cong f p f p",
-      "cong f p f p",
-      "cong f n f n",
-      "=> perp f f p n",
-      "cong f l f l",
-      "cong f p f p",
-      "=> perp f f l p",
-      "perp f f l n",
-      "=> perp f f n l"
+      "para l f q r",
+      "=> para l f r q",
+      "para l f q r",
+      "=> para q r l f",
+      "cong l f q r",
+      "=> cong f l r q",
+      "cong l f q r",
+      "=> cong q r l f",
+      "para l f q r",
+      "=> para f l q r",
+      "para l f r q",
+      "=> para f l r q",
+      "para q r l f",
+      "para l f r q",
+      "=> para q r r q",
+      "para l r f q",
+      "=> para l r q f",
+      "para l f q r",
+      "para q r l f",
+      "=> para l f l f",
+      "para l r f q",
+      "para l r q f",
+      "=> para f q q f",
+      "cong f l r q",
+      "=> cong r q f l",
+      "para l f l f",
+      "=> coll l f f",
+      "para l f r q",
+      "para l f q r",
+      "=> para r q q r",
+      "para l f l f",
+      "=> para l f f l",
+      "para q r r q",
+      "=> para r q r q",
+      "para f q q f",
+      "=> para q f q f",
+      "para q f q f",
+      "=> para q f f q",
+      "para q r r q",
+      "=> para q r q r"
     ]
   },
   {
     "problem_name": "controlled_1",
-    "problem_statement": "l k g = triangle; z = orthocenter z l k g ? para l k k l",
+    "problem_statement": "o a n = triangle; j = circumcenter j o a n ? cong j n j n",
     "constructions": [
-      "l k g = triangle",
-      "z = orthocenter z l k g"
+      "o a n = triangle",
+      "j = circumcenter j o a n"
     ],
-    "goal": "para l k k l",
+    "goal": "cong j n j n",
     "setup_predicates": [
-      "perp z l k g",
-      "perp z k g l",
-      "perp z g l k"
+      "cong j o j a",
+      "cong j a j n"
     ],
     "proof_steps": [
       {
         "premises": [
-          "perp z k g l"
+          "cong j a j n"
         ],
-        "conclusion": "perp k z g l",
-        "rule_name": "r80",
+        "conclusion": "cong a j n j",
+        "rule_name": "r65",
         "level": 1
       },
       {
         "premises": [
-          "perp k z g l"
+          "cong j a j n"
         ],
-        "conclusion": "perp g l k z",
-        "rule_name": "r68",
+        "conclusion": "cong j n j a",
+        "rule_name": "r66",
         "level": 2
       },
       {
         "premises": [
-          "perp g l k z"
+          "cong j n j a"
         ],
-        "conclusion": "perp g l z k",
-        "rule_name": "r79",
+        "conclusion": "cong n j a j",
+        "rule_name": "r65",
         "level": 3
       },
       {
         "premises": [
-          "perp k z g l",
-          "perp g l k z"
+          "cong j o j a",
+          "cong j a j n"
         ],
-        "conclusion": "para k z k z",
-        "rule_name": "r47",
+        "conclusion": "cong j o j n",
+        "rule_name": "r49",
         "level": 4
       },
       {
         "premises": [
-          "perp g l k z"
+          "cong j o j n"
         ],
-        "conclusion": "perp l g k z",
-        "rule_name": "r80",
+        "conclusion": "cong j n j o",
+        "rule_name": "r70",
         "level": 5
       },
       {
         "premises": [
-          "perp z g l k"
+          "cong j o j n",
+          "cong j n j o"
         ],
-        "conclusion": "perp z g k l",
-        "rule_name": "r79",
+        "conclusion": "cong j o j o",
+        "rule_name": "r49",
         "level": 6
       },
       {
         "premises": [
-          "perp l g k z"
+          "cong j o j n"
         ],
-        "conclusion": "perp k z l g",
-        "rule_name": "r68",
+        "conclusion": "cong o j n j",
+        "rule_name": "r65",
         "level": 7
       },
       {
         "premises": [
-          "perp k z g l"
+          "cong o j n j",
+          "cong n j a j"
         ],
-        "conclusion": "perp z k l g",
-        "rule_name": "r64",
+        "conclusion": "cong o j a j",
+        "rule_name": "r49",
         "level": 8
       },
       {
         "premises": [
-          "perp z g l k"
+          "cong j o j o"
         ],
-        "conclusion": "perp g z l k",
-        "rule_name": "r80",
+        "conclusion": "cong o j o j",
+        "rule_name": "r65",
         "level": 9
       },
       {
         "premises": [
-          "perp g l k z",
-          "perp k z l g"
+          "cong a j n j",
+          "cong n j a j"
         ],
-        "conclusion": "para g l l g",
-        "rule_name": "r47",
+        "conclusion": "cong a j a j",
+        "rule_name": "r49",
         "level": 10
       },
       {
         "premises": [
-          "perp z g k l"
+          "cong j n j a",
+          "cong j n j o"
         ],
-        "conclusion": "perp g z k l",
-        "rule_name": "r80",
+        "conclusion": "cong j a j o",
+        "rule_name": "r69",
         "level": 11
       },
       {
         "premises": [
-          "perp z k l g",
-          "perp z k g l"
+          "cong j a j o"
         ],
-        "conclusion": "para l g g l",
-        "rule_name": "r58",
+        "conclusion": "cong a j o j",
+        "rule_name": "r65",
         "level": 12
       },
       {
         "premises": [
-          "para l g g l",
-          "para g l l g"
+          "cong j n j o",
+          "cong j o j n"
         ],
-        "conclusion": "para l g l g",
-        "rule_name": "r46",
+        "conclusion": "cong j n j n",
+        "rule_name": "r49",
         "level": 13
-      },
-      {
-        "premises": [
-          "perp z g k l",
-          "perp z g l k"
-        ],
-        "conclusion": "para k l l k",
-        "rule_name": "r58",
-        "level": 14
-      },
-      {
-        "premises": [
-          "perp z k g l",
-          "perp g l z k"
-        ],
-        "conclusion": "para z k z k",
-        "rule_name": "r47",
-        "level": 15
-      },
-      {
-        "premises": [
-          "perp g l z k"
-        ],
-        "conclusion": "perp l g z k",
-        "rule_name": "r80",
-        "level": 16
-      },
-      {
-        "premises": [
-          "perp z g l k",
-          "perp z g k l"
-        ],
-        "conclusion": "para l k k l",
-        "rule_name": "r58",
-        "level": 17
       }
     ],
     "is_solved": true,
     "step_sequence": [
-      "perp z k g l",
-      "=> perp k z g l",
-      "perp k z g l",
-      "=> perp g l k z",
-      "perp g l k z",
-      "=> perp g l z k",
-      "perp k z g l",
-      "perp g l k z",
-      "=> para k z k z",
-      "perp g l k z",
-      "=> perp l g k z",
-      "perp z g l k",
-      "=> perp z g k l",
-      "perp l g k z",
-      "=> perp k z l g",
-      "perp k z g l",
-      "=> perp z k l g",
-      "perp z g l k",
-      "=> perp g z l k",
-      "perp g l k z",
-      "perp k z l g",
-      "=> para g l l g",
-      "perp z g k l",
-      "=> perp g z k l",
-      "perp z k l g",
-      "perp z k g l",
-      "=> para l g g l",
-      "para l g g l",
-      "para g l l g",
-      "=> para l g l g",
-      "perp z g k l",
-      "perp z g l k",
-      "=> para k l l k",
-      "perp z k g l",
-      "perp g l z k",
-      "=> para z k z k",
-      "perp g l z k",
-      "=> perp l g z k",
-      "perp z g l k",
-      "perp z g k l",
-      "=> para l k k l"
+      "cong j a j n",
+      "=> cong a j n j",
+      "cong j a j n",
+      "=> cong j n j a",
+      "cong j n j a",
+      "=> cong n j a j",
+      "cong j o j a",
+      "cong j a j n",
+      "=> cong j o j n",
+      "cong j o j n",
+      "=> cong j n j o",
+      "cong j o j n",
+      "cong j n j o",
+      "=> cong j o j o",
+      "cong j o j n",
+      "=> cong o j n j",
+      "cong o j n j",
+      "cong n j a j",
+      "=> cong o j a j",
+      "cong j o j o",
+      "=> cong o j o j",
+      "cong a j n j",
+      "cong n j a j",
+      "=> cong a j a j",
+      "cong j n j a",
+      "cong j n j o",
+      "=> cong j a j o",
+      "cong j a j o",
+      "=> cong a j o j",
+      "cong j n j o",
+      "cong j o j n",
+      "=> cong j n j n"
     ]
   },
   {
     "problem_name": "controlled_2",
-    "problem_statement": "g y q = triangle; z = circumcenter z g y q ? cong z q z g",
+    "problem_statement": "z x l = triangle; e = orthocenter e z x l ? perp x l z e",
     "constructions": [
-      "g y q = triangle",
-      "z = circumcenter z g y q"
+      "z x l = triangle",
+      "e = orthocenter e z x l"
     ],
-    "goal": "cong z q z g",
+    "goal": "perp x l z e",
     "setup_predicates": [
-      "cong z g z y",
-      "cong z y z q"
+      "perp e z x l",
+      "perp e x l z",
+      "perp e l z x"
     ],
     "proof_steps": [
       {
         "premises": [
-          "cong z g z y"
+          "perp e x l z"
         ],
-        "conclusion": "cong g z y z",
-        "rule_name": "r65",
-        "level": 1
-      },
-      {
-        "premises": [
-          "cong z y z q"
-        ],
-        "conclusion": "cong z q z y",
-        "rule_name": "r70",
-        "level": 2
-      },
-      {
-        "premises": [
-          "cong z q z y",
-          "cong z y z q"
-        ],
-        "conclusion": "cong z q z q",
-        "rule_name": "r49",
-        "level": 3
-      },
-      {
-        "premises": [
-          "cong z y z q"
-        ],
-        "conclusion": "cong y z q z",
-        "rule_name": "r65",
-        "level": 4
-      },
-      {
-        "premises": [
-          "cong z q z q"
-        ],
-        "conclusion": "cong q z q z",
-        "rule_name": "r65",
-        "level": 5
-      },
-      {
-        "premises": [
-          "cong z y z q",
-          "cong z q z y"
-        ],
-        "conclusion": "cong z y z y",
-        "rule_name": "r49",
-        "level": 6
-      },
-      {
-        "premises": [
-          "cong z g z y"
-        ],
-        "conclusion": "cong z y z g",
-        "rule_name": "r70",
-        "level": 7
-      },
-      {
-        "premises": [
-          "cong z y z g",
-          "cong z y z q"
-        ],
-        "conclusion": "cong z g z q",
-        "rule_name": "r69",
-        "level": 8
-      },
-      {
-        "premises": [
-          "cong z y z y",
-          "cong z q z q"
-        ],
-        "conclusion": "perp z z y q",
-        "rule_name": "r24",
-        "level": 9
-      },
-      {
-        "premises": [
-          "cong z y z q",
-          "cong z y z g"
-        ],
-        "conclusion": "cong z q z g",
-        "rule_name": "r69",
-        "level": 10
-      }
-    ],
-    "is_solved": true,
-    "step_sequence": [
-      "cong z g z y",
-      "=> cong g z y z",
-      "cong z y z q",
-      "=> cong z q z y",
-      "cong z q z y",
-      "cong z y z q",
-      "=> cong z q z q",
-      "cong z y z q",
-      "=> cong y z q z",
-      "cong z q z q",
-      "=> cong q z q z",
-      "cong z y z q",
-      "cong z q z y",
-      "=> cong z y z y",
-      "cong z g z y",
-      "=> cong z y z g",
-      "cong z y z g",
-      "cong z y z q",
-      "=> cong z g z q",
-      "cong z y z y",
-      "cong z q z q",
-      "=> perp z z y q",
-      "cong z y z q",
-      "cong z y z g",
-      "=> cong z q z g"
-    ]
-  },
-  {
-    "problem_name": "controlled_3",
-    "problem_statement": "y b h = triangle; g = orthocenter g y b h ? para h b h b",
-    "constructions": [
-      "y b h = triangle",
-      "g = orthocenter g y b h"
-    ],
-    "goal": "para h b h b",
-    "setup_predicates": [
-      "perp g y b h",
-      "perp g b h y",
-      "perp g h y b"
-    ],
-    "proof_steps": [
-      {
-        "premises": [
-          "perp g y b h"
-        ],
-        "conclusion": "perp b h g y",
-        "rule_name": "r68",
-        "level": 1
-      },
-      {
-        "premises": [
-          "perp g y b h"
-        ],
-        "conclusion": "perp g y h b",
-        "rule_name": "r79",
-        "level": 2
-      },
-      {
-        "premises": [
-          "perp g h y b"
-        ],
-        "conclusion": "perp y b g h",
-        "rule_name": "r68",
-        "level": 3
-      },
-      {
-        "premises": [
-          "perp b h g y",
-          "perp g y h b"
-        ],
-        "conclusion": "para b h h b",
-        "rule_name": "r47",
-        "level": 4
-      },
-      {
-        "premises": [
-          "perp b h g y"
-        ],
-        "conclusion": "perp h b y g",
+        "conclusion": "perp x e z l",
         "rule_name": "r64",
+        "level": 1
+      },
+      {
+        "premises": [
+          "perp e z x l"
+        ],
+        "conclusion": "perp z e l x",
+        "rule_name": "r64",
+        "level": 2
+      },
+      {
+        "premises": [
+          "perp e x l z"
+        ],
+        "conclusion": "perp e x z l",
+        "rule_name": "r79",
+        "level": 3
+      },
+      {
+        "premises": [
+          "perp x e z l"
+        ],
+        "conclusion": "perp z l x e",
+        "rule_name": "r68",
+        "level": 4
+      },
+      {
+        "premises": [
+          "perp x e z l"
+        ],
+        "conclusion": "perp x e l z",
+        "rule_name": "r79",
         "level": 5
       },
       {
         "premises": [
-          "perp h b y g"
+          "perp e x z l",
+          "perp e x l z"
         ],
-        "conclusion": "perp y g h b",
-        "rule_name": "r68",
-        "level": 6
-      },
-      {
-        "premises": [
-          "perp h b y g"
-        ],
-        "conclusion": "perp h b g y",
-        "rule_name": "r79",
-        "level": 7
-      },
-      {
-        "premises": [
-          "perp y g h b"
-        ],
-        "conclusion": "perp y g b h",
-        "rule_name": "r79",
-        "level": 8
-      },
-      {
-        "premises": [
-          "perp y g b h"
-        ],
-        "conclusion": "perp b h y g",
-        "rule_name": "r68",
-        "level": 9
-      },
-      {
-        "premises": [
-          "perp h b y g",
-          "perp y g b h"
-        ],
-        "conclusion": "para h b b h",
-        "rule_name": "r47",
-        "level": 10
-      },
-      {
-        "premises": [
-          "perp g h y b",
-          "perp y b g h"
-        ],
-        "conclusion": "para g h g h",
-        "rule_name": "r47",
-        "level": 11
-      },
-      {
-        "premises": [
-          "perp g h y b"
-        ],
-        "conclusion": "perp g h b y",
-        "rule_name": "r79",
-        "level": 12
-      },
-      {
-        "premises": [
-          "perp h b y g",
-          "perp h b g y"
-        ],
-        "conclusion": "para y g g y",
+        "conclusion": "para z l l z",
         "rule_name": "r58",
-        "level": 13
-      },
-      {
-        "premises": [
-          "perp h b y g",
-          "perp y g h b"
-        ],
-        "conclusion": "para h b h b",
-        "rule_name": "r47",
-        "level": 14
-      }
-    ],
-    "is_solved": true,
-    "step_sequence": [
-      "perp g y b h",
-      "=> perp b h g y",
-      "perp g y b h",
-      "=> perp g y h b",
-      "perp g h y b",
-      "=> perp y b g h",
-      "perp b h g y",
-      "perp g y h b",
-      "=> para b h h b",
-      "perp b h g y",
-      "=> perp h b y g",
-      "perp h b y g",
-      "=> perp y g h b",
-      "perp h b y g",
-      "=> perp h b g y",
-      "perp y g h b",
-      "=> perp y g b h",
-      "perp y g b h",
-      "=> perp b h y g",
-      "perp h b y g",
-      "perp y g b h",
-      "=> para h b b h",
-      "perp g h y b",
-      "perp y b g h",
-      "=> para g h g h",
-      "perp g h y b",
-      "=> perp g h b y",
-      "perp h b y g",
-      "perp h b g y",
-      "=> para y g g y",
-      "perp h b y g",
-      "perp y g h b",
-      "=> para h b h b"
-    ]
-  },
-  {
-    "problem_name": "controlled_4",
-    "problem_statement": "v t q e = parallelogram b j u f ? para f u j b",
-    "constructions": [
-      "v t q e = parallelogram b j u f"
-    ],
-    "goal": "para f u j b",
-    "setup_predicates": [
-      "para b j u f",
-      "para b f j u",
-      "cong b j u f",
-      "cong b f j u"
-    ],
-    "proof_steps": [
-      {
-        "premises": [
-          "para b j u f"
-        ],
-        "conclusion": "para b j f u",
-        "rule_name": "r74",
-        "level": 1
-      },
-      {
-        "premises": [
-          "para b j f u"
-        ],
-        "conclusion": "para j b u f",
-        "rule_name": "r63",
-        "level": 2
-      },
-      {
-        "premises": [
-          "cong b f j u"
-        ],
-        "conclusion": "cong f b u j",
-        "rule_name": "r65",
-        "level": 3
-      },
-      {
-        "premises": [
-          "cong f b u j"
-        ],
-        "conclusion": "cong u j f b",
-        "rule_name": "r66",
-        "level": 4
-      },
-      {
-        "premises": [
-          "para j b u f"
-        ],
-        "conclusion": "para u f j b",
-        "rule_name": "r67",
-        "level": 5
-      },
-      {
-        "premises": [
-          "para u f j b",
-          "para j b u f"
-        ],
-        "conclusion": "para u f u f",
-        "rule_name": "r46",
         "level": 6
       },
       {
         "premises": [
-          "cong f b u j",
-          "cong u j f b"
+          "perp z l x e"
         ],
-        "conclusion": "cong f b f b",
-        "rule_name": "r49",
-        "level": 7
-      },
-      {
-        "premises": [
-          "para u f j b"
-        ],
-        "conclusion": "para u f b j",
-        "rule_name": "r74",
-        "level": 8
-      },
-      {
-        "premises": [
-          "cong b j u f"
-        ],
-        "conclusion": "cong j b f u",
-        "rule_name": "r65",
-        "level": 9
-      },
-      {
-        "premises": [
-          "para j b u f",
-          "para u f j b"
-        ],
-        "conclusion": "para j b j b",
-        "rule_name": "r46",
-        "level": 10
-      },
-      {
-        "premises": [
-          "para u f u f"
-        ],
-        "conclusion": "para u f f u",
-        "rule_name": "r74",
-        "level": 11
-      },
-      {
-        "premises": [
-          "para j b j b"
-        ],
-        "conclusion": "coll j b b",
-        "rule_name": "r29",
-        "level": 12
-      },
-      {
-        "premises": [
-          "para u f j b",
-          "para u f b j"
-        ],
-        "conclusion": "para j b b j",
-        "rule_name": "r54",
-        "level": 13
-      },
-      {
-        "premises": [
-          "para u f f u",
-          "para u f j b"
-        ],
-        "conclusion": "para f u j b",
-        "rule_name": "r54",
-        "level": 14
-      }
-    ],
-    "is_solved": true,
-    "step_sequence": [
-      "para b j u f",
-      "=> para b j f u",
-      "para b j f u",
-      "=> para j b u f",
-      "cong b f j u",
-      "=> cong f b u j",
-      "cong f b u j",
-      "=> cong u j f b",
-      "para j b u f",
-      "=> para u f j b",
-      "para u f j b",
-      "para j b u f",
-      "=> para u f u f",
-      "cong f b u j",
-      "cong u j f b",
-      "=> cong f b f b",
-      "para u f j b",
-      "=> para u f b j",
-      "cong b j u f",
-      "=> cong j b f u",
-      "para j b u f",
-      "para u f j b",
-      "=> para j b j b",
-      "para u f u f",
-      "=> para u f f u",
-      "para j b j b",
-      "=> coll j b b",
-      "para u f j b",
-      "para u f b j",
-      "=> para j b b j",
-      "para u f f u",
-      "para u f j b",
-      "=> para f u j b"
-    ]
-  },
-  {
-    "problem_name": "controlled_5",
-    "problem_statement": "l a b = triangle; d = circumcenter d l a b ? para b a b a",
-    "constructions": [
-      "l a b = triangle",
-      "d = circumcenter d l a b"
-    ],
-    "goal": "para b a b a",
-    "setup_predicates": [
-      "cong d l d a",
-      "cong d a d b"
-    ],
-    "proof_steps": [
-      {
-        "premises": [
-          "cong d a d b"
-        ],
-        "conclusion": "cong d b d a",
-        "rule_name": "r66",
-        "level": 1
-      },
-      {
-        "premises": [
-          "cong d b d a",
-          "cong d a d b"
-        ],
-        "conclusion": "cong d b d b",
-        "rule_name": "r49",
-        "level": 2
-      },
-      {
-        "premises": [
-          "cong d l d a"
-        ],
-        "conclusion": "cong l d a d",
-        "rule_name": "r65",
-        "level": 3
-      },
-      {
-        "premises": [
-          "cong d l d a",
-          "cong d a d b"
-        ],
-        "conclusion": "cong d l d b",
-        "rule_name": "r49",
-        "level": 4
-      },
-      {
-        "premises": [
-          "cong d b d b"
-        ],
-        "conclusion": "cong b d b d",
-        "rule_name": "r65",
-        "level": 5
-      },
-      {
-        "premises": [
-          "cong d a d b",
-          "cong d b d a"
-        ],
-        "conclusion": "cong d a d a",
-        "rule_name": "r49",
-        "level": 6
-      },
-      {
-        "premises": [
-          "cong d a d a",
-          "cong d b d b"
-        ],
-        "conclusion": "perp d d a b",
-        "rule_name": "r24",
-        "level": 7
-      },
-      {
-        "premises": [
-          "cong l d a d"
-        ],
-        "conclusion": "cong a d l d",
-        "rule_name": "r66",
-        "level": 8
-      },
-      {
-        "premises": [
-          "cong d l d b"
-        ],
-        "conclusion": "cong d b d l",
-        "rule_name": "r70",
-        "level": 9
-      },
-      {
-        "premises": [
-          "cong d l d a"
-        ],
-        "conclusion": "cong d a d l",
-        "rule_name": "r66",
-        "level": 10
-      },
-      {
-        "premises": [
-          "perp d d a b"
-        ],
-        "conclusion": "perp a b d d",
-        "rule_name": "r68",
-        "level": 11
-      },
-      {
-        "premises": [
-          "cong a d l d",
-          "cong l d a d"
-        ],
-        "conclusion": "cong a d a d",
-        "rule_name": "r49",
-        "level": 12
-      },
-      {
-        "premises": [
-          "perp a b d d",
-          "perp d d a b"
-        ],
-        "conclusion": "para a b a b",
-        "rule_name": "r47",
-        "level": 13
-      },
-      {
-        "premises": [
-          "cong d l d b",
-          "cong d b d l"
-        ],
-        "conclusion": "cong d l d l",
-        "rule_name": "r49",
-        "level": 14
-      },
-      {
-        "premises": [
-          "para a b a b"
-        ],
-        "conclusion": "para b a b a",
-        "rule_name": "r63",
-        "level": 15
-      }
-    ],
-    "is_solved": true,
-    "step_sequence": [
-      "cong d a d b",
-      "=> cong d b d a",
-      "cong d b d a",
-      "cong d a d b",
-      "=> cong d b d b",
-      "cong d l d a",
-      "=> cong l d a d",
-      "cong d l d a",
-      "cong d a d b",
-      "=> cong d l d b",
-      "cong d b d b",
-      "=> cong b d b d",
-      "cong d a d b",
-      "cong d b d a",
-      "=> cong d a d a",
-      "cong d a d a",
-      "cong d b d b",
-      "=> perp d d a b",
-      "cong l d a d",
-      "=> cong a d l d",
-      "cong d l d b",
-      "=> cong d b d l",
-      "cong d l d a",
-      "=> cong d a d l",
-      "perp d d a b",
-      "=> perp a b d d",
-      "cong a d l d",
-      "cong l d a d",
-      "=> cong a d a d",
-      "perp a b d d",
-      "perp d d a b",
-      "=> para a b a b",
-      "cong d l d b",
-      "cong d b d l",
-      "=> cong d l d l",
-      "para a b a b",
-      "=> para b a b a"
-    ]
-  },
-  {
-    "problem_name": "controlled_6",
-    "problem_statement": "h u r = triangle; c = midpoint c h u ? perp h h u c",
-    "constructions": [
-      "h u r = triangle",
-      "c = midpoint c h u"
-    ],
-    "goal": "perp h h u c",
-    "setup_predicates": [
-      "midp c h u",
-      "coll c h u",
-      "cong c h c u"
-    ],
-    "proof_steps": [
-      {
-        "premises": [
-          "cong c h c u"
-        ],
-        "conclusion": "cong h c u c",
-        "rule_name": "r65",
-        "level": 1
-      },
-      {
-        "premises": [
-          "midp c h u"
-        ],
-        "conclusion": "midp c u h",
-        "rule_name": "r78",
-        "level": 2
-      },
-      {
-        "premises": [
-          "midp c h u",
-          "midp c u h"
-        ],
-        "conclusion": "eqratio c h h u c u u h",
-        "rule_name": "r30",
-        "level": 3
-      },
-      {
-        "premises": [
-          "midp c u h"
-        ],
-        "conclusion": "cong c u c h",
-        "rule_name": "r57",
-        "level": 4
-      },
-      {
-        "premises": [
-          "cong c u c h"
-        ],
-        "conclusion": "cong u c h c",
-        "rule_name": "r65",
-        "level": 5
-      },
-      {
-        "premises": [
-          "midp c h u",
-          "midp c u h"
-        ],
-        "conclusion": "cong h u u h",
-        "rule_name": "r50",
-        "level": 6
-      },
-      {
-        "premises": [
-          "cong h c u c",
-          "cong u c h c"
-        ],
-        "conclusion": "cong h c h c",
-        "rule_name": "r49",
-        "level": 7
-      },
-      {
-        "premises": [
-          "cong u c h c",
-          "cong h c u c"
-        ],
-        "conclusion": "cong u c u c",
-        "rule_name": "r49",
-        "level": 8
-      },
-      {
-        "premises": [
-          "midp c h u",
-          "midp c u h"
-        ],
-        "conclusion": "para h u u h",
-        "rule_name": "r26",
-        "level": 9
-      },
-      {
-        "premises": [
-          "cong c u c h",
-          "cong c h c u"
-        ],
-        "conclusion": "cong c u c u",
-        "rule_name": "r49",
-        "level": 10
-      },
-      {
-        "premises": [
-          "cong h u u h"
-        ],
-        "conclusion": "cong u h h u",
-        "rule_name": "r66",
-        "level": 11
-      },
-      {
-        "premises": [
-          "para h u u h"
-        ],
-        "conclusion": "para u h u h",
-        "rule_name": "r75",
-        "level": 12
-      },
-      {
-        "premises": [
-          "cong h c h c"
-        ],
-        "conclusion": "cong c h c h",
-        "rule_name": "r65",
-        "level": 13
-      },
-      {
-        "premises": [
-          "midp c u h",
-          "midp c h u"
-        ],
-        "conclusion": "para u h h u",
-        "rule_name": "r26",
-        "level": 14
-      },
-      {
-        "premises": [
-          "cong c u c u",
-          "cong c h c h"
-        ],
-        "conclusion": "perp c c u h",
-        "rule_name": "r24",
-        "level": 15
-      },
-      {
-        "premises": [
-          "perp c c u h",
-          "para u h h u"
-        ],
-        "conclusion": "perp c c h u",
-        "rule_name": "r48",
-        "level": 16
-      },
-      {
-        "premises": [
-          "cong u h h u",
-          "cong h u u h"
-        ],
-        "conclusion": "cong u h u h",
-        "rule_name": "r49",
-        "level": 17
-      },
-      {
-        "premises": [
-          "para u h h u"
-        ],
-        "conclusion": "para h u h u",
-        "rule_name": "r75",
-        "level": 18
-      },
-      {
-        "premises": [
-          "cong u h u h"
-        ],
-        "conclusion": "cong h u h u",
-        "rule_name": "r65",
-        "level": 19
-      },
-      {
-        "premises": [
-          "cong h u h u",
-          "cong h c h c"
-        ],
-        "conclusion": "perp h h u c",
-        "rule_name": "r24",
-        "level": 20
-      }
-    ],
-    "is_solved": true,
-    "step_sequence": [
-      "cong c h c u",
-      "=> cong h c u c",
-      "midp c h u",
-      "=> midp c u h",
-      "midp c h u",
-      "midp c u h",
-      "=> eqratio c h h u c u u h",
-      "midp c u h",
-      "=> cong c u c h",
-      "cong c u c h",
-      "=> cong u c h c",
-      "midp c h u",
-      "midp c u h",
-      "=> cong h u u h",
-      "cong h c u c",
-      "cong u c h c",
-      "=> cong h c h c",
-      "cong u c h c",
-      "cong h c u c",
-      "=> cong u c u c",
-      "midp c h u",
-      "midp c u h",
-      "=> para h u u h",
-      "cong c u c h",
-      "cong c h c u",
-      "=> cong c u c u",
-      "cong h u u h",
-      "=> cong u h h u",
-      "para h u u h",
-      "=> para u h u h",
-      "cong h c h c",
-      "=> cong c h c h",
-      "midp c u h",
-      "midp c h u",
-      "=> para u h h u",
-      "cong c u c u",
-      "cong c h c h",
-      "=> perp c c u h",
-      "perp c c u h",
-      "para u h h u",
-      "=> perp c c h u",
-      "cong u h h u",
-      "cong h u u h",
-      "=> cong u h u h",
-      "para u h h u",
-      "=> para h u h u",
-      "cong u h u h",
-      "=> cong h u h u",
-      "cong h u h u",
-      "cong h c h c",
-      "=> perp h h u c"
-    ]
-  },
-  {
-    "problem_name": "controlled_7",
-    "problem_statement": "z y j = triangle; m = midpoint m z y ? cong z m y m",
-    "constructions": [
-      "z y j = triangle",
-      "m = midpoint m z y"
-    ],
-    "goal": "cong z m y m",
-    "setup_predicates": [
-      "midp m z y",
-      "coll m z y",
-      "cong m z m y"
-    ],
-    "proof_steps": [
-      {
-        "premises": [
-          "cong m z m y"
-        ],
-        "conclusion": "cong m y m z",
-        "rule_name": "r66",
-        "level": 1
-      },
-      {
-        "premises": [
-          "midp m z y"
-        ],
-        "conclusion": "midp m y z",
-        "rule_name": "r78",
-        "level": 2
-      },
-      {
-        "premises": [
-          "cong m z m y",
-          "cong m y m z"
-        ],
-        "conclusion": "cong m z m z",
-        "rule_name": "r49",
-        "level": 3
-      },
-      {
-        "premises": [
-          "midp m y z",
-          "midp m z y"
-        ],
-        "conclusion": "cong y z z y",
-        "rule_name": "r50",
-        "level": 4
-      },
-      {
-        "premises": [
-          "cong y z z y"
-        ],
-        "conclusion": "cong z y y z",
-        "rule_name": "r66",
-        "level": 5
-      },
-      {
-        "premises": [
-          "cong y z z y",
-          "cong z y y z"
-        ],
-        "conclusion": "cong y z y z",
-        "rule_name": "r49",
-        "level": 6
-      },
-      {
-        "premises": [
-          "midp m z y",
-          "midp m y z"
-        ],
-        "conclusion": "eqratio m z z y m y y z",
-        "rule_name": "r30",
-        "level": 7
-      },
-      {
-        "premises": [
-          "cong m y m z"
-        ],
-        "conclusion": "cong y m z m",
-        "rule_name": "r65",
-        "level": 8
-      },
-      {
-        "premises": [
-          "midp m y z",
-          "midp m z y"
-        ],
-        "conclusion": "para y z z y",
-        "rule_name": "r26",
-        "level": 9
-      },
-      {
-        "premises": [
-          "midp m z y",
-          "midp m y z"
-        ],
-        "conclusion": "para z y y z",
-        "rule_name": "r26",
-        "level": 10
-      },
-      {
-        "premises": [
-          "para z y y z"
-        ],
-        "conclusion": "para z y z y",
-        "rule_name": "r74",
-        "level": 11
-      },
-      {
-        "premises": [
-          "cong y m z m"
-        ],
-        "conclusion": "cong z m y m",
-        "rule_name": "r66",
-        "level": 12
-      }
-    ],
-    "is_solved": true,
-    "step_sequence": [
-      "cong m z m y",
-      "=> cong m y m z",
-      "midp m z y",
-      "=> midp m y z",
-      "cong m z m y",
-      "cong m y m z",
-      "=> cong m z m z",
-      "midp m y z",
-      "midp m z y",
-      "=> cong y z z y",
-      "cong y z z y",
-      "=> cong z y y z",
-      "cong y z z y",
-      "cong z y y z",
-      "=> cong y z y z",
-      "midp m z y",
-      "midp m y z",
-      "=> eqratio m z z y m y y z",
-      "cong m y m z",
-      "=> cong y m z m",
-      "midp m y z",
-      "midp m z y",
-      "=> para y z z y",
-      "midp m z y",
-      "midp m y z",
-      "=> para z y y z",
-      "para z y y z",
-      "=> para z y z y",
-      "cong y m z m",
-      "=> cong z m y m"
-    ]
-  },
-  {
-    "problem_name": "controlled_8",
-    "problem_statement": "b w m = triangle; k = orthocenter k b w m ? para b k b k",
-    "constructions": [
-      "b w m = triangle",
-      "k = orthocenter k b w m"
-    ],
-    "goal": "para b k b k",
-    "setup_predicates": [
-      "perp k b w m",
-      "perp k w m b",
-      "perp k m b w"
-    ],
-    "proof_steps": [
-      {
-        "premises": [
-          "perp k b w m"
-        ],
-        "conclusion": "perp b k m w",
+        "conclusion": "perp l z e x",
         "rule_name": "r64",
-        "level": 1
-      },
-      {
-        "premises": [
-          "perp k b w m"
-        ],
-        "conclusion": "perp w m k b",
-        "rule_name": "r68",
-        "level": 2
-      },
-      {
-        "premises": [
-          "perp k w m b"
-        ],
-        "conclusion": "perp k w b m",
-        "rule_name": "r79",
-        "level": 3
-      },
-      {
-        "premises": [
-          "perp k b w m",
-          "perp w m k b"
-        ],
-        "conclusion": "para k b k b",
-        "rule_name": "r47",
-        "level": 4
-      },
-      {
-        "premises": [
-          "perp k b w m"
-        ],
-        "conclusion": "perp k b m w",
-        "rule_name": "r79",
-        "level": 5
-      },
-      {
-        "premises": [
-          "perp k w b m"
-        ],
-        "conclusion": "perp w k m b",
-        "rule_name": "r64",
-        "level": 6
-      },
-      {
-        "premises": [
-          "para k b k b"
-        ],
-        "conclusion": "coll k b b",
-        "rule_name": "r29",
         "level": 7
       },
       {
         "premises": [
-          "perp w m k b"
+          "perp e z x l"
         ],
-        "conclusion": "perp m w k b",
+        "conclusion": "perp z e x l",
         "rule_name": "r80",
         "level": 8
       },
       {
         "premises": [
-          "perp k b m w"
+          "perp z l x e"
         ],
-        "conclusion": "perp b k w m",
-        "rule_name": "r64",
+        "conclusion": "perp l z x e",
+        "rule_name": "r80",
         "level": 9
       },
       {
         "premises": [
-          "perp m w k b"
+          "perp l z e x",
+          "perp l z x e"
         ],
-        "conclusion": "perp m w b k",
-        "rule_name": "r79",
+        "conclusion": "para e x x e",
+        "rule_name": "r58",
         "level": 10
       },
       {
         "premises": [
-          "perp w m k b",
-          "perp k b w m"
+          "perp l z x e",
+          "perp x e z l"
         ],
-        "conclusion": "para w m w m",
+        "conclusion": "para l z z l",
         "rule_name": "r47",
         "level": 11
       },
       {
         "premises": [
-          "perp b k m w",
-          "perp m w b k"
+          "para l z z l",
+          "para z l l z"
         ],
-        "conclusion": "para b k b k",
-        "rule_name": "r47",
+        "conclusion": "para l z l z",
+        "rule_name": "r46",
         "level": 12
+      },
+      {
+        "premises": [
+          "para l z z l"
+        ],
+        "conclusion": "para z l z l",
+        "rule_name": "r75",
+        "level": 13
+      },
+      {
+        "premises": [
+          "perp l z x e"
+        ],
+        "conclusion": "perp z l e x",
+        "rule_name": "r64",
+        "level": 14
+      },
+      {
+        "premises": [
+          "para e x x e"
+        ],
+        "conclusion": "para x e e x",
+        "rule_name": "r67",
+        "level": 15
+      },
+      {
+        "premises": [
+          "perp z e l x"
+        ],
+        "conclusion": "perp l x z e",
+        "rule_name": "r68",
+        "level": 16
+      },
+      {
+        "premises": [
+          "perp l x z e",
+          "perp z e x l"
+        ],
+        "conclusion": "para l x x l",
+        "rule_name": "r47",
+        "level": 17
+      },
+      {
+        "premises": [
+          "perp l x z e"
+        ],
+        "conclusion": "perp x l z e",
+        "rule_name": "r80",
+        "level": 18
       }
     ],
     "is_solved": true,
     "step_sequence": [
-      "perp k b w m",
-      "=> perp b k m w",
-      "perp k b w m",
-      "=> perp w m k b",
-      "perp k w m b",
-      "=> perp k w b m",
-      "perp k b w m",
-      "perp w m k b",
-      "=> para k b k b",
-      "perp k b w m",
-      "=> perp k b m w",
-      "perp k w b m",
-      "=> perp w k m b",
-      "para k b k b",
-      "=> coll k b b",
-      "perp w m k b",
-      "=> perp m w k b",
-      "perp k b m w",
-      "=> perp b k w m",
-      "perp m w k b",
-      "=> perp m w b k",
-      "perp w m k b",
-      "perp k b w m",
-      "=> para w m w m",
-      "perp b k m w",
-      "perp m w b k",
-      "=> para b k b k"
+      "perp e x l z",
+      "=> perp x e z l",
+      "perp e z x l",
+      "=> perp z e l x",
+      "perp e x l z",
+      "=> perp e x z l",
+      "perp x e z l",
+      "=> perp z l x e",
+      "perp x e z l",
+      "=> perp x e l z",
+      "perp e x z l",
+      "perp e x l z",
+      "=> para z l l z",
+      "perp z l x e",
+      "=> perp l z e x",
+      "perp e z x l",
+      "=> perp z e x l",
+      "perp z l x e",
+      "=> perp l z x e",
+      "perp l z e x",
+      "perp l z x e",
+      "=> para e x x e",
+      "perp l z x e",
+      "perp x e z l",
+      "=> para l z z l",
+      "para l z z l",
+      "para z l l z",
+      "=> para l z l z",
+      "para l z z l",
+      "=> para z l z l",
+      "perp l z x e",
+      "=> perp z l e x",
+      "para e x x e",
+      "=> para x e e x",
+      "perp z e l x",
+      "=> perp l x z e",
+      "perp l x z e",
+      "perp z e x l",
+      "=> para l x x l",
+      "perp l x z e",
+      "=> perp x l z e"
     ]
   },
   {
-    "problem_name": "controlled_9",
-    "problem_statement": "l p o = triangle; v = midpoint v l p ? cong l p p l",
+    "problem_name": "controlled_3",
+    "problem_statement": "a o n = triangle; f = circumcenter f a o n ? cong f a f a",
     "constructions": [
-      "l p o = triangle",
-      "v = midpoint v l p"
+      "a o n = triangle",
+      "f = circumcenter f a o n"
     ],
-    "goal": "cong l p p l",
+    "goal": "cong f a f a",
     "setup_predicates": [
-      "midp v l p",
-      "coll v l p",
-      "cong v l v p"
+      "cong f a f o",
+      "cong f o f n"
     ],
     "proof_steps": [
       {
         "premises": [
-          "cong v l v p"
+          "cong f a f o",
+          "cong f o f n"
         ],
-        "conclusion": "cong l v p v",
-        "rule_name": "r65",
+        "conclusion": "cong f a f n",
+        "rule_name": "r49",
         "level": 1
       },
       {
         "premises": [
-          "cong l v p v"
+          "cong f a f n",
+          "cong f a f o"
         ],
-        "conclusion": "cong p v l v",
-        "rule_name": "r66",
+        "conclusion": "cong f n f o",
+        "rule_name": "r69",
         "level": 2
       },
       {
         "premises": [
-          "cong l v p v",
-          "cong p v l v"
+          "cong f n f o",
+          "cong f o f n"
         ],
-        "conclusion": "cong l v l v",
+        "conclusion": "cong f n f n",
         "rule_name": "r49",
         "level": 3
       },
       {
         "premises": [
-          "midp v l p"
+          "cong f a f o"
         ],
-        "conclusion": "midp v p l",
-        "rule_name": "r78",
+        "conclusion": "cong a f o f",
+        "rule_name": "r65",
         "level": 4
       },
       {
         "premises": [
-          "midp v p l",
-          "midp v l p"
+          "cong f o f n",
+          "cong f n f o"
         ],
-        "conclusion": "eqratio v p p l v l l p",
-        "rule_name": "r30",
+        "conclusion": "cong f o f o",
+        "rule_name": "r49",
         "level": 5
       },
       {
         "premises": [
-          "midp v l p",
-          "midp v p l"
+          "cong f n f n",
+          "cong f o f o"
         ],
-        "conclusion": "para l p p l",
-        "rule_name": "r26",
+        "conclusion": "perp f f n o",
+        "rule_name": "r24",
         "level": 6
       },
       {
         "premises": [
-          "para l p p l"
+          "cong f o f o"
         ],
-        "conclusion": "para p l l p",
-        "rule_name": "r63",
+        "conclusion": "cong o f o f",
+        "rule_name": "r65",
         "level": 7
       },
       {
         "premises": [
-          "para l p p l"
+          "cong f a f n"
         ],
-        "conclusion": "para p l p l",
-        "rule_name": "r75",
+        "conclusion": "cong a f n f",
+        "rule_name": "r65",
         "level": 8
       },
       {
         "premises": [
-          "para l p p l",
-          "para p l l p"
+          "cong f n f n"
         ],
-        "conclusion": "para l p l p",
-        "rule_name": "r46",
+        "conclusion": "cong n f n f",
+        "rule_name": "r65",
         "level": 9
       },
       {
         "premises": [
-          "midp v p l"
+          "cong f n f o"
         ],
-        "conclusion": "cong v p v l",
-        "rule_name": "r57",
+        "conclusion": "cong n f o f",
+        "rule_name": "r65",
         "level": 10
       },
       {
         "premises": [
-          "cong v l v p",
-          "cong v p v l"
+          "cong n f o f"
         ],
-        "conclusion": "cong v l v l",
-        "rule_name": "r49",
+        "conclusion": "cong o f n f",
+        "rule_name": "r66",
         "level": 11
       },
       {
         "premises": [
-          "para l p l p"
+          "cong a f o f"
         ],
-        "conclusion": "coll l p p",
-        "rule_name": "r29",
+        "conclusion": "cong o f a f",
+        "rule_name": "r66",
         "level": 12
       },
       {
         "premises": [
-          "coll v l p",
-          "coll l p p"
+          "cong o f a f"
         ],
-        "conclusion": "ncoll v l l",
-        "rule_name": "r62",
+        "conclusion": "cong f o f a",
+        "rule_name": "r65",
         "level": 13
       },
       {
         "premises": [
-          "cong p v l v",
-          "cong l v p v"
+          "cong a f o f",
+          "cong o f a f"
         ],
-        "conclusion": "cong p v p v",
+        "conclusion": "cong a f a f",
         "rule_name": "r49",
         "level": 14
       },
       {
         "premises": [
-          "midp v l p",
-          "midp v p l"
+          "perp f f n o"
         ],
-        "conclusion": "eqratio v l l p v p p l",
-        "rule_name": "r30",
+        "conclusion": "perp f f o n",
+        "rule_name": "r64",
         "level": 15
       },
       {
         "premises": [
-          "midp v l p",
-          "midp v p l"
+          "cong a f a f"
         ],
-        "conclusion": "cong l p p l",
-        "rule_name": "r50",
+        "conclusion": "cong f a f a",
+        "rule_name": "r65",
         "level": 16
       }
     ],
     "is_solved": true,
     "step_sequence": [
-      "cong v l v p",
-      "=> cong l v p v",
-      "cong l v p v",
-      "=> cong p v l v",
-      "cong l v p v",
-      "cong p v l v",
-      "=> cong l v l v",
-      "midp v l p",
-      "=> midp v p l",
-      "midp v p l",
-      "midp v l p",
-      "=> eqratio v p p l v l l p",
-      "midp v l p",
-      "midp v p l",
-      "=> para l p p l",
-      "para l p p l",
-      "=> para p l l p",
-      "para l p p l",
-      "=> para p l p l",
-      "para l p p l",
-      "para p l l p",
-      "=> para l p l p",
-      "midp v p l",
-      "=> cong v p v l",
-      "cong v l v p",
-      "cong v p v l",
-      "=> cong v l v l",
-      "para l p l p",
-      "=> coll l p p",
-      "coll v l p",
-      "coll l p p",
-      "=> ncoll v l l",
-      "cong p v l v",
-      "cong l v p v",
-      "=> cong p v p v",
-      "midp v l p",
-      "midp v p l",
-      "=> eqratio v l l p v p p l",
-      "midp v l p",
-      "midp v p l",
-      "=> cong l p p l"
+      "cong f a f o",
+      "cong f o f n",
+      "=> cong f a f n",
+      "cong f a f n",
+      "cong f a f o",
+      "=> cong f n f o",
+      "cong f n f o",
+      "cong f o f n",
+      "=> cong f n f n",
+      "cong f a f o",
+      "=> cong a f o f",
+      "cong f o f n",
+      "cong f n f o",
+      "=> cong f o f o",
+      "cong f n f n",
+      "cong f o f o",
+      "=> perp f f n o",
+      "cong f o f o",
+      "=> cong o f o f",
+      "cong f a f n",
+      "=> cong a f n f",
+      "cong f n f n",
+      "=> cong n f n f",
+      "cong f n f o",
+      "=> cong n f o f",
+      "cong n f o f",
+      "=> cong o f n f",
+      "cong a f o f",
+      "=> cong o f a f",
+      "cong o f a f",
+      "=> cong f o f a",
+      "cong a f o f",
+      "cong o f a f",
+      "=> cong a f a f",
+      "perp f f n o",
+      "=> perp f f o n",
+      "cong a f a f",
+      "=> cong f a f a"
+    ]
+  },
+  {
+    "problem_name": "controlled_4",
+    "problem_statement": "h q b p = parallelogram a i j t ? cong a i a i",
+    "constructions": [
+      "h q b p = parallelogram a i j t"
+    ],
+    "goal": "cong a i a i",
+    "setup_predicates": [
+      "para a i j t",
+      "para a t i j",
+      "cong a i j t",
+      "cong a t i j"
+    ],
+    "proof_steps": [
+      {
+        "premises": [
+          "cong a i j t"
+        ],
+        "conclusion": "cong j t a i",
+        "rule_name": "r66",
+        "level": 1
+      },
+      {
+        "premises": [
+          "cong a t i j"
+        ],
+        "conclusion": "cong i j a t",
+        "rule_name": "r66",
+        "level": 2
+      },
+      {
+        "premises": [
+          "para a i j t"
+        ],
+        "conclusion": "para a i t j",
+        "rule_name": "r74",
+        "level": 3
+      },
+      {
+        "premises": [
+          "para a i j t"
+        ],
+        "conclusion": "para j t a i",
+        "rule_name": "r67",
+        "level": 4
+      },
+      {
+        "premises": [
+          "cong i j a t",
+          "cong a t i j"
+        ],
+        "conclusion": "cong i j i j",
+        "rule_name": "r49",
+        "level": 5
+      },
+      {
+        "premises": [
+          "para a t i j"
+        ],
+        "conclusion": "para t a j i",
+        "rule_name": "r63",
+        "level": 6
+      },
+      {
+        "premises": [
+          "para a i t j"
+        ],
+        "conclusion": "para t j a i",
+        "rule_name": "r67",
+        "level": 7
+      },
+      {
+        "premises": [
+          "para j t a i"
+        ],
+        "conclusion": "para t j i a",
+        "rule_name": "r63",
+        "level": 8
+      },
+      {
+        "premises": [
+          "para a i j t"
+        ],
+        "conclusion": "para i a j t",
+        "rule_name": "r75",
+        "level": 9
+      },
+      {
+        "premises": [
+          "para a i j t",
+          "para a i t j"
+        ],
+        "conclusion": "para j t t j",
+        "rule_name": "r54",
+        "level": 10
+      },
+      {
+        "premises": [
+          "para t a j i"
+        ],
+        "conclusion": "para t a i j",
+        "rule_name": "r74",
+        "level": 11
+      },
+      {
+        "premises": [
+          "cong a i j t",
+          "cong j t a i"
+        ],
+        "conclusion": "cong a i a i",
+        "rule_name": "r49",
+        "level": 12
+      }
+    ],
+    "is_solved": true,
+    "step_sequence": [
+      "cong a i j t",
+      "=> cong j t a i",
+      "cong a t i j",
+      "=> cong i j a t",
+      "para a i j t",
+      "=> para a i t j",
+      "para a i j t",
+      "=> para j t a i",
+      "cong i j a t",
+      "cong a t i j",
+      "=> cong i j i j",
+      "para a t i j",
+      "=> para t a j i",
+      "para a i t j",
+      "=> para t j a i",
+      "para j t a i",
+      "=> para t j i a",
+      "para a i j t",
+      "=> para i a j t",
+      "para a i j t",
+      "para a i t j",
+      "=> para j t t j",
+      "para t a j i",
+      "=> para t a i j",
+      "cong a i j t",
+      "cong j t a i",
+      "=> cong a i a i"
+    ]
+  },
+  {
+    "problem_name": "controlled_5",
+    "problem_statement": "h a r = triangle; z = midpoint z h a ? perp h h a z",
+    "constructions": [
+      "h a r = triangle",
+      "z = midpoint z h a"
+    ],
+    "goal": "perp h h a z",
+    "setup_predicates": [
+      "midp z h a",
+      "coll z h a",
+      "cong z h z a"
+    ],
+    "proof_steps": [
+      {
+        "premises": [
+          "midp z h a"
+        ],
+        "conclusion": "midp z a h",
+        "rule_name": "r78",
+        "level": 1
+      },
+      {
+        "premises": [
+          "cong z h z a"
+        ],
+        "conclusion": "cong h z a z",
+        "rule_name": "r65",
+        "level": 2
+      },
+      {
+        "premises": [
+          "midp z h a",
+          "midp z a h"
+        ],
+        "conclusion": "para h a a h",
+        "rule_name": "r26",
+        "level": 3
+      },
+      {
+        "premises": [
+          "midp z a h",
+          "midp z h a"
+        ],
+        "conclusion": "para a h h a",
+        "rule_name": "r26",
+        "level": 4
+      },
+      {
+        "premises": [
+          "para h a a h"
+        ],
+        "conclusion": "para a h a h",
+        "rule_name": "r75",
+        "level": 5
+      },
+      {
+        "premises": [
+          "midp z h a",
+          "midp z a h"
+        ],
+        "conclusion": "cong h a a h",
+        "rule_name": "r50",
+        "level": 6
+      },
+      {
+        "premises": [
+          "para h a a h",
+          "para a h h a"
+        ],
+        "conclusion": "para h a h a",
+        "rule_name": "r46",
+        "level": 7
+      },
+      {
+        "premises": [
+          "cong z h z a"
+        ],
+        "conclusion": "cong z a z h",
+        "rule_name": "r66",
+        "level": 8
+      },
+      {
+        "premises": [
+          "midp z a h",
+          "midp z h a"
+        ],
+        "conclusion": "eqratio z a a h z h h a",
+        "rule_name": "r30",
+        "level": 9
+      },
+      {
+        "premises": [
+          "cong h a a h"
+        ],
+        "conclusion": "cong a h h a",
+        "rule_name": "r65",
+        "level": 10
+      },
+      {
+        "premises": [
+          "cong a h h a",
+          "cong h a a h"
+        ],
+        "conclusion": "cong a h a h",
+        "rule_name": "r49",
+        "level": 11
+      },
+      {
+        "premises": [
+          "cong h z a z"
+        ],
+        "conclusion": "cong a z h z",
+        "rule_name": "r66",
+        "level": 12
+      },
+      {
+        "premises": [
+          "cong h a a h",
+          "cong a h h a"
+        ],
+        "conclusion": "cong h a h a",
+        "rule_name": "r49",
+        "level": 13
+      },
+      {
+        "premises": [
+          "midp z h a",
+          "midp z a h"
+        ],
+        "conclusion": "eqratio z h h a z a a h",
+        "rule_name": "r30",
+        "level": 14
+      },
+      {
+        "premises": [
+          "cong z a z h",
+          "cong z h z a"
+        ],
+        "conclusion": "cong z a z a",
+        "rule_name": "r49",
+        "level": 15
+      },
+      {
+        "premises": [
+          "eqratio z a a h z h h a",
+          "eqratio z h h a z a a h"
+        ],
+        "conclusion": "eqratio z a a h z a a h",
+        "rule_name": "r53",
+        "level": 16
+      },
+      {
+        "premises": [
+          "cong h z a z",
+          "cong a z h z"
+        ],
+        "conclusion": "cong h z h z",
+        "rule_name": "r49",
+        "level": 17
+      },
+      {
+        "premises": [
+          "cong h a h a",
+          "cong h z h z"
+        ],
+        "conclusion": "perp h h a z",
+        "rule_name": "r24",
+        "level": 18
+      }
+    ],
+    "is_solved": true,
+    "step_sequence": [
+      "midp z h a",
+      "=> midp z a h",
+      "cong z h z a",
+      "=> cong h z a z",
+      "midp z h a",
+      "midp z a h",
+      "=> para h a a h",
+      "midp z a h",
+      "midp z h a",
+      "=> para a h h a",
+      "para h a a h",
+      "=> para a h a h",
+      "midp z h a",
+      "midp z a h",
+      "=> cong h a a h",
+      "para h a a h",
+      "para a h h a",
+      "=> para h a h a",
+      "cong z h z a",
+      "=> cong z a z h",
+      "midp z a h",
+      "midp z h a",
+      "=> eqratio z a a h z h h a",
+      "cong h a a h",
+      "=> cong a h h a",
+      "cong a h h a",
+      "cong h a a h",
+      "=> cong a h a h",
+      "cong h z a z",
+      "=> cong a z h z",
+      "cong h a a h",
+      "cong a h h a",
+      "=> cong h a h a",
+      "midp z h a",
+      "midp z a h",
+      "=> eqratio z h h a z a a h",
+      "cong z a z h",
+      "cong z h z a",
+      "=> cong z a z a",
+      "eqratio z a a h z h h a",
+      "eqratio z h h a z a a h",
+      "=> eqratio z a a h z a a h",
+      "cong h z a z",
+      "cong a z h z",
+      "=> cong h z h z",
+      "cong h a h a",
+      "cong h z h z",
+      "=> perp h h a z"
+    ]
+  },
+  {
+    "problem_name": "controlled_6",
+    "problem_statement": "z w q = triangle; e = circumcenter e z w q ? perp z w e e",
+    "constructions": [
+      "z w q = triangle",
+      "e = circumcenter e z w q"
+    ],
+    "goal": "perp z w e e",
+    "setup_predicates": [
+      "cong e z e w",
+      "cong e w e q"
+    ],
+    "proof_steps": [
+      {
+        "premises": [
+          "cong e z e w"
+        ],
+        "conclusion": "cong e w e z",
+        "rule_name": "r66",
+        "level": 1
+      },
+      {
+        "premises": [
+          "cong e w e z",
+          "cong e z e w"
+        ],
+        "conclusion": "cong e w e w",
+        "rule_name": "r49",
+        "level": 2
+      },
+      {
+        "premises": [
+          "cong e z e w",
+          "cong e w e q"
+        ],
+        "conclusion": "cong e z e q",
+        "rule_name": "r49",
+        "level": 3
+      },
+      {
+        "premises": [
+          "cong e w e q"
+        ],
+        "conclusion": "cong e q e w",
+        "rule_name": "r66",
+        "level": 4
+      },
+      {
+        "premises": [
+          "cong e z e w"
+        ],
+        "conclusion": "cong z e w e",
+        "rule_name": "r65",
+        "level": 5
+      },
+      {
+        "premises": [
+          "cong z e w e"
+        ],
+        "conclusion": "cong w e z e",
+        "rule_name": "r66",
+        "level": 6
+      },
+      {
+        "premises": [
+          "cong e q e w",
+          "cong e w e z"
+        ],
+        "conclusion": "cong e q e z",
+        "rule_name": "r49",
+        "level": 7
+      },
+      {
+        "premises": [
+          "cong w e z e",
+          "cong z e w e"
+        ],
+        "conclusion": "cong w e w e",
+        "rule_name": "r49",
+        "level": 8
+      },
+      {
+        "premises": [
+          "cong e q e w",
+          "cong e w e q"
+        ],
+        "conclusion": "cong e q e q",
+        "rule_name": "r49",
+        "level": 9
+      },
+      {
+        "premises": [
+          "cong e z e w",
+          "cong e w e z"
+        ],
+        "conclusion": "cong e z e z",
+        "rule_name": "r49",
+        "level": 10
+      },
+      {
+        "premises": [
+          "cong e z e z",
+          "cong e w e w"
+        ],
+        "conclusion": "perp e e z w",
+        "rule_name": "r24",
+        "level": 11
+      },
+      {
+        "premises": [
+          "cong e q e z"
+        ],
+        "conclusion": "cong q e z e",
+        "rule_name": "r65",
+        "level": 12
+      },
+      {
+        "premises": [
+          "cong z e w e",
+          "cong w e z e"
+        ],
+        "conclusion": "cong z e z e",
+        "rule_name": "r49",
+        "level": 13
+      },
+      {
+        "premises": [
+          "cong q e z e",
+          "cong z e w e"
+        ],
+        "conclusion": "cong q e w e",
+        "rule_name": "r49",
+        "level": 14
+      },
+      {
+        "premises": [
+          "perp e e z w"
+        ],
+        "conclusion": "perp z w e e",
+        "rule_name": "r68",
+        "level": 15
+      }
+    ],
+    "is_solved": true,
+    "step_sequence": [
+      "cong e z e w",
+      "=> cong e w e z",
+      "cong e w e z",
+      "cong e z e w",
+      "=> cong e w e w",
+      "cong e z e w",
+      "cong e w e q",
+      "=> cong e z e q",
+      "cong e w e q",
+      "=> cong e q e w",
+      "cong e z e w",
+      "=> cong z e w e",
+      "cong z e w e",
+      "=> cong w e z e",
+      "cong e q e w",
+      "cong e w e z",
+      "=> cong e q e z",
+      "cong w e z e",
+      "cong z e w e",
+      "=> cong w e w e",
+      "cong e q e w",
+      "cong e w e q",
+      "=> cong e q e q",
+      "cong e z e w",
+      "cong e w e z",
+      "=> cong e z e z",
+      "cong e z e z",
+      "cong e w e w",
+      "=> perp e e z w",
+      "cong e q e z",
+      "=> cong q e z e",
+      "cong z e w e",
+      "cong w e z e",
+      "=> cong z e z e",
+      "cong q e z e",
+      "cong z e w e",
+      "=> cong q e w e",
+      "perp e e z w",
+      "=> perp z w e e"
+    ]
+  },
+  {
+    "problem_name": "controlled_7",
+    "problem_statement": "u p b = triangle; x = midpoint x u p ? perp x x p u",
+    "constructions": [
+      "u p b = triangle",
+      "x = midpoint x u p"
+    ],
+    "goal": "perp x x p u",
+    "setup_predicates": [
+      "midp x u p",
+      "coll x u p",
+      "cong x u x p"
+    ],
+    "proof_steps": [
+      {
+        "premises": [
+          "cong x u x p"
+        ],
+        "conclusion": "cong x p x u",
+        "rule_name": "r66",
+        "level": 1
+      },
+      {
+        "premises": [
+          "midp x u p"
+        ],
+        "conclusion": "midp x p u",
+        "rule_name": "r78",
+        "level": 2
+      },
+      {
+        "premises": [
+          "cong x p x u",
+          "cong x u x p"
+        ],
+        "conclusion": "cong x p x p",
+        "rule_name": "r49",
+        "level": 3
+      },
+      {
+        "premises": [
+          "cong x p x p"
+        ],
+        "conclusion": "cong p x p x",
+        "rule_name": "r65",
+        "level": 4
+      },
+      {
+        "premises": [
+          "cong x u x p"
+        ],
+        "conclusion": "cong u x p x",
+        "rule_name": "r65",
+        "level": 5
+      },
+      {
+        "premises": [
+          "midp x u p",
+          "midp x p u"
+        ],
+        "conclusion": "para u p p u",
+        "rule_name": "r26",
+        "level": 6
+      },
+      {
+        "premises": [
+          "cong x u x p",
+          "cong x p x u"
+        ],
+        "conclusion": "cong x u x u",
+        "rule_name": "r49",
+        "level": 7
+      },
+      {
+        "premises": [
+          "midp x u p",
+          "midp x p u"
+        ],
+        "conclusion": "eqratio x u u p x p p u",
+        "rule_name": "r30",
+        "level": 8
+      },
+      {
+        "premises": [
+          "para u p p u"
+        ],
+        "conclusion": "para p u p u",
+        "rule_name": "r75",
+        "level": 9
+      },
+      {
+        "premises": [
+          "para u p p u"
+        ],
+        "conclusion": "para u p u p",
+        "rule_name": "r74",
+        "level": 10
+      },
+      {
+        "premises": [
+          "para p u p u"
+        ],
+        "conclusion": "coll p u u",
+        "rule_name": "r29",
+        "level": 11
+      },
+      {
+        "premises": [
+          "para u p p u"
+        ],
+        "conclusion": "para p u u p",
+        "rule_name": "r67",
+        "level": 12
+      },
+      {
+        "premises": [
+          "cong x u x u"
+        ],
+        "conclusion": "cong u x u x",
+        "rule_name": "r65",
+        "level": 13
+      },
+      {
+        "premises": [
+          "cong x p x u"
+        ],
+        "conclusion": "cong p x u x",
+        "rule_name": "r65",
+        "level": 14
+      },
+      {
+        "premises": [
+          "cong x p x p",
+          "cong x u x u"
+        ],
+        "conclusion": "perp x x p u",
+        "rule_name": "r24",
+        "level": 15
+      }
+    ],
+    "is_solved": true,
+    "step_sequence": [
+      "cong x u x p",
+      "=> cong x p x u",
+      "midp x u p",
+      "=> midp x p u",
+      "cong x p x u",
+      "cong x u x p",
+      "=> cong x p x p",
+      "cong x p x p",
+      "=> cong p x p x",
+      "cong x u x p",
+      "=> cong u x p x",
+      "midp x u p",
+      "midp x p u",
+      "=> para u p p u",
+      "cong x u x p",
+      "cong x p x u",
+      "=> cong x u x u",
+      "midp x u p",
+      "midp x p u",
+      "=> eqratio x u u p x p p u",
+      "para u p p u",
+      "=> para p u p u",
+      "para u p p u",
+      "=> para u p u p",
+      "para p u p u",
+      "=> coll p u u",
+      "para u p p u",
+      "=> para p u u p",
+      "cong x u x u",
+      "=> cong u x u x",
+      "cong x p x u",
+      "=> cong p x u x",
+      "cong x p x p",
+      "cong x u x u",
+      "=> perp x x p u"
+    ]
+  },
+  {
+    "problem_name": "controlled_8",
+    "problem_statement": "p n i = triangle; z = midpoint z p n ? cong p n n p",
+    "constructions": [
+      "p n i = triangle",
+      "z = midpoint z p n"
+    ],
+    "goal": "cong p n n p",
+    "setup_predicates": [
+      "midp z p n",
+      "coll z p n",
+      "cong z p z n"
+    ],
+    "proof_steps": [
+      {
+        "premises": [
+          "cong z p z n"
+        ],
+        "conclusion": "cong z n z p",
+        "rule_name": "r66",
+        "level": 1
+      },
+      {
+        "premises": [
+          "cong z p z n"
+        ],
+        "conclusion": "cong p z n z",
+        "rule_name": "r65",
+        "level": 2
+      },
+      {
+        "premises": [
+          "cong z p z n",
+          "cong z n z p"
+        ],
+        "conclusion": "cong z p z p",
+        "rule_name": "r49",
+        "level": 3
+      },
+      {
+        "premises": [
+          "cong z p z p"
+        ],
+        "conclusion": "cong p z p z",
+        "rule_name": "r65",
+        "level": 4
+      },
+      {
+        "premises": [
+          "cong p z n z"
+        ],
+        "conclusion": "cong n z p z",
+        "rule_name": "r66",
+        "level": 5
+      },
+      {
+        "premises": [
+          "cong n z p z",
+          "cong p z n z"
+        ],
+        "conclusion": "cong n z n z",
+        "rule_name": "r49",
+        "level": 6
+      },
+      {
+        "premises": [
+          "cong n z n z"
+        ],
+        "conclusion": "cong z n z n",
+        "rule_name": "r65",
+        "level": 7
+      },
+      {
+        "premises": [
+          "cong z p z p",
+          "cong z n z n"
+        ],
+        "conclusion": "perp z z p n",
+        "rule_name": "r24",
+        "level": 8
+      },
+      {
+        "premises": [
+          "cong z n z n",
+          "cong z p z p"
+        ],
+        "conclusion": "perp z z n p",
+        "rule_name": "r24",
+        "level": 9
+      },
+      {
+        "premises": [
+          "perp z z n p",
+          "perp z z p n"
+        ],
+        "conclusion": "para n p p n",
+        "rule_name": "r58",
+        "level": 10
+      },
+      {
+        "premises": [
+          "para n p p n"
+        ],
+        "conclusion": "para p n p n",
+        "rule_name": "r75",
+        "level": 11
+      },
+      {
+        "premises": [
+          "para p n p n"
+        ],
+        "conclusion": "para p n n p",
+        "rule_name": "r74",
+        "level": 12
+      },
+      {
+        "premises": [
+          "para n p p n",
+          "para p n n p"
+        ],
+        "conclusion": "para n p n p",
+        "rule_name": "r46",
+        "level": 13
+      },
+      {
+        "premises": [
+          "midp z p n"
+        ],
+        "conclusion": "midp z n p",
+        "rule_name": "r78",
+        "level": 14
+      },
+      {
+        "premises": [
+          "midp z n p",
+          "midp z p n"
+        ],
+        "conclusion": "eqratio z n n p z p p n",
+        "rule_name": "r30",
+        "level": 15
+      },
+      {
+        "premises": [
+          "para p n p n"
+        ],
+        "conclusion": "coll p n n",
+        "rule_name": "r29",
+        "level": 16
+      },
+      {
+        "premises": [
+          "coll z p n",
+          "coll p n n"
+        ],
+        "conclusion": "ncoll z p p",
+        "rule_name": "r62",
+        "level": 17
+      },
+      {
+        "premises": [
+          "midp z p n",
+          "midp z n p"
+        ],
+        "conclusion": "cong p n n p",
+        "rule_name": "r50",
+        "level": 18
+      }
+    ],
+    "is_solved": true,
+    "step_sequence": [
+      "cong z p z n",
+      "=> cong z n z p",
+      "cong z p z n",
+      "=> cong p z n z",
+      "cong z p z n",
+      "cong z n z p",
+      "=> cong z p z p",
+      "cong z p z p",
+      "=> cong p z p z",
+      "cong p z n z",
+      "=> cong n z p z",
+      "cong n z p z",
+      "cong p z n z",
+      "=> cong n z n z",
+      "cong n z n z",
+      "=> cong z n z n",
+      "cong z p z p",
+      "cong z n z n",
+      "=> perp z z p n",
+      "cong z n z n",
+      "cong z p z p",
+      "=> perp z z n p",
+      "perp z z n p",
+      "perp z z p n",
+      "=> para n p p n",
+      "para n p p n",
+      "=> para p n p n",
+      "para p n p n",
+      "=> para p n n p",
+      "para n p p n",
+      "para p n n p",
+      "=> para n p n p",
+      "midp z p n",
+      "=> midp z n p",
+      "midp z n p",
+      "midp z p n",
+      "=> eqratio z n n p z p p n",
+      "para p n p n",
+      "=> coll p n n",
+      "coll z p n",
+      "coll p n n",
+      "=> ncoll z p p",
+      "midp z p n",
+      "midp z n p",
+      "=> cong p n n p"
+    ]
+  },
+  {
+    "problem_name": "controlled_9",
+    "problem_statement": "d i y = triangle; e = orthocenter e d i y ? coll d y y",
+    "constructions": [
+      "d i y = triangle",
+      "e = orthocenter e d i y"
+    ],
+    "goal": "coll d y y",
+    "setup_predicates": [
+      "perp e d i y",
+      "perp e i y d",
+      "perp e y d i"
+    ],
+    "proof_steps": [
+      {
+        "premises": [
+          "perp e y d i"
+        ],
+        "conclusion": "perp e y i d",
+        "rule_name": "r79",
+        "level": 1
+      },
+      {
+        "premises": [
+          "perp e y d i",
+          "perp e y i d"
+        ],
+        "conclusion": "para d i i d",
+        "rule_name": "r58",
+        "level": 2
+      },
+      {
+        "premises": [
+          "perp e y i d"
+        ],
+        "conclusion": "perp y e i d",
+        "rule_name": "r80",
+        "level": 3
+      },
+      {
+        "premises": [
+          "para d i i d"
+        ],
+        "conclusion": "para i d d i",
+        "rule_name": "r67",
+        "level": 4
+      },
+      {
+        "premises": [
+          "perp e i y d"
+        ],
+        "conclusion": "perp i e y d",
+        "rule_name": "r80",
+        "level": 5
+      },
+      {
+        "premises": [
+          "perp e y i d"
+        ],
+        "conclusion": "perp y e d i",
+        "rule_name": "r64",
+        "level": 6
+      },
+      {
+        "premises": [
+          "perp e i y d"
+        ],
+        "conclusion": "perp y d e i",
+        "rule_name": "r68",
+        "level": 7
+      },
+      {
+        "premises": [
+          "para i d d i"
+        ],
+        "conclusion": "para i d i d",
+        "rule_name": "r74",
+        "level": 8
+      },
+      {
+        "premises": [
+          "perp i e y d"
+        ],
+        "conclusion": "perp i e d y",
+        "rule_name": "r79",
+        "level": 9
+      },
+      {
+        "premises": [
+          "perp i e d y"
+        ],
+        "conclusion": "perp d y i e",
+        "rule_name": "r68",
+        "level": 10
+      },
+      {
+        "premises": [
+          "perp d y i e",
+          "perp i e d y"
+        ],
+        "conclusion": "para d y d y",
+        "rule_name": "r47",
+        "level": 11
+      },
+      {
+        "premises": [
+          "perp y d e i",
+          "perp e i y d"
+        ],
+        "conclusion": "para y d y d",
+        "rule_name": "r47",
+        "level": 12
+      },
+      {
+        "premises": [
+          "para d y d y"
+        ],
+        "conclusion": "para d y y d",
+        "rule_name": "r74",
+        "level": 13
+      },
+      {
+        "premises": [
+          "perp d y i e"
+        ],
+        "conclusion": "perp d y e i",
+        "rule_name": "r79",
+        "level": 14
+      },
+      {
+        "premises": [
+          "para d y y d"
+        ],
+        "conclusion": "para y d d y",
+        "rule_name": "r67",
+        "level": 15
+      },
+      {
+        "premises": [
+          "perp d y e i",
+          "perp d y i e"
+        ],
+        "conclusion": "para e i i e",
+        "rule_name": "r58",
+        "level": 16
+      },
+      {
+        "premises": [
+          "perp i e d y"
+        ],
+        "conclusion": "perp e i d y",
+        "rule_name": "r80",
+        "level": 17
+      },
+      {
+        "premises": [
+          "para d y d y"
+        ],
+        "conclusion": "coll d y y",
+        "rule_name": "r29",
+        "level": 18
+      }
+    ],
+    "is_solved": true,
+    "step_sequence": [
+      "perp e y d i",
+      "=> perp e y i d",
+      "perp e y d i",
+      "perp e y i d",
+      "=> para d i i d",
+      "perp e y i d",
+      "=> perp y e i d",
+      "para d i i d",
+      "=> para i d d i",
+      "perp e i y d",
+      "=> perp i e y d",
+      "perp e y i d",
+      "=> perp y e d i",
+      "perp e i y d",
+      "=> perp y d e i",
+      "para i d d i",
+      "=> para i d i d",
+      "perp i e y d",
+      "=> perp i e d y",
+      "perp i e d y",
+      "=> perp d y i e",
+      "perp d y i e",
+      "perp i e d y",
+      "=> para d y d y",
+      "perp y d e i",
+      "perp e i y d",
+      "=> para y d y d",
+      "para d y d y",
+      "=> para d y y d",
+      "perp d y i e",
+      "=> perp d y e i",
+      "para d y y d",
+      "=> para y d d y",
+      "perp d y e i",
+      "perp d y i e",
+      "=> para e i i e",
+      "perp i e d y",
+      "=> perp e i d y",
+      "para d y d y",
+      "=> coll d y y"
     ]
   }
 ]
