@@ -40,6 +40,7 @@ class ReasoningStep:
     symbolic_valid: Optional[bool] = None
     render_valid: Optional[bool] = None
     step_penalty: float = 0.0
+    used_symbolic_check: bool = False  # 是否调用了符号引擎检查
 
 
 @dataclass
@@ -189,6 +190,9 @@ class GeometryReasoningSystem:
 
         if use_decoder or use_render:
             self._process_decoded_statement(step, use_render)
+
+        # 判断是否调用了符号引擎检查：解码且不使用渲染引擎
+        step.used_symbolic_check = use_decoder and not use_render
 
         return step
 

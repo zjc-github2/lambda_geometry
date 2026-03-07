@@ -33,7 +33,7 @@ if TYPE_CHECKING:
 @dataclass
 class RewardConfig:
     """奖励配置
-    
+
     注意：step_penalty 仅用于推理阶段，不参与RL训练。
     推理阶段的步数惩罚在 workflow.py 中实现。
     """
@@ -45,6 +45,9 @@ class RewardConfig:
     proof_success: float = 5.0
     proof_failure: float = -2.0
     repeat_penalty: float = -0.05
+    # 连续不调用符号引擎的惩罚配置
+    consecutive_no_symbolic_base: float = -0.0  # 连续不调用符号引擎的基础惩罚
+    consecutive_no_symbolic_increment: float = -0.1  # 每多一步增加的惩罚
 
 
 class EncoderDecoderTrainer:
@@ -242,11 +245,24 @@ class RLTrainer:
         self.gamma = 0.99
 
     def compute_reward(
-        self, step_result: ReasoningStep, is_proof_complete: bool, is_repeat: bool
+        self,
+        step_result: ReasoningStep,
+        is_proof_complete: bool,
+        is_repeat: bool,
+        consecutive_no_symbolic: int = 0,
     ) -> float:
         """计算奖励值（RL训练用，不包含步数惩罚）
-        
+
         注意：步数惩罚仅在推理阶段应用，不参与RL训练。
+
+        Args:
+            step_result: 推理步骤结果
+            is_proof_complete: 是否完成证明
+            is_repeat: 是否重复命题
+            consecutive_no_symbolic: 连续不调用符号引擎的步数
+
+        Returns:
+            奖励值
         """
         reward = 0.0
 
@@ -268,6 +284,15 @@ class RLTrainer:
         if is_proof_complete:
             reward += self.reward_config.proof_success
 
+        # 连续不调用符号引擎的惩罚（绝对值逐渐变大）
+        if consecutive_no_symbolic > 0:
+            penalty = (
+                self.reward_config.consecutive_no_symbolic_base
+                + self.reward_config.consecutive_no_symbolic_increment
+                * (consecutive_no_symbolic - 1)
+            )
+            reward += penalty
+
         return reward
 
     def train_episode(
@@ -284,6 +309,9 @@ class RLTrainer:
 
         rewards: List[float] = []
         log_probs: List[torch.Tensor] = []
+        control_signals: List[torch.Tensor] = []  # 保存控制信号用于梯度引导
+        needs_guidance: List[bool] = []  # 记录哪些步骤需要引导梯度
+        consecutive_no_symbolic = 0  # 连续不调用符号引擎的步数
 
         for _ in range(max_steps):
             encoded_sequence = self.system.event_sequence.get_sequence_tensor()
@@ -292,7 +320,9 @@ class RLTrainer:
 
             control_log_prob = torch.log(control_signal + 1e-10).sum()
             log_probs.append(control_log_prob)
+            control_signals.append(control_signal.clone())  # 保存控制信号
 
+            use_render = control_signal[0, 0].item() > 0.5
             use_decoder = control_signal[0, 1].item() > 0.5
             decoded_statement: Optional[str] = None
             symbolic_valid: Optional[bool] = None
@@ -304,10 +334,35 @@ class RLTrainer:
                     from .geometry_parser import GeometryParser
 
                     prop = GeometryParser.parse_proposition(decoded_statement)
-                    is_valid = self.system.symbolic_engine.verify_proposition(prop)
+                    if use_render:
+                        # 使用渲染引擎验证
+                        is_valid = self.system.render_engine.verify_proposition(prop)
+                        render_valid = is_valid
+                    else:
+                        # 使用符号引擎验证
+                        is_valid = self.system.symbolic_engine.verify_proposition(prop)
+                        symbolic_valid = is_valid
                 except Exception:
                     is_valid = False
-                symbolic_valid = is_valid
+                    if use_render:
+                        render_valid = False
+                    else:
+                        symbolic_valid = False
+
+            # 跟踪连续不调用符号引擎的步数
+            # 判断条件：生成了命题但没有调用符号引擎检查（即没有解码，或者解码后使用了渲染引擎）
+            generated_proposition = decoded_statement is not None
+            used_symbolic_check = (
+                use_decoder and not use_render and symbolic_valid is not None
+            )
+
+            if generated_proposition and not used_symbolic_check:
+                consecutive_no_symbolic += 1
+            else:
+                consecutive_no_symbolic = 0
+
+            # 记录是否需要引导梯度（连续不调用符号引擎检查时需要）
+            needs_guidance.append(generated_proposition and not used_symbolic_check)
 
             is_repeat = (
                 decoded_statement in self.recent_statements
@@ -329,9 +384,12 @@ class RLTrainer:
                 decoded_statement=decoded_statement,
                 symbolic_valid=symbolic_valid,
                 render_valid=render_valid,
+                used_symbolic_check=used_symbolic_check,
             )
 
-            reward = self.compute_reward(step_result, is_complete, is_repeat)
+            reward = self.compute_reward(
+                step_result, is_complete, is_repeat, consecutive_no_symbolic
+            )
             rewards.append(reward)
 
             new_event = Event(
@@ -358,8 +416,39 @@ class RLTrainer:
         for log_prob, R in zip(log_probs, returns_tensor):
             policy_loss = policy_loss - log_prob * R
 
+        # 连续不调用符号引擎时，添加引导梯度使"调用符号引擎位"趋向1
+        # control_signal[1] 是解码器控制位，应趋向1
+        symbolic_guidance_loss: torch.Tensor = torch.tensor(0.0)
+        guidance_count = 0
+        for i, (control_signal, need_guidance) in enumerate(
+            zip(control_signals, needs_guidance)
+        ):
+            if need_guidance:
+                # 对于需要引导的步骤，添加梯度引导
+                # 目标：解码器控制位趋向1（调用解码器）
+                target_decoder = torch.ones_like(
+                    control_signal[0, 1:2]
+                )  # 解码器位目标为1
+
+                # 使用 BCE loss 引导控制信号
+                decoder_loss = torch.nn.functional.binary_cross_entropy(
+                    control_signal[0, 1:2],  # 解码器控制位
+                    target_decoder,
+                    reduction="sum",
+                )
+                symbolic_guidance_loss = symbolic_guidance_loss + decoder_loss
+                guidance_count += 1
+
+        # 将引导损失添加到策略损失中，使用较小的权重
+        # 只有在需要引导时才添加
+        if guidance_count > 0:
+            guidance_weight = 0.1
+            total_loss = policy_loss + guidance_weight * symbolic_guidance_loss
+        else:
+            total_loss = policy_loss
+
         self.optimizer.zero_grad()
-        policy_loss.backward()
+        total_loss.backward()
         torch.nn.utils.clip_grad_norm_(
             self.system.reasoning_ai.parameters(), self.config.max_grad_norm
         )
