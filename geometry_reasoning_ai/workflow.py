@@ -140,7 +140,7 @@ class GeometryReasoningSystem:
                 event_vector,
                 bos_id=self.tokenizer.bos_id,
                 eos_id=self.tokenizer.eos_id,
-                max_len=64,
+                max_len=32,
             )
 
         token_ids = generated[0].tolist()

@@ -28,7 +28,7 @@ class GeometryTokenizer:
     SPECIAL_TOKENS = ["<PAD>", "<UNK>", "<BOS>", "<EOS>", "<SEP>"]
     SYMBOLS = ["=", ";", ",", "(", ")", "?", ":", "{", "}"]
 
-    def __init__(self, vocab_size: int = 400):
+    def __init__(self, vocab_size: int = 150):
         self.vocab_size = vocab_size
         self.token_to_id: dict[str, int] = {}
         self.id_to_token: dict[int, str] = {}

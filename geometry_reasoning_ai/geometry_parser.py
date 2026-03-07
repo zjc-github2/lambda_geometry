@@ -109,7 +109,7 @@ class GeometryParser:
             raise ValueError(f"不支持的谓词: {predicate}")
 
         expected_arity = GeometryParser.PREDICATE_ARITIES.get(predicate)
-        if expected_arity is not None:
+        if expected_arity is not None and expected_arity != -1:
             if isinstance(expected_arity, list):
                 if len(args) not in expected_arity:
                     raise ValueError(
@@ -356,7 +356,7 @@ class GeometryParser:
             return False, f"不支持的谓词: {prop.predicate}"
 
         expected_arity = GeometryParser.PREDICATE_ARITIES.get(prop.predicate)
-        if expected_arity is not None:
+        if expected_arity is not None and expected_arity != -1:
             if isinstance(expected_arity, list):
                 if len(prop.args) not in expected_arity:
                     return (

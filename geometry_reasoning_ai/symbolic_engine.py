@@ -1003,6 +1003,16 @@ class SymbolicEngine:
         if len(points) != 4:
             return []
         a, b, c, d = [self.graph.get_or_create_point(p) for p in points]
+        if a == b or c == d:
+            return []
+
+        if {a, b} == {c, d}:
+            return []
+
+        if len({a, b, c, d}) < 4:
+            if self.check_coll([a, b, c]) or self.check_coll([a, b, d]):
+                return []
+
         _ = self.graph.get_line_thru_pair(a, b)
         _ = self.graph.get_line_thru_pair(c, d)
 
@@ -1203,6 +1213,13 @@ class SymbolicEngine:
         a, b, c, d = points
         if a == b or c == d:
             return False
+
+        if {a, b} == {c, d}:
+            return False
+
+        if len({a, b, c, d}) < 4:
+            if self.check_coll([a, b, c]) or self.check_coll([a, b, d]):
+                return False
 
         key = hashed("para", [p.name for p in points])
         if key in self.graph.cache:
@@ -1766,7 +1783,17 @@ class SymbolicEngine:
         name = first_premise.name
         args = first_premise.args
 
-        if name in ["coll", "para", "perp", "cong", "midp", "cyclic"]:
+        if name in [
+            "coll",
+            "para",
+            "perp",
+            "cong",
+            "midp",
+            "cyclic",
+            "ncoll",
+            "npara",
+            "nperp",
+        ]:
             cached_relations = self._get_cached_relations(name)
             for rel_args in cached_relations:
                 if len(rel_args) == len(args):
@@ -1794,6 +1821,12 @@ class SymbolicEngine:
         if not unknown_vars:
             points = [mapping.get(a) for a in args]
             if None not in points:
+                if name in ["ncoll", "npara", "nperp", "diff", "sameside"]:
+                    if self.check(name, points):
+                        return self._match_remaining_premises(
+                            theorem, mapping, premise_idx + 1
+                        )
+                    return []
                 key = hashed(name, [p.name for p in points if p is not None])
                 if key in self.graph.cache:
                     return self._match_remaining_premises(
