@@ -39,6 +39,14 @@ class ReasoningStep:
     decoded_statement: Optional[str] = None
     symbolic_valid: Optional[bool] = None
     render_valid: Optional[bool] = None
+    step_penalty: float = 0.0
+
+
+@dataclass
+class InferenceConfig:
+    """推理配置"""
+
+    step_penalty: float = -0.01
 
 
 class GeometryReasoningSystem:
@@ -101,6 +109,7 @@ class GeometryReasoningSystem:
         )
         self.max_steps = 50
         self.control_threshold = 0.5
+        self.inference_config = InferenceConfig()
 
     def encode_proposition(self, proposition: Union[str, Proposition]) -> torch.Tensor:
         """编码几何命题
@@ -162,14 +171,18 @@ class GeometryReasoningSystem:
         """执行单步推理
 
         Returns:
-            推理步骤结果
+            推理步骤结果（包含步数惩罚）
         """
         encoded_sequence = self.event_sequence.get_sequence_tensor()
 
         with torch.no_grad():
             event_vector, control_signal = self.reasoning_ai(encoded_sequence)
 
-        step = ReasoningStep(event_vector=event_vector, control_signal=control_signal)
+        step = ReasoningStep(
+            event_vector=event_vector,
+            control_signal=control_signal,
+            step_penalty=self.inference_config.step_penalty,
+        )
 
         use_render = control_signal[0, 0].item() > self.control_threshold
         use_decoder = control_signal[0, 1].item() > self.control_threshold
@@ -261,6 +274,17 @@ class GeometryReasoningSystem:
         statements = [s.decoded_statement for s in recent if s.decoded_statement]
 
         return len(statements) == 3 and len(set(statements)) == 1
+
+    def compute_total_penalty(self, steps: List[ReasoningStep]) -> float:
+        """计算推理过程的总步数惩罚
+
+        Args:
+            steps: 推理步骤列表
+
+        Returns:
+            总步数惩罚值
+        """
+        return sum(step.step_penalty for step in steps)
 
     def reset(self) -> None:
         """重置推理状态"""

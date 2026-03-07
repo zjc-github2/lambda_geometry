@@ -32,9 +32,12 @@ if TYPE_CHECKING:
 
 @dataclass
 class RewardConfig:
-    """奖励配置"""
+    """奖励配置
+    
+    注意：step_penalty 仅用于推理阶段，不参与RL训练。
+    推理阶段的步数惩罚在 workflow.py 中实现。
+    """
 
-    step_penalty: float = -0.01
     render_success: float = 0.5
     render_failure: float = -0.1
     symbolic_success: float = 1.0
@@ -241,8 +244,11 @@ class RLTrainer:
     def compute_reward(
         self, step_result: ReasoningStep, is_proof_complete: bool, is_repeat: bool
     ) -> float:
-        """计算奖励值"""
-        reward = self.reward_config.step_penalty
+        """计算奖励值（RL训练用，不包含步数惩罚）
+        
+        注意：步数惩罚仅在推理阶段应用，不参与RL训练。
+        """
+        reward = 0.0
 
         if is_repeat:
             reward += self.reward_config.repeat_penalty
