@@ -980,14 +980,15 @@ class SymbolicEngine:
         pts = [self.graph.get_or_create_point(p) for p in points]
         added = []
 
-        for p1, p2 in [(pts[0], pts[1]), (pts[0], pts[2])]:
-            _ = self.graph.get_line_thru_pair(p1, p2)
+        # 创建第一条线（通过前两个点）
+        main_line = self.graph.get_line_thru_pair(pts[0], pts[1])
 
-        all_lines = []
-        for p1, p2 in [
-            (pts[i], pts[j]) for i in range(len(pts)) for j in range(i + 1, len(pts))
-        ]:
-            all_lines.append(self.graph.get_line_thru_pair(p1, p2))
+        # 将所有其他点连接到这条线上
+        for pt in pts[2:]:
+            # 检查点是否已经在某条线上
+            existing_lines = pt.neighbors(GeomLine)
+            if main_line not in existing_lines:
+                self.graph.connect(pt, main_line, None)
 
         if deps is None:
             deps = EmptyDependency(level=0, rule_name="given")

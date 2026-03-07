@@ -261,7 +261,9 @@ class RenderEngine:
         return abs(pM.x - mx) < self.tolerance and abs(pM.y - my) < self.tolerance
 
     def _verify_cyclic(self, args: Tuple[str, ...]) -> bool:
-        """验证共圆: cyclic A B C D"""
+        """验证共圆: cyclic A B C D
+        四点共圆当且仅当角 ABC = 角 ADC（同弧所对的圆周角相等）
+        """
         if len(args) != 4:
             return False
         A, B, C, D = args
@@ -271,94 +273,120 @@ class RenderEngine:
         pD = self.get_point(D)
         if pA is None or pB is None or pC is None or pD is None:
             return False
+
+        # 角 ABC 和 角 ADC 应该相等（同弧 AC 所对的圆周角）
+        angle1 = self.angle(B, A, C)
+        angle2 = self.angle(D, A, C)
+        return abs(angle1 - angle2) < self.tolerance
+
+    def _verify_circle(self, args: Tuple[str, ...]) -> bool:
+        """验证圆: circle O A B C (O 是过 A, B, C 的圆心)"""
+        if len(args) != 4:
+            return False
+        O, A, B, C = args
+        return self._verify_cong((O, A, O, B)) and self._verify_cong((O, A, O, C))
+
+    def _is_parallel(self, p1: str, p2: str, p3: str, p4: str) -> bool:
+        """检查两条线是否平行"""
+        return self._verify_para((p1, p2, p3, p4))
+
+    def _verify_eqangle(self, args: Tuple[str, ...]) -> bool:
+        """验证等角: eqangle A B C D E F G H
+        表示角 (AB, CD) 等于角 (EF, GH)
+        """
+        if len(args) != 8:
+            return False
+        A, B, C, D, E, F, G, H = args
+
+        if self._is_parallel(A, B, C, D):
+            return self._is_parallel(E, F, G, H)
+        if self._is_parallel(E, F, G, H):
+            return self._is_parallel(A, B, C, D)
+
+        angle1 = self._compute_angle_between_lines(A, B, C, D)
+        angle2 = self._compute_angle_between_lines(E, F, G, H)
+        if angle1 is None or angle2 is None:
+            return False
+
+        diff = abs(angle1 - angle2) % (2 * math.pi)
+        return diff < self.tolerance or abs(diff - 2 * math.pi) < self.tolerance
+
+    def _compute_angle_between_lines(self, p1: str, p2: str, p3: str, p4: str) -> Optional[float]:
+        """计算两条线之间的角度 (p1p2 和 p3p4)"""
+        pt1 = self.get_point(p1)
+        pt2 = self.get_point(p2)
+        pt3 = self.get_point(p3)
+        pt4 = self.get_point(p4)
+        if pt1 is None or pt2 is None or pt3 is None or pt4 is None:
+            return None
+
+        v1x = pt2.x - pt1.x
+        v1y = pt2.y - pt1.y
+        v2x = pt4.x - pt3.x
+        v2y = pt4.y - pt3.y
+
+        return math.atan2(v2y, v2x) - math.atan2(v1y, v1x)
+
+    def _verify_eqangle6(self, args: Tuple[str, ...]) -> bool:
+        """验证六点等角: eqangle6 A B C D E F G H
+        等同于 eqangle
+        """
+        return self._verify_eqangle(args)
+
+    def _verify_eqangle3(self, args: Tuple[str, ...]) -> bool:
+        """验证三点等角: eqangle3 A B C D E F
+        表示角 BAC 等于角 EDF
+        """
+        if len(args) != 6:
+            return False
+        A, B, C, D, E, F = args
+        angle1 = self.angle(A, B, C)
+        angle2 = self.angle(D, E, F)
+        return abs(angle1 - angle2) < self.tolerance
+
+    def _verify_eqangle2(self, args: Tuple[str, ...]) -> bool:
+        """验证二点等角: eqangle2 A B C D
+        表示角 BAC 等于角 BDC
+        """
+        if len(args) != 4:
+            return False
+        A, B, C, D = args
         angle1 = self.angle(A, B, C)
         angle2 = self.angle(A, D, C)
         return abs(angle1 - angle2) < self.tolerance
 
-    def _verify_circle(self, args: Tuple[str, ...]) -> bool:
-        """验证圆: circle O A (O 是圆心,A 在圆上)"""
-        if len(args) != 2:
-            return False
-        return True
-
-    def _verify_eqangle(self, args: Tuple[str, ...]) -> bool:
-        """验证等角: eqangle A B P Q C D P Q"""
-        if len(args) != 8:
-            return False
-        A, B, P, Q, C, D, _, _ = args
-        angle1 = self.angle(B, A, P)
-        angle2 = self.angle(D, C, Q)
-        return abs(angle1 - angle2) < self.tolerance
-
-    def _verify_eqangle6(self, args: Tuple[str, ...]) -> bool:
-        """验证六点等角: eqangle6 A B C D E F G H"""
-        if len(args) != 8:
-            return False
-        A, B, C, _, E, F, G, _ = args
-        angle1 = self.angle(B, A, C)
-        angle2 = self.angle(F, E, G)
-        return abs(angle1 - angle2) < self.tolerance
-
-    def _verify_eqangle3(self, args: Tuple[str, ...]) -> bool:
-        """验证三点等角: eqangle3 A B C D E F"""
-        if len(args) != 6:
-            return False
-        A, B, C, D, E, F = args
-        angle1 = self.angle(B, A, C)
-        angle2 = self.angle(E, D, F)
-        return abs(angle1 - angle2) < self.tolerance
-
-    def _verify_eqangle2(self, args: Tuple[str, ...]) -> bool:
-        """验证二点等角: eqangle2 A B C D"""
-        if len(args) != 4:
-            return False
-        A, B, C, D = args
-        angle1 = self.angle(B, A, C)
-        angle2 = self.angle(B, C, D)
-        return abs(angle1 - angle2) < self.tolerance
-
     def _verify_eqratio(self, args: Tuple[str, ...]) -> bool:
-        """验证等比: eqratio A B P Q C D P Q"""
-        if len(args) != 8:
-            return False
-        A, B, P, Q, C, D, _, _ = args
-        d1 = self.distance(A, B)
-        d2 = self.distance(P, Q)
-        d3 = self.distance(C, D)
-        if d2 < self.tolerance or d3 < self.tolerance:
-            return False
-        ratio1 = d1 / d2
-        ratio2 = d3 / d2
-        return abs(ratio1 - ratio2) < self.tolerance
-
-    def _verify_eqratio6(self, args: Tuple[str, ...]) -> bool:
-        """验证六点等比: eqratio6 A B C D E F G H"""
+        """验证等比: eqratio A B C D E F G H
+        表示 AB/CD = EF/GH，即 AB * GH = CD * EF
+        """
         if len(args) != 8:
             return False
         A, B, C, D, E, F, G, H = args
-        d1 = self.distance(A, B)
-        d2 = self.distance(C, D)
-        d3 = self.distance(E, F)
-        d4 = self.distance(G, H)
-        if d2 < self.tolerance or d4 < self.tolerance:
-            return False
-        ratio1 = d1 / d2
-        ratio2 = d3 / d4
-        return abs(ratio1 - ratio2) < self.tolerance
+        d_ab = self.distance(A, B)
+        d_cd = self.distance(C, D)
+        d_ef = self.distance(E, F)
+        d_gh = self.distance(G, H)
+        return abs(d_ab * d_gh - d_cd * d_ef) < self.tolerance
+
+    def _verify_eqratio6(self, args: Tuple[str, ...]) -> bool:
+        """验证六点等比: eqratio6 A B C D E F G H
+        等同于 eqratio
+        """
+        return self._verify_eqratio(args)
 
     def _verify_eqratio3(self, args: Tuple[str, ...]) -> bool:
-        """验证三点等比: eqratio3 A B C D E F"""
+        """验证三点等比: eqratio3 A B C D E F
+        表示 AB/CD = EF/CD，即 AB = EF
+        """
         if len(args) != 6:
             return False
         A, B, C, D, E, F = args
-        d1 = self.distance(A, B)
-        d2 = self.distance(C, D)
-        d3 = self.distance(E, F)
-        if d2 < self.tolerance:
+        d_ab = self.distance(A, B)
+        d_cd = self.distance(C, D)
+        d_ef = self.distance(E, F)
+        if d_cd < self.tolerance:
             return False
-        ratio1 = d1 / d2
-        ratio2 = d3 / d2
-        return abs(ratio1 - ratio2) < self.tolerance
+        return abs(d_ab - d_ef) < self.tolerance
 
     def _verify_diff(self, args: Tuple[str, ...]) -> bool:
         """验证不同: diff A B"""
