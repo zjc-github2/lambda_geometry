@@ -381,6 +381,4 @@ class GeometryKeywords:
         )
 
 
-# 兼容旧代码的别名
-GeometryDefinitions = GeometryConstructions
-DeductionRules = GeometryRules
+

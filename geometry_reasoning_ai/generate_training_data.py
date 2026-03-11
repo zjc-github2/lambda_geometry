@@ -12,22 +12,22 @@ from typing import List, Dict, Tuple, Optional
 
 try:
     from .data_generator import (
-        GeometryDefinitions,
-        DeductionRules,
+        _get_definitions_dict,
+        _get_rules_list,
         ProofStep,
         ProofData,
     )
 except ImportError:
     from data_generator import (
-        GeometryDefinitions,
-        DeductionRules,
+        _get_definitions_dict,
+        _get_rules_list,
         ProofStep,
         ProofData,
     )
 
 # ==================== 配置参数 ====================
-MAX_STEPS = 20
-MIN_STEPS = 10
+MAX_STEPS = 10
+MIN_STEPS = 5
 NUM_PROBLEMS = 100
 OUTPUT_FILE = os.path.join(os.path.dirname(__file__), "generated_training_data.json")
 # =================================================
@@ -136,7 +136,7 @@ class ConstructionGenerator:
     """构造生成器 - 自动从 DEFINITIONS 生成构造语句"""
 
     def __init__(self):
-        self.definitions = GeometryDefinitions.DEFINITIONS
+        self.definitions = _get_definitions_dict()
         self.point_names = list("abcdefghijklmnopqrstuvwxyz")
         self.used_points: set = set()
 
@@ -320,8 +320,8 @@ class ControlledReasoningEngine:
     """受控推理引擎 - 每步只产生一个新命题"""
 
     def __init__(self):
-        self.definitions = GeometryDefinitions.DEFINITIONS
-        self.rules = DeductionRules.RULES
+        self.definitions = _get_definitions_dict()
+        self.rules = _get_rules_list()
         self.predicates = {}
         self.predicate_list = []
         self.proof_steps = []
@@ -333,17 +333,63 @@ class ControlledReasoningEngine:
         self.proof_steps = []
         self.level = 0
 
+    def is_valid_predicate(self, pred):
+        """检查谓词是否合理"""
+        parts = pred.strip().split()
+        if len(parts) < 3:
+            return False
+        name = parts[0]
+        args = parts[1:]
+
+        if name in ["para", "perp"]:
+            if len(args) >= 4:
+                line1 = sorted([args[0], args[1]])
+                line2 = sorted([args[2], args[3]])
+                if line1 == line2:
+                    return False
+        elif name in ["cong"]:
+            if len(args) >= 4:
+                seg1 = sorted([args[0], args[1]])
+                seg2 = sorted([args[2], args[3]])
+                if seg1 == seg2:
+                    return False
+        return True
+
     def normalize(self, pred):
         parts = pred.strip().split()
         if not parts:
             return ()
         name = parts[0]
-        args = (
-            tuple(sorted(parts[1:]))
-            if name in ["coll", "cyclic", "ncoll"]
-            else tuple(parts[1:])
-        )
-        return (name, args)
+        args = parts[1:]
+
+        if name in ["coll", "cyclic", "ncoll"]:
+            return (name, tuple(sorted(args)))
+        elif name in ["para", "perp"]:
+            if len(args) >= 4:
+                line1 = tuple(sorted([args[0], args[1]]))
+                line2 = tuple(sorted([args[2], args[3]]))
+                if line1 <= line2:
+                    return (name, line1 + line2)
+                else:
+                    return (name, line2 + line1)
+            return (name, tuple(args))
+        elif name in ["cong", "eqratio"]:
+            if len(args) >= 4:
+                seg1 = tuple(sorted([args[0], args[1]]))
+                seg2 = tuple(sorted([args[2], args[3]]))
+                if seg1 <= seg2:
+                    return (name, seg1 + seg2)
+                else:
+                    return (name, seg2 + seg1)
+            return (name, tuple(args))
+        elif name == "midp":
+            if len(args) >= 3:
+                point = args[0]
+                seg = tuple(sorted([args[1], args[2]]))
+                return (name, (point,) + seg)
+            return (name, tuple(args))
+        else:
+            return (name, tuple(args))
 
     def add(self, pred):
         key = self.normalize(pred)
@@ -382,18 +428,19 @@ class ControlledReasoningEngine:
                     valid = False
                     break
             if valid:
-                predicates.append(" ".join(result))
+                pred = " ".join(result)
+                predicates.append(pred)
         return predicates
 
     def step_forward(self):
-        """向前推理一步，只返回一个随机选择的新命题（优化版：预先过滤已存在的结论）"""
+        """向前推理一步，只返回一个随机选择的新命题（优化版：预先过滤已存在的结论和不合理的谓词）"""
         self.level += 1
         valid_matches = []
         for rule in self.rules:
             matches = self._find_all_matches(rule)
             for m in matches:
                 conclusion = self._apply(rule, m)
-                if conclusion:
+                if conclusion and self.is_valid_predicate(conclusion):
                     normalized = self.normalize(conclusion)
                     if normalized not in self.predicates:
                         valid_matches.append((rule, m, conclusion))
@@ -429,19 +476,39 @@ class ControlledReasoningEngine:
         return matches
 
     def _match_single(self, template, actual, mapping):
+        """Match a template predicate against an actual predicate.
+
+        Args:
+            template: Template predicate with variable placeholders (e.g., "coll A B C")
+            actual: Actual predicate with concrete values (e.g., "coll x y z")
+            mapping: Existing variable mapping from previous matches
+
+        Returns:
+            Updated mapping if match succeeds, None otherwise
+        """
         t_parts = template.split()
         a_parts = actual.split()
+
+        # Must have same number of parts
         if len(t_parts) != len(a_parts):
             return None
+
+        # Predicate names must match
         if t_parts[0] != a_parts[0]:
             return None
+
         new_mapping = mapping.copy()
+
+        # Match each argument position
         for t, a in zip(t_parts[1:], a_parts[1:]):
             if t in new_mapping:
+                # Variable already mapped - must be consistent
                 if new_mapping[t] != a:
                     return None
             else:
+                # New variable - add to mapping
                 new_mapping[t] = a
+
         return new_mapping
 
     def _apply(self, rule, match_data):
@@ -461,15 +528,29 @@ class ControlledReasoningEngine:
 
 
 def generate_random_construction():
-    """随机生成构造语句 - 自动从 DEFINITIONS 选择"""
+    """随机生成构造语句 - 自动从 DEFINITIONS 选择，生成多个构造以获得更多初始谓词"""
     generator = ConstructionGenerator()
     generator.reset()
     available = generator.get_constructions_with_predicates()
     if not available:
         return []
-    chosen = random.choice(available)
-    constructions, _ = generator.generate_construction(chosen)
-    return constructions
+
+    all_constructions = []
+    all_new_points = []
+
+    # 生成1-3个构造
+    num_constructions = random.randint(1, 3)
+
+    for _ in range(num_constructions):
+        chosen = random.choice(available)
+        constructions, new_points = generator.generate_construction(
+            chosen, all_new_points if all_new_points else None
+        )
+        if constructions:
+            all_constructions.extend(constructions)
+            all_new_points.extend(new_points)
+
+    return all_constructions if all_constructions else []
 
 
 def generate_training_data():
@@ -487,7 +568,7 @@ def generate_training_data():
     available = generator.get_constructions_with_predicates()
     print(f"\n可用构造类型 ({len(available)} 种):")
     for const in available:
-        defn = GeometryDefinitions.DEFINITIONS.get(const, {})
+        defn = _get_definitions_dict().get(const, {})
         desc = defn.get("description", "")
         preds = defn.get("predicates", [])
         print(f"  - {const}: {desc} ({len(preds)} 个谓词)")
@@ -509,7 +590,8 @@ def generate_training_data():
             continue
         setup_predicates = []
         for const in constructions:
-            for pred in engine.expand_construction(const):
+            expanded = engine.expand_construction(const)
+            for pred in expanded:
                 if engine.add(pred):
                     setup_predicates.append(pred)
         if not setup_predicates:
@@ -520,6 +602,8 @@ def generate_training_data():
             if not new_steps:
                 break
         total_steps = len(engine.proof_steps)
+        if attempts <= 5:
+            print(f"  [调试] 尝试 {attempts}: 推理了 {total_steps} 步")
         if MIN_STEPS <= total_steps <= MAX_STEPS and engine.proof_steps:
             goal = engine.proof_steps[-1].conclusion
             proof_data = ProofData(
@@ -573,17 +657,17 @@ def verify_generated_data():
     for item in data:
         step_count = len(item.get("proof_steps", []))
         is_valid = MIN_STEPS <= step_count <= MAX_STEPS
-        status = "✓" if is_valid else "✗"
+        status = "[OK]" if is_valid else "[FAIL]"
         if not is_valid:
             all_valid = False
         print(
-            f"  [{status}] {item['problem_name']}: {step_count} 步, 目标: {item['goal']}"
+            f"  {status} {item['problem_name']}: {step_count} 步, 目标: {item['goal']}"
         )
     print("\n" + "=" * 60)
     if all_valid:
-        print("验证结果: 所有数据都符合步数要求 ✓")
+        print("验证结果: 所有数据都符合步数要求 [OK]")
     else:
-        print("验证结果: 存在不符步数要求的数据 ✗")
+        print("验证结果: 存在不符步数要求的数据 [FAIL]")
     print("=" * 60)
 
 

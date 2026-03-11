@@ -293,7 +293,10 @@ def count_parameters(model: nn.Module) -> int:
 
 
 if __name__ == "__main__":
-    from .config import EncoderConfig, DecoderConfig, ReasoningAIConfig
+    try:
+        from .config import EncoderConfig, DecoderConfig, ReasoningAIConfig
+    except ImportError:
+        from config import EncoderConfig, DecoderConfig, ReasoningAIConfig
 
     enc_config = EncoderConfig()
     encoder = Encoder(

@@ -105,21 +105,8 @@ def _get_predicate_templates() -> Dict:
 
 
 def _get_rules_list() -> List[Dict]:
-    """获取规则列表（兼容旧代码格式）"""
+    """获取规则列表"""
     return GeometryRules.get_rules_dict_list()
-
-
-class GeometryDefinitions:
-    """几何定义 - 兼容旧代码的包装类"""
-
-    DEFINITIONS = _get_definitions_dict()
-    PREDICATE_TEMPLATES = _get_predicate_templates()
-
-
-class DeductionRules:
-    """演绎规则 - 兼容旧代码的包装类"""
-
-    RULES = _get_rules_list()
 
 
 class SimpleProofState:
@@ -164,7 +151,7 @@ class SimpleDeductiveEngine:
 
     def __init__(self):
         self.state = SimpleProofState()
-        self.rules = DeductionRules.RULES
+        self.rules = _get_rules_list()
         self.max_iterations = 100
 
     def reset(self):
@@ -312,7 +299,7 @@ class ProblemGenerator:
     """几何问题生成器"""
 
     def __init__(self):
-        self.definitions = GeometryDefinitions.DEFINITIONS
+        self.definitions = _get_definitions_dict()
         self.point_names = list("abcdefghijklmnopqrstuvwxyz")
 
     def generate_random_problem(
@@ -439,7 +426,7 @@ class TrainingDataGenerator:
     def __init__(self, cache_file: Optional[str] = None):
         self.engine = SimpleDeductiveEngine()
         self.problem_gen = ProblemGenerator()
-        self.definitions = GeometryDefinitions.DEFINITIONS
+        self.definitions = _get_definitions_dict()
         self._cache: Dict[str, ProofData] = {}
         self._cache_file = cache_file
         if cache_file:

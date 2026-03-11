@@ -330,11 +330,10 @@ class GeomNode:
             self.merge_one(node, deps)
 
     def why_equal(
-        self, nodes: List["GeomNode"], level: Union[int, float]
+        self, nodes: List["GeomNode"], _level: Union[int, float]
     ) -> Optional[Any]:
-        # Simple implementation or stub
         if self in nodes:
-            return []  # Found equality
+            return []
         return None
 
     def rep(self) -> "GeomNode":

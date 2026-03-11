@@ -420,9 +420,7 @@ class RLTrainer:
         # control_signal[1] 是解码器控制位，应趋向1
         symbolic_guidance_loss: torch.Tensor = torch.tensor(0.0)
         guidance_count = 0
-        for i, (control_signal, need_guidance) in enumerate(
-            zip(control_signals, needs_guidance)
-        ):
+        for control_signal, need_guidance in zip(control_signals, needs_guidance):
             if need_guidance:
                 # 对于需要引导的步骤，添加梯度引导
                 # 目标：解码器控制位趋向1（调用解码器）
@@ -554,7 +552,10 @@ class TrainingPipeline:
 
 
 if __name__ == "__main__":
-    import geometry_reasoning_ai.workflow as _workflow_module
+    try:
+        from . import workflow as _workflow_module
+    except ImportError:
+        import workflow as _workflow_module
 
     system = _workflow_module.GeometryReasoningSystem()
     pipeline = TrainingPipeline(system)
